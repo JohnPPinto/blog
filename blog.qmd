@@ -1,0 +1,16 @@
+---
+title: "All My Blog Posts"
+listing:
+  contents: posts/**/*.qmd
+  sort: "date desc"
+  type: default
+  categories: true
+  sort-ui: true
+  filter-ui: true
+  fields: [date, title, description, author, categories, reading-time]
+  page-size: 10
+  feed: true
+page-layout: full
+title-block-banner: false
+---
+---

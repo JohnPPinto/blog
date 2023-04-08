@@ -6,3 +6,24 @@ freeze: true
 
 # Enable banner style title blocks
 title-block-banner: true
+
+# Author name for all the post
+author: 'John Pinto'
+
+# Table of content settings
+toc: true
+toc-depth: 3
+toc-location: left
+
+# page settings
+page-layout: article
+
+# Comments setting
+comments:
+  giscus: 
+    repo: JohnPPinto/blog
+
+# footer setting
+format: 
+  html: 
+    include-after-body: ../footer.html

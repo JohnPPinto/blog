@@ -5,5 +5,11 @@
       "/posts/post-with-code/index.html",
       "/posts/welcome/index.html"
     ]
+  },
+  {
+    "listing": "/blog.html",
+    "items": [
+      "/posts/2022-11-20_tf_modelling/index.html"
+    ]
   }
 ]

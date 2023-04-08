@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss  xmlns:atom="http://www.w3.org/2005/Atom" 
+      xmlns:media="http://search.yahoo.com/mrss/" 
+      xmlns:content="http://purl.org/rss/1.0/modules/content/" 
+      xmlns:dc="http://purl.org/dc/elements/1.1/" 
+      version="2.0">
+<channel>
+<title>John Pinto</title>
+<link>https://johnppinto.github.io/blog/blog.html</link>
+<atom:link href="https://johnppinto.github.io/blog/blog.xml" rel="self" type="application/rss+xml"/>
+<description>This is John Pinto&#39;s Personal Blog.</description>
+<generator>quarto-1.3.302</generator>
+<lastBuildDate>Sat, 19 Nov 2022 18:30:00 GMT</lastBuildDate>
+<item>
+  <title>TensorFlow Modelling — Sequential Vs Functional</title>
+  <dc:creator>John Pinto</dc:creator>
+  <link>https://johnppinto.github.io/blog/posts/2022-11-20_tf_modelling/index.html</link>
+  <description><![CDATA[ 
+
+
+
+
+
+
+
+ ]]></description>
+  <category>Tensorflow</category>
+  <category>Keras</category>
+  <category>AI</category>
+  <category>Neural Network</category>
+  <category>Architecture</category>
+  <guid>https://johnppinto.github.io/blog/posts/2022-11-20_tf_modelling/index.html</guid>
+  <pubDate>Sat, 19 Nov 2022 18:30:00 GMT</pubDate>
+  <media:content url="https://johnppinto.github.io/blog/posts/2022-11-20_tf_modelling/featured.webp" medium="image" type="image/webp"/>
+</item>
+</channel>
+</rss>
