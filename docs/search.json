@@ -11,7 +11,7 @@
     "href": "blog.html",
     "title": "All My Blog Posts",
     "section": "",
-    "text": "Order By\n       Default\n         \n          Title\n        \n         \n          Date - Oldest\n        \n         \n          Date - Newest\n        \n         \n          Author\n        \n     \n  \n    \n      \n      \n    \n\n\n\n\n\n\nTensorFlow Modelling — Sequential Vs Functional\n\n\n\n\n\n\n\nTensorflow\n\n\nKeras\n\n\nAI\n\n\nNeural Network\n\n\nArchitecture\n\n\n\n\nIn this post, I introduce you to the Tensorflow neural network architectures that will help you in building AI Models.\n\n\n\n\n\n\nNov 20, 2022\n\n\nJohn Pinto\n\n\n3 min\n\n\n\n\n\n\nNo matching items"
+    "text": "Order By\n       Default\n         \n          Title\n        \n         \n          Date - Oldest\n        \n         \n          Date - Newest\n        \n         \n          Author\n        \n     \n  \n\n\n\n\n  \n\n\n\n\nTensorFlow Modelling — Sequential Vs Functional\n\n\n\n\n\n\n\nTensorflow\n\n\nKeras\n\n\nAI\n\n\nNeural Network\n\n\nArchitecture\n\n\n\n\nIn this post, I introduce you to the Tensorflow neural network architectures that will help you in building AI Models.\n\n\n\n\n\n\nNov 20, 2022\n\n\nJohn Pinto\n\n\n7 min\n\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "posts/2022-11-20_tf_modelling/index.html#the-sequential-api-model",
@@ -33,5 +33,12 @@
     "title": "TensorFlow Modelling — Sequential Vs Functional",
     "section": "",
     "text": "We have covered both the Sequential and Functional Model architecture in this article. Experimented with both and understood the pros and cons, with this you are now capable enough to create your neural network. By the way, there’s a third method that I haven’t mentioned in this article. It’s called the Model subclassing method. I do not recommend this for a beginner to begin their journey in deep learning, it is much more complex and difficult to understand however powerful enough to create your own custom layers and models.\nI hope that you enjoyed this article and that it serves you well. Please reach out to me or you can comment down if you run into any trouble with what I wrote. I am more than happy to improve my article so that it can help more people."
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Hello and Welcome to My Blog!",
+    "section": "",
+    "text": "Hello and Welcome to My Blog!\n\n\n\n\n\n\n\nBlog\n\n\nI enjoy exploring Data Analytics and Machine Learning and picking up new  tricks on my way. I share what I discover and learn.\n\nStart reading\n\n\n\n\n\n\n\nProjects\n\n\nA collection of my ongoing personal data-endeavors and programming projects.\n\n Take me there"
   }
 ]

@@ -5,10 +5,15 @@ website:
   title: "John Pinto"
   site-url: https://johnppinto.github.io/blog
   description: "This is John Pinto's Personal Blog."
+  search: 
+    location: navbar
+    type: textbox
   navbar:
     left: 
       - text: Blog
         href: blog.qmd
+      - text: About
+        href: about.qmd
       - text: Portfolio
         href: https://johnppinto.github.io/
         target: _blank
@@ -33,15 +38,15 @@ website:
   twitter-card: true
   open-graph: true
   page-footer: 
-    left: John Pinto {{< fa copyright regular >}} 2023 made with <i class="fa-solid fa-heart fa-xl"></i>, <i class="fa-brands fa-python fa-xl"></i>, <i class="fa-brands fa-r-project fa-xl"></i>  and [quarto](https://quarto.org).
+    left: John Pinto {{< fa copyright regular >}} 2023 made with HTML5 <i class="fab fa-html5"></i>, CSS3 <i class="fa-brands fa-css3"></i> and [Quarto](https://quarto.org).
 highlight-style: arrow
 format:
   html:
-    mainfont: cambria
+    mainfont: "Book Antiqua"
     fontsize: 18px
     theme:
       dark: superhero
       light: flatly
     css: styles.css
     code-block-bg: true
-    code-block-border-left: "#4582ec"
+    code-block-border-left: "#31BAE9"

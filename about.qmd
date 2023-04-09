@@ -1,0 +1,25 @@
+---
+title: "John Pinto"
+image: ./assets/images/john_photo.jpg
+about: 
+  template: trestles
+  links: 
+    - icon: envelope
+      text: Email
+      href: mailto:pintojohn47@gmail.com
+      target: _blank
+    - icon: github
+      text: Github
+      href: https://github.com/JohnPPinto
+      target: _blank
+    - icon: linkedin
+      text: Linkedin
+      href: https://www.linkedin.com/in/john-p-pinto/
+      target: _blank
+    - icon: twitter
+      text: Twitter
+      href: https://twitter.com/john77272002
+      target: _blank
+
+page-layout: full
+---

@@ -45,12 +45,14 @@ ul.task-list li input[type="checkbox"] {
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
 <link href="site_libs/bootstrap/bootstrap-dark.min.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/quarto-contrib/fontawesome6-0.1.0/all.css" rel="stylesheet">
+<link href="site_libs/quarto-contrib/fontawesome6-0.1.0/latex-fontsize.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
   "collapse-after": 3,
   "panel-placement": "end",
-  "type": "overlay",
+  "type": "textbox",
   "limit": 20,
   "language": {
     "search-no-results-text": "No results",
@@ -74,7 +76,7 @@ ul.task-list li input[type="checkbox"] {
     }
 
     const options = {
-      valueNames: ['listing-date','listing-title','listing-description','listing-author','listing-categories','listing-reading-time',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
+      valueNames: ['listing-image','listing-date','listing-title','listing-description','listing-author','listing-categories','listing-reading-time',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
       
       searchColumns: ["listing-date","listing-title","listing-author","listing-image","listing-description","listing-categories"],
     };
@@ -124,9 +126,11 @@ cookieconsent.run({
 
 <link rel="stylesheet" href="styles.css">
 <link rel="alternate" type="application/rss+xml" title="John Pinto" href="blog.xml"><meta property="og:title" content="John Pinto - All My Blog Posts">
+<meta property="og:image" content="https://johnppinto.github.io/blog/posts/2022-11-20_tf_modelling/featured.webp">
 <meta property="og:site-name" content="John Pinto">
 <meta name="twitter:title" content="John Pinto - All My Blog Posts">
-<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://johnppinto.github.io/blog/posts/2022-11-20_tf_modelling/featured.webp">
+<meta name="twitter:card" content="summary_large_image">
 </head>
 
 <body class="nav-fixed">
@@ -149,6 +153,10 @@ cookieconsent.run({
   <li class="nav-item">
     <a class="nav-link active" href="./blog.html" rel="" target="" aria-current="page">
  <span class="menu-text">Blog</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./about.html" rel="" target="">
+ <span class="menu-text">About</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="https://johnppinto.github.io/" rel="" target="_blank">
@@ -242,13 +250,12 @@ cookieconsent.run({
         </option>
      </select>
   </div>
-    <div class="input-group input-group-sm quarto-listing-filter">
-      <span class="input-group-text"><i class="bi bi-search"></i></span>
-      <input type="text" class="search form-control" placeholder="Filter">
-    </div>
 </div>
 <div class="list quarto-listing-default">
-<div class="quarto-post image-right" data-index="0" data-categories="Tensorflow,Keras,AI,Neural Network,Architecture" data-listing-date-sort="1668882600000" data-listing-file-modified-sort="1680891982329" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="3">
+<div class="quarto-post image-left" data-index="0" data-categories="Tensorflow,Keras,AI,Neural Network,Architecture" data-listing-date-sort="1668882600000" data-listing-file-modified-sort="1681036884004" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="7">
+<div class="thumbnail">
+<p><a href="./posts/2022-11-20_tf_modelling/index.html"> <img src="./posts/2022-11-20_tf_modelling/featured.webp" class="thumbnail-image" style="height: 200px;"> </a></p>
+</div>
 <div class="body">
 <a href="./posts/2022-11-20_tf_modelling/index.html">
 <h3 class="no-anchor listing-title">
@@ -290,7 +297,7 @@ Nov 20, 2022
 John Pinto
 </div>
 <div class="listing-reading-time">
-3 min
+7 min
 </div>
 </a>
 </div>
@@ -651,7 +658,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </div> <!-- /content -->
 <footer class="footer">
   <div class="nav-footer">
-    <div class="nav-footer-left">John Pinto <i class="fa-regular fa-copyright fa-xl"></i> 2023 made with <i class="fa-solid fa-heart fa-xl"></i>, <i class="fa-brands fa-python fa-xl"></i>, <i class="fa-brands fa-r-project fa-xl"></i> and <a href="https://quarto.org">quarto</a>.</div>   
+    <div class="nav-footer-left">John Pinto <i class="fa-copyright fa-regular" aria-label="regular"></i> 2023 made with HTML5 <i class="fab fa-html5"></i>, CSS3 <i class="fa-brands fa-css3"></i> and <a href="https://quarto.org">Quarto</a>.</div>   
     <div class="nav-footer-center"><div class="cookie-consent-footer"><a href="#" id="open_preferences_center">Cookie Preferences</a></div></div>
     <div class="nav-footer-right">
       &nbsp;
