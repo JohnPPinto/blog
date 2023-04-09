@@ -34,7 +34,7 @@ website:
       - icon: rss
         href: blog.xml
         target: _blank
-  google-analytics: "G-6DE2RCBFFM"
+  google-analytics: G-6DE2RCBFFM
   cookie-consent: true
   twitter-card: true
   open-graph: true
