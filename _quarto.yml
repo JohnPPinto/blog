@@ -2,6 +2,7 @@ project:
   type: website
   output-dir: docs
 website:
+  favicon: assets\images\favicon.png
   title: "John Pinto"
   site-url: https://johnppinto.github.io/blog
   description: "This is John Pinto's Personal Blog."
@@ -45,8 +46,8 @@ format:
     mainfont: "Book Antiqua"
     fontsize: 18px
     theme:
-      dark: superhero
       light: flatly
+      dark: superhero
     css: styles.css
     code-block-bg: true
     code-block-border-left: "#31BAE9"

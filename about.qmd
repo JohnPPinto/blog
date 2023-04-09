@@ -1,8 +1,9 @@
 ---
 title: "John Pinto"
-image: ./assets/images/john_photo.jpg
+image: assets\images\about_my_photo.jpg
 about: 
   template: trestles
+  image-width: 13em
   links: 
     - icon: envelope
       text: Email
@@ -23,3 +24,15 @@ about:
 
 page-layout: full
 ---
+::: {.grid}
+
+:::{.g-col-12 .g-col-md-12}
+# 👋 Hey there!
+
+:::{.lead}
+I'm John Pinto. I'm a Management and I.T. graduate who is self-motivated and passionate about the field of Data Analytics, Data Visualization and Data Science. I have a great interest in open and reproducible research and deveploment in machine learning and deep learning using open and reproducible tools like Python and R. This is my personal blog where I share on topics that I learn and explore.
+:::
+
+:::
+
+:::
