@@ -2,18 +2,22 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://johnppinto.github.io/blog/posts/2022-11-20_tf_modelling/index.html</loc>
-    <lastmod>2023-04-09T18:10:56.894Z</lastmod>
+    <lastmod>2023-04-11T09:31:09.673Z</lastmod>
   </url>
   <url>
     <loc>https://johnppinto.github.io/blog/index.html</loc>
-    <lastmod>2023-04-09T17:28:02.775Z</lastmod>
+    <lastmod>2023-04-12T18:03:03.687Z</lastmod>
   </url>
   <url>
     <loc>https://johnppinto.github.io/blog/blog.html</loc>
-    <lastmod>2023-04-09T18:10:45.631Z</lastmod>
+    <lastmod>2023-04-12T18:03:04.843Z</lastmod>
   </url>
   <url>
     <loc>https://johnppinto.github.io/blog/about.html</loc>
     <lastmod>2023-04-09T18:11:24.733Z</lastmod>
+  </url>
+  <url>
+    <loc>https://johnppinto.github.io/blog/posts/2023-04-01_pytorch_&_lightning_2.0/index.html</loc>
+    <lastmod>2023-04-12T18:03:02.857Z</lastmod>
   </url>
 </urlset>

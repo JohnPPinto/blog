@@ -40,7 +40,7 @@ website:
   open-graph: true
   page-footer: 
     left: John Pinto {{< fa copyright regular >}} 2023 made with HTML5 <i class="fab fa-html5"></i>, CSS3 <i class="fa-brands fa-css3"></i> and [Quarto](https://quarto.org).
-highlight-style: arrow
+highlight-style: github
 format:
   html:
     mainfont: "Book Antiqua"

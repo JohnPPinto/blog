@@ -1,0 +1,715 @@
+---
+title: "Riding the Waves - PyTorch and Lightning 2.0"
+description: "In this post, I will be talking about the new release by PyTorch and PyTorch Lightning. Also testing the potential of the new updates." 
+author: "John Pinto"
+date: "2023-04-01"
+categories: ["PyTorch", "Lightning", "Fabric", "AI", "Video Classification"]
+image: "featured.png"
+toc: true
+page-layout: full
+code-fold: true
+notebook-links: inline
+---
+
+```{=html}
+<style>
+.quarto-figure-center > figure {
+  text-align: center;
+}
+</style>
+```
+![](featured.png){fig-align="center"}
+
+# Quick Facts on PyTorch and Lightning 2.0 Release
+
+PyTorch and PyTorch Lightning (2.0) were released on 15 March, 2023.
+
+**PyTorch**: The main focus being the improvement in the speed, even the release article title says it
+
+> "PyTorch 2.0: Our next generation release that is faster, more Pythonic and Dynamic as ever"
+
+you can read the article over [here](https://pytorch.org/blog/pytorch-2.0-release/).
+
+This speed that they mention comes with just a single line of code. After you have created your model you just use this code and the code modifies your model to perform at it's best level.
+
+``` python
+torch.compile()
+```
+
+They have even mentioned the details while testing the new functionality and how the `torch.compile()` can improve the speed of the models from different sources \[[HuggingFace](https://github.com/huggingface/transformers), [TIMM](https://github.com/rwightman/pytorch-image-models) and [TorchBench](https://github.com/pytorch/benchmark/)\].
+
+To run this amazing compiled model, PyTorch introduces new technologies - TorchDynamo, AOTAutograd, PrimTorch and TorchInductor. All of this new technologies are working in a flow and they are broken down in three phases - Graph Acquisition, Graph Lowering and Graph Compilation. You can check all of this over [here](https://pytorch.org/get-started/pytorch-2.0/), they have explained complex system in easy to understand way.
+
+::: callout-tip
+Read the above linked article, especially the section on [technology overview](https://pytorch.org/get-started/pytorch-2.0/#technology-overview), this will help you understand the hyper-parameters workings within the torch.compile().
+:::
+
+**PyTorch Lightning** on the other hand was just kind of following PyTorch, they have just mentioned that lightning supports PyTorch 2.0 with backward compatibility and this itself makes it a mature release. But what makes lightning amazing in this release is not the support but the introduction to a new library "[Lightning Fabric](https://lightning.ai/pages/open-source/fabric/)".
+
+![The space where "Lightning Fabric" occupies.](images/fabric.png){fig-align="center"}
+
+PyTorch Lightning has a history for converting the vanilla style of PyTorch code by removing all the boilerplate code. This way it helps in setting up the model training much faster but at the cost of higher complexity when you try to control somethings that you can't. Now, that Fabric is come into the picture this changes the way you are going to train your model. They have basically given control on some of the complex task like accelerators, distributed strategies, and mixed precision, while still retaining full control on your training loop.
+
+## Caveats Part of the Release
+
+PyTorch and PyTorch Lightning 2.0 are the stable release but there are some information that needs attention.
+
+1.  **Hardware**: This speed up performance that the PyTorch team speaks of are based on specific hardware, broadly they have mentioned that NVIDIA Volta and Ampere server class GPUs are capable to produce decent results. So desktop GPUs will need to wait for later releases.
+2.  **Model Saving/Exporting**: Right now the compile model can only be saved using the `model.state_dict()` method. You won't me able to save the object of the model, which returns an error if you try to. You can read the [serialization](https://pytorch.org/get-started/pytorch-2.0/#serialization) part of the article that I have mentioned above. Along with the save part, team will also introduce `torch.export()` mode in the later release.
+
+# Enough Theory, Time to Experiment...
+
+Before I start showing my code and results, let me brief you about it. Many website were already showing the methodology and results of the PyTorch 2.0 on different models, you can check the blog article of [Weights and Biases](https://api.wandb.ai/links/gladiator/d0o6cxp0) that show how they implemented and test the new features.
+
+I wanted to try something different so I choose to implement and test it on a video classification problem rather than a Image Classification or NLP problem. For my Video Classification problem I went with the [HMDB51 dataset](https://serre-lab.clps.brown.edu/resource/hmdb-a-large-human-motion-database). Now, the next step was selecting the hardware, majority of the website have shown that they were using Nvidia A100 GPU, even PyTorch themselves have shown the results based on this hardware and have recommended GPU similar to this type off. For me the only available Ampere GPU was Nvidia **A4000 (CUDA: 8.6)** and as a reference I even used a **Tesla T4 (CUDA: 7.5)**.
+
+::: callout-note
+There's a reason why PyTorch compile mode needs Volta and Ampere GPUs, because the minimum CUDA compute capability needs to be more than 8.0. You can check your hardware compute capability on the [Nvidia website](https://developer.nvidia.com/cuda-gpus).
+:::
+
+### Methodology
+
+The main motive of this testing is to compare the benchmark of the PyTorch 1.13 (Eager Mode) and PyTorch 2.0 (Compile Mode).
+
+There are three Phases of testing that I have conducted:
+
+1.  PyTorch Test
+2.  PyTorch Lightning Test
+3.  Lightning Fabric Test
+
+### Dataset, Dataloaders and Model Details
+
+-   Dataset contains 51 Classes, I have used only **20 classes** for all the experiment.
+
+-   The dataset contained fixed sequencce length of **16 frames**.
+
+-   Total Training Sample: **1898** and Total Validation/Testing Samples: **632**.
+
+-   Batch size: **16** and number of workers was set to max of CPU cores: **8**.
+
+-   [MVit V2 Small](https://arxiv.org/abs/2104.11227) Model was used for all the experiments from [torchvision](https://pytorch.org/vision/main/models/generated/torchvision.models.video.mvit_v2_s.html).
+
+-   **Cross entropy** was used as a loss function and **Adam optimizer** was used for optimizing the model at a default learning rate of **1e-4.**
+
+-   In all the experiments the model was trained for **3 epochs**.
+
+You can check my [Jupyter notebook](https://github.com/JohnPPinto/HMDB51_human_motion_recognition_pytorch/blob/main/HMDB51_human_action_recognition_pytorch.ipynb){target="_blank"} for complete understanding of the dataset preprocessing, Dataloaders and model details.
+
+### Phase 1 - PyTorch Implementation
+
+For this phase, I have used the basic training pipeline code used in PyTorch.
+
+**Defining Training Structure:**
+
+<details>
+
+<summary>Code</summary>
+
+``` python
+def train_step(model, dataloader, loss_fn, optimizer, device, num_classes):
+    """
+    Trains a pytorch model by going into train mode and applying forward pass,
+    loss calculation and optimizer step.
+    
+    Parameters:
+        model: A pytorch model for training.
+        dataloader: A pytorch dataloader for training.
+        loss_fn: A pytorch loss to calculate the model's prediction loss.
+        optimizer: A pytorch optimizer to minimize the loss function.
+        device: A torch device to allocate tensors on 'cpu' or 'cuda'.
+        num_classes: A integer that indicates total number of classes in the dataset.
+        
+    Returns: A tuple of training loss and training accuracy.
+        
+    """
+    # Model on training mode
+    model.train()
+    
+    # Setting train loss and accuracy 
+    train_loss = 0
+    train_acc = torchmetrics.Accuracy(task='multiclass', 
+                                      num_classes=num_classes).to(device)
+    
+    # Looping the dataloaders
+    for batch, (X, y) in tqdm(enumerate(dataloader), 
+                              desc='Model Training', 
+                              total=len(dataloader), 
+                              unit='batch'):
+        X, y = X.to(device), y.to(device)
+        
+        # 5 step to train a model
+        y_pred = model(X) # 1. Forward pass
+        loss = loss_fn(y_pred, y) # 2. Calculate loss
+        train_loss += loss.item() 
+        optimizer.zero_grad() # 3. Initiate optimizer
+        loss.backward() # 4. Backward pass
+        optimizer.step() # 5. Updating the model parameters
+        
+        # Calculating the training accuracy
+        y_pred_labels = torch.argmax(torch.softmax(y_pred, dim=1), dim=1)
+        train_acc.update(y_pred_labels, y)
+    
+    # Averaging the loss and accuracy
+    train_loss = train_loss / len(dataloader)
+    train_acc = train_acc.compute()
+    return train_loss, train_acc
+
+def test_step(model, dataloader, loss_fn, device, num_classes):
+    """
+    Test a pytorch model by going into eval mode and applying forward pass,
+    and loss calculation.
+    
+    Parameters:
+        model: A pytorch model for testing.
+        dataloader: A pytorch dataloader for testing.
+        loss_fn: A pytorch loss to calculate the model's prediction loss.
+        device: A torch device to allocate tensors on 'cpu' or 'cuda'.
+        num_classes: A integer that indicates total number of classes in the dataset.
+        
+    Returns: A tuple of testing loss and testing accuracy.
+    """
+    # Model on evaluation mode
+    model.eval()
+    
+    # Setting train loss and accuracy 
+    test_loss = 0
+    test_acc = torchmetrics.Accuracy(task='multiclass', 
+                                     num_classes=num_classes).to(device)
+    
+    # Using inference mode
+    with torch.no_grad():
+        # Looping the dataloaders
+        for batch, (X, y) in tqdm(enumerate(dataloader), 
+                                  desc='Model Evaluation', 
+                                  total=len(dataloader), 
+                                  unit='batch'):
+            X, y = X.to(device), y.to(device)
+            
+            # Forward pass
+            y_pred = model(X)
+            
+            # Calculate loss
+            loss = loss_fn(y_pred, y)
+            test_loss += loss.item()
+            
+            # Calculate accuracy
+            y_pred_labels = y_pred.argmax(dim=1)
+            test_acc.update(y_pred_labels, y)
+    
+    # Averaging the loss and accuracy
+    test_loss = test_loss / len(dataloader)
+    test_acc = test_acc.compute()
+    return test_loss, test_acc
+
+def model_train(epochs, model, train_dataloader, test_dataloader, optimizer, loss_fn, device, num_classes):
+    """
+    Trains a pytorch model for a certain number of epochs going through the model training 
+    and testing stage, and accumalating the loss, accuracy, and training and testing time.
+    
+    Parameters:
+        epochs: A integer to run the training and testing stage. 
+        model: A pytorch model for training and testing.
+        train_dataloader: A pytorch dataloader for training.
+        test_dataloader: A pytorch dataloader for testing.
+        loss_fn: A pytorch loss to calculate the model's prediction loss.
+        optimizer: A pytorch optimizer to minimize the loss function.
+        device: A torch device to allocate tensors on 'cpu' or 'cuda'.
+        num_classes: A integer that indicates total number of classes in the dataset.
+        
+    Returns: A tuple of accumaleted results in dict and total training time in float datatype.
+    """
+    # Create empty result
+    results = {'train_loss': [],
+               'train_acc': [],
+               'test_loss': [],
+               'test_acc': [],
+               'train_epoch_time(min)': [],
+               'test_epoch_time(min)': []}
+    
+    # Loop through training and testing steps
+    model_train_start_time = timer()
+    for epoch in tqdm(range(epochs), desc=f'Training and Evaluation for {epochs} Epochs', unit='epochs'):
+        # Training the model and timing it.
+        train_epoch_start_time = timer()
+        train_loss, train_acc = train_step(model=model, 
+                                           dataloader=train_dataloader, 
+                                           loss_fn=loss_fn, 
+                                           optimizer=optimizer, 
+                                           device=device, 
+                                           num_classes=num_classes)
+        train_epoch_stop_time = timer()
+        train_epoch_time = (train_epoch_stop_time - train_epoch_start_time)/60
+        
+        # Testing the model and timing it
+        test_epoch_start_time = timer()
+        test_loss, test_acc = test_step(model=model,
+                                        dataloader=test_dataloader,
+                                        loss_fn=loss_fn,
+                                        device=device,
+                                        num_classes=num_classes)
+        test_epoch_stop_time = timer()
+        test_epoch_time = (test_epoch_stop_time - test_epoch_start_time)/60
+        
+        # Print the model result
+        print(f'Epoch: [{epoch+1}/{epochs}] | train_loss: {train_loss:.4f} | train_acc: {train_acc:.4f} | train_time: {train_epoch_time:.4f} min | '
+              f'test loss: {test_loss:.4f} | test_acc: {test_acc:.4f} | test_time: {test_epoch_time:.4f} min')
+        
+        # Saving the results
+        results['train_loss'].append(train_loss)
+        results['train_acc'].append(train_acc.detach().cpu().item())
+        results['test_loss'].append(test_loss)
+        results['test_acc'].append(test_acc.detach().cpu().item())
+        results['train_epoch_time(min)'].append(train_epoch_time)
+        results['test_epoch_time(min)'].append(test_epoch_time)
+        
+    # Calculating total model training time
+    model_train_end_time = timer()
+    total_train_time = (model_train_end_time - model_train_start_time)/60
+    print(f'\nTotal Model Training Time: {total_train_time:.4f} min')
+    return results, total_train_time
+```
+
+</details>
+
+**Training the Model:**
+
+<details>
+
+<summary>Code</summary>
+
+``` python
+set_seed(42)
+
+# Initializing the model and dataloaders
+model, transforms = create_model(num_classes=len(dataset.classes), device=device)
+model.to(device)
+train_dataloader = create_dataloaders(dataset=train_dataset, batch=BATCH_SIZE, shuffle=True, workers=WORKERS)
+test_dataloader = create_dataloaders(dataset=test_dataset, batch=BATCH_SIZE, shuffle=False, workers=WORKERS)
+
+# Intializing loss and optimizer
+loss_fn = torch.nn.CrossEntropyLoss()
+optimizer = torch.optim.Adam(params=model.parameters(), lr=0.0001)
+
+# Setting up compiled model(Introduced in PyTorch 2.0.0)
+model = torch.compile(model, mode='default') # Only used it durning Exp 2.
+
+# Training the model using the function
+NUM_EPOCHS = 3
+exp2_results, exp2_total_train_time = model_train(epochs=NUM_EPOCHS,
+                                                  model=model,
+                                                  train_dataloader=train_dataloader,
+                                                  test_dataloader=test_dataloader,
+                                                  optimizer=optimizer,
+                                                  loss_fn=loss_fn,
+                                                  device=device,
+                                                  num_classes=len(dataset.classes))
+```
+
+</details>
+
+{{< embed notebooks/blog_figures.ipynb#fig-pytorch-exp >}}
+
+As you can see the loss and accuracy are quite similar for both the experiments. The result needs to be same because we do not change the model and the epoch is also same for both. This is good for the new features that it does not make any changes with the model rather a container is created and model is fitted within that container.
+
+The PyTorch team has mentioned that the major changes you will see is with speed, for this to happen all the processing is been done in the initial epoch later there should be a increase in speed, but in my case the eager is doing much better than the compile mode. This might be due to the hardware that I am using the A4000 GPU.
+
+### Phase 2 - PyTorch Lightning Implementation
+
+The training pipeline is similar as before but the structure is defined as per the lightning methodology.
+
+**Defining Training Structure:**
+
+<details>
+
+<summary>Code</summary>
+
+``` python
+class PyLightHMDB51(L.LightningModule):
+    """
+    A Lightning Module containing Model training and validation step.
+    Parameters: 
+        model: A PyTorch Model.
+        loss_fn: A PyTorch loss function.
+        optimizer: A Pytorch Optimizer.
+        num_classes: A integer for total number of classes in the dataset.
+    """
+    def __init__(self, model, loss_fn, optimizer, num_classes):
+        super().__init__()
+        self.model = model
+        self.loss_fn = loss_fn
+        self.optimizer = optimizer
+        self.num_classes = num_classes
+        self.train_acc = torchmetrics.Accuracy(task='multiclass', 
+                                               num_classes=self.num_classes)
+        self.test_acc = torchmetrics.Accuracy(task='multiclass', 
+                                              num_classes=self.num_classes)
+        
+    def forward(self, x):
+        return self.model(x)
+    
+    def training_step(self, train_batch, batch_idx):
+        X, y = train_batch
+        y_preds = self.forward(X)
+        loss = self.loss_fn(y_preds, y)
+        self.log('train_loss', loss, prog_bar=True, on_step=False, on_epoch=True)
+        y_pred_labels = torch.argmax(torch.softmax(y_preds, dim=1), dim=1)
+        self.train_acc.update(y_pred_labels, y)
+        self.log('train_acc', self.train_acc, prog_bar=True, on_step=False, on_epoch=True)
+        return loss
+    
+    def validation_step(self, val_batch, batch_idx):
+        X, y = val_batch
+        y_preds = self.forward(X)
+        loss = self.loss_fn(y_preds, y)
+        self.log('test_loss', loss, prog_bar=True, on_step=False, on_epoch=True)
+        y_pred_labels = torch.argmax(torch.softmax(y_preds, dim=1), dim=1)
+        self.test_acc.update(y_pred_labels, y)
+        self.log('test_acc', self.test_acc, prog_bar=True, on_step=False, on_epoch=True)
+    
+    def configure_optimizers(self):
+        optimizers = self.optimizer
+        return optimizers
+```
+
+</details>
+
+**Training the Model**:
+
+<details>
+
+<summary>Code</summary>
+
+``` python
+set_seed(42)
+
+# Creating the pytorch lightning trainer
+NUM_EPOCHS = 3
+logger = L.pytorch.loggers.CSVLogger(save_dir=RESULTS_DIR, 
+                                     name="pytorch_lightning_compile_mode")
+trainer = L.Trainer(max_epochs=NUM_EPOCHS, 
+                    logger=logger)
+
+# Initializing the model and dataloaders
+model, transforms = create_model(num_classes=len(dataset.classes), device=device)
+train_dataloader = create_dataloaders(dataset=train_dataset, batch=BATCH_SIZE, shuffle=True, workers=WORKERS)
+test_dataloader = create_dataloaders(dataset=test_dataset, batch=BATCH_SIZE, shuffle=False, workers=WORKERS)
+
+# Intializing loss and optimizer
+loss_fn = torch.nn.CrossEntropyLoss()
+optimizer = torch.optim.Adam(params=model.parameters(), lr=0.0001)
+
+# Setting up compiled model(Introduced in PyTorch 2.0.0)
+model = torch.compile(model, mode='default') # Only used it durning Exp 4.
+
+# Initializing the lightning module class
+model = PyLightHMDB51(model=model, 
+                      loss_fn=loss_fn, 
+                      optimizer=optimizer, 
+                      num_classes=len(dataset.classes))
+
+# Fiting the model to trainer.
+start_time = timer()
+trainer.fit(model=model, 
+            train_dataloaders=train_dataloader, 
+            val_dataloaders=test_dataloader)
+end_time = timer()
+exp4_total_train_time = (end_time - start_time)/60
+print(f'Total Time to train the model: {exp4_total_train_time:.4f} min')
+```
+
+</details>
+
+{{< embed notebooks/blog_figures.ipynb#fig-pytorch-light-exp >}}
+
+Here, while training the model the lightning only logs the loss and accuracy. So understanding the time for every epoch is difficult in this case. But similar to pytorch the values of the loss and accuracy are not changed so the training was properly done.
+
+### Phase 3 - Lightning Fabric Implementation
+
+Fabric is quite simple for implementing, the code structure is similar to pytorch that we used in the beginning but we minor changes, some of the manual process is automated by fabric, by this your code have less chances to be broken.
+
+::: callout-note
+I have added a comment "New by Fabric" for all lines that are modified.
+:::
+
+**Defining Training Structure**:
+
+<details>
+
+<summary>Code</summary>
+
+``` python
+def train_step(model, dataloader, loss_fn, optimizer, fabric, num_classes):
+    """
+    Trains a pytorch model by going into train mode and applying forward pass,
+    loss calculation and optimizer step.
+    
+    Parameters:
+        model: A pytorch model for training.
+        dataloader: A pytorch dataloader for training.
+        loss_fn: A pytorch loss to calculate the model's prediction loss.
+        optimizer: A pytorch optimizer to minimize the loss function.
+        fabric: A Fabric function to setup device for the tensors and gradients.
+        num_classes: A integer that indicates total number of classes in the dataset.
+        
+    Returns: A tuple of training loss and training accuracy.
+        
+    """
+    # Model on training mode
+    model.train()
+    
+    # Setting train loss and accuracy 
+    train_loss = 0
+    train_acc = torchmetrics.Accuracy(task='multiclass', num_classes=num_classes).to(fabric.device) # New by Fabric
+    
+    # Looping the dataloaders
+    for batch, (X, y) in tqdm(enumerate(dataloader), desc='Model Training', total=len(dataloader), unit='batch'):
+        # X, y = X.to(device), y.to(device) # New by Fabric
+        
+        # 5 step to train a model
+        y_pred = model(X) # 1. Forward pass
+        loss = loss_fn(y_pred, y) # 2. Calculate loss
+        train_loss += loss.item() 
+        optimizer.zero_grad() # 3. Initiate optimizer
+        #loss.backward() # 4. Backward pass
+        fabric.backward(loss) # New by Fabric
+        optimizer.step() # 5. Updating the model parameters
+        
+        # Calculating the training accuracy
+        y_pred_labels = torch.argmax(torch.softmax(y_pred, dim=1), dim=1)
+        train_acc.update(y_pred_labels, y)
+    
+    # Averaging the loss and accuracy
+    train_loss = train_loss / len(dataloader)
+    train_acc = train_acc.compute()
+    return train_loss, train_acc
+
+def test_step(model, dataloader, loss_fn, fabric, num_classes):
+    """
+    Test a pytorch model by going into eval mode and applying forward pass,
+    and loss calculation.
+    
+    Parameters:
+        model: A pytorch model for testing.
+        dataloader: A pytorch dataloader for testing.
+        loss_fn: A pytorch loss to calculate the model's prediction loss.
+        fabric: A Fabric function to setup device for the tensors and gradients.
+        num_classes: A integer that indicates total number of classes in the dataset.
+        
+    Returns: A tuple of testing loss and testing accuracy.
+    """
+    # Model on evaluation mode
+    model.eval()
+    
+    # Setting train loss and accuracy 
+    test_loss = 0
+    test_acc = torchmetrics.Accuracy(task='multiclass', num_classes=num_classes).to(fabric.device) # New by Fabric
+    
+    # Using inference mode
+    with torch.no_grad():
+        # Looping the dataloaders
+        for batch, (X, y) in tqdm(enumerate(dataloader), desc='Model Evaluation', total=len(dataloader), unit='batch'):
+            # X, y = X.to(device), y.to(device) # New by Fabric
+            
+            # Forward pass
+            y_pred = model(X)
+            
+            # Calculate loss
+            loss = loss_fn(y_pred, y)
+            test_loss += loss.item()
+            
+            # Calculate accuracy
+            y_pred_labels = y_pred.argmax(dim=1)
+            test_acc.update(y_pred_labels, y)
+    
+    # Averaging the loss and accuracy
+    test_loss = test_loss / len(dataloader)
+    test_acc = test_acc.compute()
+    return test_loss, test_acc
+
+def model_train(epochs, model, train_dataloader, test_dataloader, optimizer, loss_fn, fabric, num_classes):
+    """
+    Trains a pytorch model for a certain number of epochs going through the model training 
+    and testing stage, and accumalating the loss, accuracy, and training and testing time.
+    
+    Parameters:
+        epochs: A integer to run the training and testing stage. 
+        model: A pytorch model for training and testing.
+        train_dataloader: A pytorch dataloader for training.
+        test_dataloader: A pytorch dataloader for testing.
+        loss_fn: A pytorch loss to calculate the model's prediction loss.
+        optimizer: A pytorch optimizer to minimize the loss function.
+        fabric: A Fabric function to setup device for the tensors and gradients.
+        num_classes: A integer that indicates total number of classes in the dataset.
+        
+    Returns: A tuple of accumaleted results in dict and total training time in float datatype.
+    """
+    # Create empty result
+    results = {'train_loss': [],
+               'train_acc': [],
+               'test_loss': [],
+               'test_acc': [],
+               'train_epoch_time(min)': [],
+               'test_epoch_time(min)': []}
+    
+    # Loop through training and testing steps
+    model_train_start_time = timer()
+    for epoch in tqdm(range(epochs), desc=f'Training and Evaluation for {epochs} Epochs', unit='epochs'):
+        # Training the model and timing it.
+        train_epoch_start_time = timer()
+        train_loss, train_acc = train_step(model=model, 
+                                           dataloader=train_dataloader, 
+                                           loss_fn=loss_fn, 
+                                           optimizer=optimizer, 
+                                           fabric=fabric, # New by Fabric
+                                           num_classes=num_classes)
+        train_epoch_stop_time = timer()
+        train_epoch_time = (train_epoch_stop_time - train_epoch_start_time)/60
+        
+        # Testing the model and timing it
+        test_epoch_start_time = timer()
+        test_loss, test_acc = test_step(model=model,
+                                        dataloader=test_dataloader,
+                                        loss_fn=loss_fn,
+                                        fabric=fabric, # New by Fabric
+                                        num_classes=num_classes)
+        test_epoch_stop_time = timer()
+        test_epoch_time = (test_epoch_stop_time - test_epoch_start_time)/60
+        
+        # Print the model result
+        print(f'Epoch: [{epoch+1}/{epochs}] | train_loss: {train_loss:.4f} | train_acc: {train_acc:.4f} | train_time: {train_epoch_time:.4f} min | '
+              f'test loss: {test_loss:.4f} | test_acc: {test_acc:.4f} | test_time: {test_epoch_time:.4f} min')
+        
+        # Saving the results
+        results['train_loss'].append(train_loss)
+        results['train_acc'].append(train_acc.detach().cpu().item())
+        results['test_loss'].append(test_loss)
+        results['test_acc'].append(test_acc.detach().cpu().item())
+        results['train_epoch_time(min)'].append(train_epoch_time)
+        results['test_epoch_time(min)'].append(test_epoch_time)
+        
+    # Calculating total model training time
+    model_train_end_time = timer()
+    total_train_time = (model_train_end_time - model_train_start_time)/60
+    print(f'\nTotal Model Training Time: {total_train_time:.4f} min')
+    return results, total_train_time
+```
+
+</details>
+
+**Training the Model**:
+
+<details>
+
+<summary>Code</summary>
+
+``` python
+set_seed(42)
+
+# Initializing Fabric # New by Fabric
+fabric = Fabric()
+
+# Initializing the model and dataloaders
+model, transforms = create_model(num_classes=len(dataset.classes), device=fabric.device) # New by Fabric
+# model.to(device)
+train_dataloader = create_dataloaders(dataset=train_dataset, batch=BATCH_SIZE, shuffle=True, workers=WORKERS)
+test_dataloader = create_dataloaders(dataset=test_dataset, batch=BATCH_SIZE, shuffle=False, workers=WORKERS)
+
+# Intializing loss and optimizer
+loss_fn = torch.nn.CrossEntropyLoss()
+optimizer = torch.optim.Adam(params=model.parameters(), lr=0.0001)
+
+# Fabric setup # New by Fabric
+model, optimizer = fabric.setup(model, optimizer)
+train_dataloader, test_dataloader = fabric.setup_dataloaders(train_dataloader, test_dataloader)
+
+# Setting up compiled model(Introduced in PyTorch 2.0.0)
+model = torch.compile(model, mode='default') # Only used it for Exp 6
+
+# Training the model using the function
+NUM_EPOCHS = 3
+exp6_results, exp6_total_train_time = model_train(epochs=NUM_EPOCHS,
+                                                  model=model, 
+                                                  train_dataloader=train_dataloader, 
+                                                  test_dataloader=test_dataloader, 
+                                                  optimizer=optimizer, 
+                                                  loss_fn=loss_fn, 
+                                                  fabric=fabric, 
+                                                  num_classes=len(dataset.classes))
+```
+
+</details>
+
+{{< embed notebooks/blog_figures.ipynb#fig-fabric-exp >}}
+
+Similar to the result of pytorch but if you see the time plot, here the compile mode reaches at the level of eager mode at the 3rd epoch which means that for every epoch there was a decrease in the training time.
+
+#### Implementation with Mixed Precision
+
+Fabric contains multiple different functionalities to automate manual functions, one of them is mixed precision. So I gave a try and used mixed precision of Floating Point 16.
+
+<details>
+
+<summary>Code</summary>
+
+``` python
+set_seed(42)
+
+# Initializing Fabric with precision # New by Fabric
+fabric = Fabric(precision='16-mixed')
+
+# Initializing the model and dataloaders
+model, transforms = create_model(num_classes=len(dataset.classes), device=fabric.device) # New by Fabric
+# model.to(device)
+train_dataloader = create_dataloaders(dataset=train_dataset, batch=BATCH_SIZE, shuffle=True, workers=WORKERS)
+test_dataloader = create_dataloaders(dataset=test_dataset, batch=BATCH_SIZE, shuffle=False, workers=WORKERS)
+
+# Intializing loss and optimizer
+loss_fn = torch.nn.CrossEntropyLoss()
+optimizer = torch.optim.Adam(params=model.parameters(), lr=0.0001)
+
+# Fabric setup # New by Fabric
+model, optimizer = fabric.setup(model, optimizer)
+train_dataloader, test_dataloader = fabric.setup_dataloaders(train_dataloader, test_dataloader)
+
+# Setting up compiled model(Introduced in PyTorch 2.0.0)
+model = torch.compile(model, mode='default') # Only used it for Exp 8
+
+# Training the model using the function
+NUM_EPOCHS = 3
+exp8_results, exp8_total_train_time = model_train(epochs=NUM_EPOCHS,
+                                                  model=model, 
+                                                  train_dataloader=train_dataloader, 
+                                                  test_dataloader=test_dataloader, 
+                                                  optimizer=optimizer, 
+                                                  loss_fn=loss_fn, 
+                                                  fabric=fabric, 
+                                                  num_classes=len(dataset.classes))
+```
+
+</details>
+
+{{< embed notebooks/blog_figures.ipynb#fig-fabric16-exp >}}
+
+There is no major changes, just a slight decrease in training time and the loss and accuracy is same due to no changes in the model.
+
+# Results
+
+So now that all the experiments are completed, it's time to check the overall comparison of all the experiment and which one has performed the best.
+
+::: {layout-ncol="2"}
+![Nvidia RTX A4000](images/model_train_time_a4000.png){fig-align="center"}
+
+![Nvidia Tesla T4](images/model_train_time_teslat4.png){fig-align="center"}
+:::
+
+This are some shocking results I have got, If you see the plots clearly, the PyTorch Eager mode, the first experiment that I did gave the best inference time for both the A4000 and for Tesla T4, actually did not see that coming, I was hoping for the compile mode to have the best time at least for the A4000 knowing that it's an Ampere chip and with a compute capability of 8.6. This might not be the case if we had trained the model using the A100 or A10 GPUs.
+
+The PyTorch Lightning in compile mode took the longest time to train a model, one reason might be that lightning already has more computation in the background for automating multiple different task and we have added the compile mode which takes longer time in the initial epoch.
+
+While pytorch shows best speed and lightning clearly has a hard time, fabric comes in the middle of both them. Showing better results than lightning and also providing some of the cool features that lightning provides onto the pytorch code. On the other hand adding mixed precision didn't yield any major difference, this part needs more experimentation like modifying the hyper-parameters - batch size, etc.
+
+# Conclusion
+
+In this article, we have explored the new features that PyTorch and PyTorch Lightning has released. These features are in the stable release of the version 2.0, they are still in the early stage of the development and many more changes and support for different hardware will be available in the future release. There are many more experiments and optimization that need to be done, however those are for some other days. Thank you
+
+I hope that you enjoyed this article, if you want to try the codes yourself you can check them out over [here](https://github.com/JohnPPinto/HMDB51_human_motion_recognition_pytorch){target="_blank"}, do try the code on different GPUs and share the results with me, I am more than happy to improve this article.

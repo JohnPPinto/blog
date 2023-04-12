@@ -19,5 +19,20 @@
   },
   "posts/2022-11-20_tf_modelling/index.qmd": {
     "index.html": "0c55c6d9"
+  },
+  "posts/2023-04-01_pytorch_&_lightning_2.0/index.qmd": {
+    "index.html": "cedc6d72"
+  },
+  "posts/2023-04-01_pytorch_&_lightning_2.0/Untitled0.ipynb": {
+    "Untitled0.ipynb.html": "ade2afe4"
+  },
+  "posts/2023-04-01_pytorch_&_lightning_2.0/notebooks/blog_pytorch2_0.ipynb": {
+    "blog_pytorch2_0.ipynb.html": "468467d0"
+  },
+  "posts/2023-04-01_pytorch_&_lightning_2.0/notebooks/blog_figures.ipynb": {
+    "blog_figures.ipynb.html": "a4a889b9"
+  },
+  "posts/2023-04-01_pytorch_&_lightning_2.0/notebooks/HMDB51_human_action_recognition_pytorch.ipynb": {
+    "HMDB51_human_action_recognition_pytorch.ipynb.html": "2cbeca6d"
   }
 }
