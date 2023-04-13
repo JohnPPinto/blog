@@ -34,5 +34,28 @@
   },
   "posts/2023-04-01_pytorch_&_lightning_2.0/notebooks/HMDB51_human_action_recognition_pytorch.ipynb": {
     "HMDB51_human_action_recognition_pytorch.ipynb.html": "2cbeca6d"
+  },
+  "posts/2023-04-01_pytorch_and_lightning_2.0/index.qmd": {
+    "index.html": "99e66b68"
+  },
+  "posts/2023-04-01_pytorch_and_lightning_2.0/notebooks/blog_figures.ipynb": {
+    "blog_figures.ipynb.html": "08391cf5",
+    "blog_figures.html": "4bf276e8"
+  },
+  "docs/posts/2023-04-01_pytorch_&_lightning_2.0/notebooks/blog_figures.ipynb": {
+    "blog_figures.html": "066f81b9"
+  },
+  "docs/posts/2023-04-01_pytorch_&_lightning_2.0/notebooks/blog_pytorch2_0.ipynb": {
+    "blog_pytorch2_0.html": "e9b06bb9"
+  },
+  "docs/posts/2023-04-01_pytorch_&_lightning_2.0/notebooks/HMDB51_human_action_recognition_pytorch.ipynb": {
+    "HMDB51_human_action_recognition_pytorch.html": "d6c5a954"
+  },
+  "posts/2023-04-01_pytorch_and_lightning_2.0/notebooks/HMDB51_human_action_recognition_pytorch.ipynb": {
+    "HMDB51_human_action_recognition_pytorch.html": "a10d13eb",
+    "HMDB51_human_action_recognition_pytorch.ipynb.html": "dd4626b5"
+  },
+  "docs/posts/2023-04-01_pytorch_and_lightning_2.0/notebooks/HMDB51_human_action_recognition_pytorch.ipynb": {
+    "HMDB51_human_action_recognition_pytorch.html": "34c139f8"
   }
 }

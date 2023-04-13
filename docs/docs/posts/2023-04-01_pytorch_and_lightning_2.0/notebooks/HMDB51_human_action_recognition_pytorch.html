@@ -1,108 +1,86 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
-    <meta charset="utf-8">
-    <meta name="generator" content="quarto-1.3.302">
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.302">
 
-    <meta name="author" content="John Pinto">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-    <title>John Pinto - HMDB51 - Human Action Recognition using Pytorch</title>    <style>
-      code{white-space: pre-wrap;}
-      span.smallcaps{font-variant: small-caps;}
-      div.columns{display: flex; gap: min(4vw, 1.5em);}
-      div.column{flex: auto; overflow-x: auto;}
-      div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-      ul.task-list{list-style: none;}
-      ul.task-list li input[type="checkbox"] {
-        width: 0.8em;
-        margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
-        vertical-align: middle;
-      }
-      /* CSS for syntax highlighting */
-      pre > code.sourceCode { white-space: pre; position: relative; }
-      pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-      pre > code.sourceCode > span:empty { height: 1.2em; }
-      .sourceCode { overflow: visible; }
-      code.sourceCode > span { color: inherit; text-decoration: inherit; }
-      div.sourceCode { margin: 1em 0; }
-      pre.sourceCode { margin: 0; }
-      @media screen {
-      div.sourceCode { overflow: auto; }
-      }
-      @media print {
-      pre > code.sourceCode { white-space: pre-wrap; }
-      pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-      }
-      pre.numberSource code
-        { counter-reset: source-line 0; }
-      pre.numberSource code > span
-        { position: relative; left: -4em; counter-increment: source-line; }
-      pre.numberSource code > span > a:first-child::before
-        { content: counter(source-line);
-          position: relative; left: -1em; text-align: right; vertical-align: baseline;
-          border: none; display: inline-block;
-          -webkit-touch-callout: none; -webkit-user-select: none;
-          -khtml-user-select: none; -moz-user-select: none;
-          -ms-user-select: none; user-select: none;
-          padding: 0 4px; width: 4em;
-        }
-      pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-      div.sourceCode
-        {   }
-      @media screen {
-      pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-      }
-    </style>
-    <style>
-      .quarto-embed-header {
-        height: 3em;
-        width: 100%;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        border-bottom: solid 1px;
-      }
-      .quarto-embed-header h6 {
-        font-size: 1em;
-        padding-top: 0.6em;
-        margin-left: 1em;
-        margin-right: 1em;
-        font-weight: 300;
-      }
-      .quarto-embed-header a.quarto-download-embed {
-        font-size: 0.7em;
-        margin-top: 1em;
-        margin-bottom: 1em;
-        margin-left: 1em;
-        margin-right: 1em;
-      }
-    </style>
-    
-<script src="../../../site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="../../../site_libs/quarto-nav/headroom.min.js"></script>
-<script src="../../../site_libs/clipboard/clipboard.min.js"></script>
-<script src="../../../site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="../../../site_libs/quarto-search/fuse.min.js"></script>
-<script src="../../../site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="../../../">
-<link href="../../../assets/images/favicon.png" rel="icon" type="image/png">
-<script src="../../../site_libs/cookie-consent/cookie-consent.js"></script>
-<link href="../../../site_libs/cookie-consent/cookie-consent.css" rel="stylesheet">
-<script src="../../../site_libs/quarto-html/quarto.js"></script>
-<script src="../../../site_libs/quarto-html/popper.min.js"></script>
-<script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="../../../site_libs/quarto-html/anchor.min.js"></script>
-<link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../../../site_libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="../../../site_libs/quarto-contrib/fontawesome6-0.1.0/all.css" rel="stylesheet">
-<link href="../../../site_libs/quarto-contrib/fontawesome6-0.1.0/latex-fontsize.css" rel="stylesheet">
-     <script id="quarto-search-options" type="application/json">{
+
+<title>John Pinto - HMDB51 - Human Action Recognition using Pytorch</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../../">
+<link href="../../../../assets/images/favicon.png" rel="icon" type="image/png">
+<script src="../../../../site_libs/cookie-consent/cookie-consent.js"></script>
+<link href="../../../../site_libs/cookie-consent/cookie-consent.css" rel="stylesheet">
+<script src="../../../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../../../site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<script src="../../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../../../site_libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../../../../site_libs/quarto-contrib/fontawesome6-0.1.0/all.css" rel="stylesheet">
+<link href="../../../../site_libs/quarto-contrib/fontawesome6-0.1.0/latex-fontsize.css" rel="stylesheet">
+<script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
   "collapse-after": 3,
@@ -120,7 +98,8 @@
     "search-detached-cancel-button-title": "Cancel",
     "search-submit-button-title": "Submit"
   }
-}</script>  <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-6DE2RCBFFM"></script>
+}</script>
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-6DE2RCBFFM"></script>
 
 <script type="text/plain" cookie-consent="tracking">
 
@@ -128,7 +107,8 @@ window.dataLayer = window.dataLayer || [];
 function gtag(){dataLayer.push(arguments);}
 gtag('js', new Date());
 gtag('config', 'G-6DE2RCBFFM', { 'anonymize_ip': true});
-</script>  
+</script>
+
 <script type="text/javascript" charset="UTF-8">
 document.addEventListener('DOMContentLoaded', function () {
 cookieconsent.run({
@@ -143,35 +123,36 @@ cookieconsent.run({
   });
 });
 </script> 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+  
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
 <script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
-<script src="https://unpkg.com/@jupyter-widgets/html-manager@*/dist/embed-amd.js" crossorigin="anonymous"></script>  
-        <link rel="stylesheet" href="../../../styles.css">
-      <meta property="og:title" content="John Pinto - HMDB51 - Human Action Recognition using Pytorch">
+<script src="https://unpkg.com/@jupyter-widgets/html-manager@*/dist/embed-amd.js" crossorigin="anonymous"></script>
+
+
+<link rel="stylesheet" href="../../../../styles.css">
+<meta property="og:title" content="John Pinto - HMDB51 - Human Action Recognition using Pytorch">
 <meta property="og:description" content="">
-<meta property="og:image" content="https://johnppinto.github.io/blog/posts/2023-04-01_pytorch_&amp;_lightning_2.0/notebooks/HMDB51_human_action_recognition_pytorch_files/figure-html/cell-11-output-1.png">
+<meta property="og:image" content="https://johnppinto.github.io/blog/docs/posts/2023-04-01_pytorch_and_lightning_2.0/notebooks/HMDB51_human_action_recognition_pytorch_files/figure-html/cell-11-output-1.png">
 <meta property="og:site-name" content="John Pinto">
 <meta property="og:image:height" content="1590">
 <meta property="og:image:width" content="1570">
 <meta name="twitter:title" content="John Pinto - HMDB51 - Human Action Recognition using Pytorch">
 <meta name="twitter:description" content="">
-<meta name="twitter:image" content="https://johnppinto.github.io/blog/posts/2023-04-01_pytorch_&amp;_lightning_2.0/notebooks/HMDB51_human_action_recognition_pytorch_files/figure-html/cell-11-output-1.png">
+<meta name="twitter:image" content="https://johnppinto.github.io/blog/docs/posts/2023-04-01_pytorch_and_lightning_2.0/notebooks/HMDB51_human_action_recognition_pytorch_files/figure-html/cell-11-output-1.png">
 <meta name="twitter:image-height" content="1590">
 <meta name="twitter:image-width" content="1570">
 <meta name="twitter:card" content="summary_large_image">
 </head>
-  <body class="floating nav-fixed quarto-notebook">
-    <div class="quarto-embed-header">
-      <h6><i class="bi bi-journal-code"></i> HMDB51_human_action_recognition_pytorch.ipynb</h6>
-      <a href="../../../posts/2023-04-01_pytorch_&amp;_lightning_2.0/notebooks/notebooks/HMDB51_human_action_recognition_pytorch.ipynb" class="btn btn-primary quarto-download-embed" download="HMDB51_human_action_recognition_pytorch.ipynb">Download Notebook</a>
-    </div>
-     <div id="quarto-search-results"></div>
+
+<body class="nav-fixed fullcontent">
+
+<div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
     <nav class="navbar navbar-expand-lg navbar-dark ">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container">
-    <a class="navbar-brand" href="../../../index.html">
+    <a class="navbar-brand" href="../../../../index.html">
     <span class="navbar-title">John Pinto</span>
     </a>
   </div>
@@ -182,11 +163,11 @@ cookieconsent.run({
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../../../blog.html" rel="" target="">
+    <a class="nav-link" href="../../../../blog.html" rel="" target="">
  <span class="menu-text">Blog</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../../about.html" rel="" target="">
+    <a class="nav-link" href="../../../../about.html" rel="" target="">
  <span class="menu-text">About</span></a>
   </li>  
   <li class="nav-item">
@@ -216,7 +197,7 @@ cookieconsent.run({
  <span class="menu-text"></span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="../../../blog.xml" rel="" target="_blank"><i class="bi bi-rss" role="img">
+    <a class="nav-link" href="../../../../blog.xml" rel="" target="_blank"><i class="bi bi-rss" role="img">
 </i> 
  <span class="menu-text"></span></a>
   </li>  
@@ -229,89 +210,39 @@ cookieconsent.run({
     </nav>
 </header>
 <!-- content -->
-<header id="title-block-header" class="quarto-title-block default toc-left page-columns page-full">
-  <div class="quarto-title-banner page-columns page-full">
-    <div class="quarto-title column-body">
-      <h1 class="title">HMDB51 - Human Action Recognition using Pytorch</h1>
-                      </div>
-  </div>
-    
-  
-  <div class="quarto-title-meta">
-
-      <div>
-      <div class="quarto-title-meta-heading">Author</div>
-      <div class="quarto-title-meta-contents">
-               <p>John Pinto </p>
-            </div>
-    </div>
-      
-    
-      
-    </div>
-    
-  
-  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
-    <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">On this page</h2>
-   
-  <ul>
-  <li><a href="#importing-libraries" id="toc-importing-libraries" class="nav-link active" data-scroll-target="#importing-libraries">Importing Libraries</a></li>
-  <li><a href="#downloading-the-dataset" id="toc-downloading-the-dataset" class="nav-link" data-scroll-target="#downloading-the-dataset">Downloading the Dataset</a></li>
-  <li><a href="#visualizing-the-dataset" id="toc-visualizing-the-dataset" class="nav-link" data-scroll-target="#visualizing-the-dataset">Visualizing the dataset</a></li>
-  <li><a href="#preprocessing-the-dataset" id="toc-preprocessing-the-dataset" class="nav-link" data-scroll-target="#preprocessing-the-dataset">Preprocessing the Dataset</a></li>
-  <li><a href="#creating-a-pretrained-model" id="toc-creating-a-pretrained-model" class="nav-link" data-scroll-target="#creating-a-pretrained-model">Creating A Pretrained Model</a></li>
-  <li><a href="#creating-dataloaders" id="toc-creating-dataloaders" class="nav-link" data-scroll-target="#creating-dataloaders">Creating DataLoaders</a></li>
-  <li><a href="#pytorch---model-training-and-testing" id="toc-pytorch---model-training-and-testing" class="nav-link" data-scroll-target="#pytorch---model-training-and-testing">PyTorch - Model Training and Testing</a>
-  <ul class="collapse">
-  <li><a href="#exp-1-pytorch-before-2.0-pytorch-eager-mode" id="toc-exp-1-pytorch-before-2.0-pytorch-eager-mode" class="nav-link" data-scroll-target="#exp-1-pytorch-before-2.0-pytorch-eager-mode">Exp 1: PyTorch Before 2.0 (PyTorch Eager Mode)</a></li>
-  <li><a href="#exp-2-pytorch-2.0-pytorch-compile-mode" id="toc-exp-2-pytorch-2.0-pytorch-compile-mode" class="nav-link" data-scroll-target="#exp-2-pytorch-2.0-pytorch-compile-mode">Exp 2: PyTorch 2.0 (PyTorch Compile Mode)</a></li>
-  </ul></li>
-  <li><a href="#pytorch-lightning---model-training-and-testing" id="toc-pytorch-lightning---model-training-and-testing" class="nav-link" data-scroll-target="#pytorch-lightning---model-training-and-testing">PyTorch Lightning - Model Training and Testing</a>
-  <ul class="collapse">
-  <li><a href="#exp-3-pytorch-lightning" id="toc-exp-3-pytorch-lightning" class="nav-link" data-scroll-target="#exp-3-pytorch-lightning">Exp 3: PyTorch Lightning</a></li>
-  <li><a href="#exp-4-pytorch-lightning---compile-mode" id="toc-exp-4-pytorch-lightning---compile-mode" class="nav-link" data-scroll-target="#exp-4-pytorch-lightning---compile-mode">Exp 4: PyTorch Lightning - Compile Mode</a></li>
-  </ul></li>
-  <li><a href="#lightning-fabric---model-training-and-testing" id="toc-lightning-fabric---model-training-and-testing" class="nav-link" data-scroll-target="#lightning-fabric---model-training-and-testing">Lightning Fabric - Model training and Testing</a>
-  <ul class="collapse">
-  <li><a href="#exp-5-fabric-lightning" id="toc-exp-5-fabric-lightning" class="nav-link" data-scroll-target="#exp-5-fabric-lightning">Exp 5: Fabric Lightning</a></li>
-  <li><a href="#exp-6-fabric-lightning---compile-mode" id="toc-exp-6-fabric-lightning---compile-mode" class="nav-link" data-scroll-target="#exp-6-fabric-lightning---compile-mode">Exp 6: Fabric Lightning - Compile mode</a></li>
-  <li><a href="#exp-7-fabric-precision" id="toc-exp-7-fabric-precision" class="nav-link" data-scroll-target="#exp-7-fabric-precision">Exp 7: Fabric + Precision</a></li>
-  <li><a href="#exp-8-fabric-precision-compile" id="toc-exp-8-fabric-precision-compile" class="nav-link" data-scroll-target="#exp-8-fabric-precision-compile">Exp 8: Fabric + Precision + Compile</a></li>
-  </ul></li>
-  <li><a href="#training-and-testing-on-full-dataset-and-deploying-the-model" id="toc-training-and-testing-on-full-dataset-and-deploying-the-model" class="nav-link" data-scroll-target="#training-and-testing-on-full-dataset-and-deploying-the-model">Training and Testing on Full Dataset and Deploying the Model</a>
-  <ul class="collapse">
-  <li><a href="#creating-the-model" id="toc-creating-the-model" class="nav-link" data-scroll-target="#creating-the-model">Creating the model</a></li>
-  <li><a href="#getting-the-full-dataset-and-dataloaders" id="toc-getting-the-full-dataset-and-dataloaders" class="nav-link" data-scroll-target="#getting-the-full-dataset-and-dataloaders">Getting the Full Dataset and Dataloaders</a></li>
-  <li><a href="#training-model-for-full-dataset" id="toc-training-model-for-full-dataset" class="nav-link" data-scroll-target="#training-model-for-full-dataset">Training Model for Full Dataset</a></li>
-  <li><a href="#storing-files-for-demo-app." id="toc-storing-files-for-demo-app." class="nav-link" data-scroll-target="#storing-files-for-demo-app.">Storing Files for Demo App.</a></li>
-  <li><a href="#saving-and-loading-the-model" id="toc-saving-and-loading-the-model" class="nav-link" data-scroll-target="#saving-and-loading-the-model">Saving and Loading the Model</a></li>
-  <li><a href="#creating-a-text-file-for-modules-and-packages" id="toc-creating-a-text-file-for-modules-and-packages" class="nav-link" data-scroll-target="#creating-a-text-file-for-modules-and-packages">Creating a text file for Modules and Packages</a></li>
-  <li><a href="#creating-a-python-script-to-preprocess-the-data" id="toc-creating-a-python-script-to-preprocess-the-data" class="nav-link" data-scroll-target="#creating-a-python-script-to-preprocess-the-data">Creating a Python Script to Preprocess the Data</a></li>
-  <li><a href="#creating-a-python-script-to-create-the-model" id="toc-creating-a-python-script-to-create-the-model" class="nav-link" data-scroll-target="#creating-a-python-script-to-create-the-model">Creating a Python Script to Create the Model</a></li>
-  <li><a href="#creating-a-python-script-for-gradio-app" id="toc-creating-a-python-script-for-gradio-app" class="nav-link" data-scroll-target="#creating-a-python-script-for-gradio-app">Creating a Python Script for Gradio App</a></li>
-  <li><a href="#deploying-on-huggingface" id="toc-deploying-on-huggingface" class="nav-link" data-scroll-target="#deploying-on-huggingface">Deploying on HuggingFace</a></li>
-  </ul></li>
-  </ul>
-</nav>
-</nav>
-<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-    </div>
+    
 <!-- main -->
-<main class="content quarto-banner-title-block page-columns page-full" id="quarto-document-content">      
-     <section id="importing-libraries" class="level2 page-columns page-full">
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">HMDB51 - Human Action Recognition using Pytorch</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="importing-libraries" class="level2">
 <h2 class="anchored" data-anchor-id="importing-libraries">Importing Libraries</h2>
-<div class="cell-container column-page-left"><div class="cell-decorator"><pre>In [1]:</pre></div><div class="cell" data-tags="[]" data-execution_count="1">
+<div class="cell" data-tags="[]" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>pip install <span class="op">-</span>U <span class="op">-</span>q <span class="op">-</span>r requirements.txt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv</code></pre>
 </div>
-</div></div>
-<div class="cell-container column-page-left"><div class="cell-decorator"><pre>In [2]:</pre></div><div class="cell" data-execution_count="2">
+</div>
+<div class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> shutil</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> rarfile</span>
@@ -339,8 +270,8 @@ cookieconsent.run({
 <span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> torchvision.models.video <span class="im">import</span> mvit_v2_s, MViT_V2_S_Weights</span>
 <span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> lightning <span class="im">as</span> L</span>
 <span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> lightning.fabric <span class="im">import</span> Fabric</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div></div>
-<div class="cell-container column-page-left"><div class="cell-decorator"><pre>In [3]:</pre></div><div class="cell" data-execution_count="3">
+</div>
+<div class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f'Torch version: </span><span class="sc">{</span>torch<span class="sc">.</span>__version__<span class="sc">}</span><span class="ss">'</span>)</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f'Torchvision version: </span><span class="sc">{</span>torchvision<span class="sc">.</span>__version__<span class="sc">}</span><span class="ss">'</span>)</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f'Lightning version: </span><span class="sc">{</span>L<span class="sc">.</span>__version__<span class="sc">}</span><span class="ss">'</span>)</span>
@@ -351,8 +282,8 @@ Torchvision version: 0.15.1+cu117
 Lightning version: 2.0.1
 GPU score: (8, 6)</code></pre>
 </div>
-</div></div>
-<div class="cell-container column-page-left"><div class="cell-decorator"><pre>In [4]:</pre></div><div class="cell" data-execution_count="4">
+</div>
+<div class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Setting seed for randomness</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> set_seed(seed: <span class="bu">int</span> <span class="op">=</span> <span class="dv">42</span>):</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    np.random.seed(seed)</span>
@@ -367,18 +298,18 @@ GPU score: (8, 6)</code></pre>
 <div class="cell-output cell-output-display" data-execution_count="4">
 <pre><code>device(type='cuda')</code></pre>
 </div>
-</div></div>
+</div>
 </section>
-<section id="downloading-the-dataset" class="level2 page-columns page-full">
+<section id="downloading-the-dataset" class="level2">
 <h2 class="anchored" data-anchor-id="downloading-the-dataset">Downloading the Dataset</h2>
 <p>Downloading the data from the dataset origin.</p>
-<div class="cell-container column-page-left"><div class="cell-decorator"><pre>In [5]:</pre></div><div class="cell" data-execution_count="5">
+<div class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>DATA_URL <span class="op">=</span> <span class="st">'http://serre-lab.clps.brown.edu/wp-content/uploads/2013/10/hmdb51_org.rar'</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>RAW_DATA_PATH <span class="op">=</span> <span class="st">'raw_data'</span></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>DATA_PATH <span class="op">=</span> <span class="st">'data'</span></span>
 <span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>HMDB_DATA_PATH <span class="op">=</span> os.path.join(DATA_PATH, <span class="st">'HMDB51'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div></div>
-<div class="cell-container column-page-left"><div class="cell-decorator"><pre>In [6]:</pre></div><div class="cell" data-tags="[]" data-execution_count="6">
+</div>
+<div class="cell" data-tags="[]" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> os.path.isfile(<span class="st">'hmdb51_org.rar'</span>):</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">'[INFO] Data already exists!'</span>)</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span>:</span>
@@ -392,9 +323,9 @@ GPU score: (8, 6)</code></pre>
 <pre><code>[INFO] Downloading data.
 [INFO] Data is been downloaded!</code></pre>
 </div>
-</div></div>
+</div>
 <p>Extracting the data in the raw_data directory</p>
-<div class="cell-container column-page-left"><div class="cell-decorator"><pre>In [7]:</pre></div><div class="cell" data-execution_count="7">
+<div class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> os.path.exists(RAW_DATA_PATH):</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">'[INFO] Data path already exists!'</span>)</span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span>:</span>
@@ -408,9 +339,9 @@ GPU score: (8, 6)</code></pre>
 <pre><code>[INFO] Extracting data.
 [INFO] Data extraction done!</code></pre>
 </div>
-</div></div>
+</div>
 <p>Extracting all the raw data in the data directory and deleting the raw data from the system..</p>
-<div class="cell-container column-page-left"><div class="cell-decorator"><pre>In [8]:</pre></div><div class="cell" data-execution_count="8">
+<div class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> os.path.exists(DATA_PATH):</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">'[INFO] Data path already exists!'</span>)</span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span>:</span>
@@ -480,9 +411,9 @@ GPU score: (8, 6)</code></pre>
 
 [INFO] Deleted raw data.</code></pre>
 </div>
-</div></div>
+</div>
 <p>Checking some info on the data that is been extracted.</p>
-<div class="cell-container column-page-left"><div class="cell-decorator"><pre>In [9]:</pre></div><div class="cell" data-execution_count="9">
+<div class="cell" data-execution_count="9">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> dirpath, dirnames, filenames <span class="kw">in</span> os.walk(DATA_PATH):</span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f'There are </span><span class="sc">{</span><span class="bu">len</span>(dirnames)<span class="sc">}</span><span class="ss"> directories and </span><span class="sc">{</span><span class="bu">len</span>(filenames)<span class="sc">}</span><span class="ss"> files in "</span><span class="sc">{</span>dirpath<span class="sc">}</span><span class="ss">".'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -539,12 +470,12 @@ There are 0 directories and 106 files in "data/pour".
 There are 0 directories and 109 files in "data/smoke".
 There are 0 directories and 136 files in "data/fall_floor".</code></pre>
 </div>
-</div></div>
+</div>
 </section>
-<section id="visualizing-the-dataset" class="level2 page-columns page-full">
+<section id="visualizing-the-dataset" class="level2">
 <h2 class="anchored" data-anchor-id="visualizing-the-dataset">Visualizing the dataset</h2>
 <p>Now that the data is downloaded, lets view the data with the labels.</p>
-<div class="cell-container column-page-left"><div class="cell-decorator"><pre>In [10]:</pre></div><div class="cell" data-execution_count="10">
+<div class="cell" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">20</span>, <span class="dv">20</span>))</span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>CLASSES <span class="op">=</span> <span class="bu">sorted</span>(os.listdir(DATA_PATH))</span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -571,19 +502,19 @@ There are 0 directories and 136 files in "data/fall_floor".</code></pre>
 <div class="cell-output cell-output-display">
 <p><img src="HMDB51_human_action_recognition_pytorch_files/figure-html/cell-11-output-1.png" class="img-fluid"></p>
 </div>
-</div></div>
+</div>
 </section>
-<section id="preprocessing-the-dataset" class="level2 page-columns page-full">
+<section id="preprocessing-the-dataset" class="level2">
 <h2 class="anchored" data-anchor-id="preprocessing-the-dataset">Preprocessing the Dataset</h2>
 <p>Creating pytorch Dataset.</p>
 <p>In this steps we will be creating a custom dataset class using the functionality provided by PyTorch. 1. Read the video file. 2. Extracting the frames after every distance for a max sequence length. 3. Assigning label index for all the classes. 4. Performing torchvision.transform on the video data. 5. Returning tuple of video and label data as a tensor.</p>
-<div class="cell-container column-page-left"><div class="cell-decorator"><pre>In [11]:</pre></div><div class="cell" data-execution_count="11">
+<div class="cell" data-execution_count="11">
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Defining variables</span></span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>SEQUENCE_LENGTH <span class="op">=</span> <span class="dv">16</span> <span class="co"># Frames feeded to the model as a single sequence</span></span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>NUM_CLASSES <span class="op">=</span> <span class="dv">20</span> <span class="co"># Selecting 20 classes from 51 classes</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div></div>
+</div>
 <p>Before creating the dataset, first lets clean it.<br> Here we will check whether the videos are readable and the frame count needs to be more than the Sequence Length frames.</p>
-<div class="cell-container column-page-left"><div class="cell-decorator"><pre>In [12]:</pre></div><div class="cell" data-execution_count="12">
+<div class="cell" data-execution_count="12">
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>files_list <span class="op">=</span> [os.path.join(DATA_PATH, <span class="bu">dir</span>, video) <span class="cf">for</span> <span class="bu">dir</span> <span class="kw">in</span> CLASSES <span class="cf">for</span> video <span class="kw">in</span> os.listdir(DATA_PATH <span class="op">+</span> <span class="st">"/"</span> <span class="op">+</span> <span class="bu">dir</span>)]</span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>remove_file_list <span class="op">=</span> []</span>
 <span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> <span class="bu">file</span> <span class="kw">in</span> files_list:</span>
@@ -595,8 +526,8 @@ There are 0 directories and 136 files in "data/fall_floor".</code></pre>
 <div class="cell-output cell-output-display" data-execution_count="12">
 <pre><code>[]</code></pre>
 </div>
-</div></div>
-<div class="cell-container column-page-left"><div class="cell-decorator"><pre>In [13]:</pre></div><div class="cell" data-execution_count="13">
+</div>
+<div class="cell" data-execution_count="13">
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Deleting the video files</span></span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="bu">len</span>(remove_file_list) <span class="op">&gt;</span> <span class="dv">0</span>:</span>
 <span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> file_path <span class="kw">in</span> remove_file_list:</span>
@@ -610,8 +541,8 @@ There are 0 directories and 136 files in "data/fall_floor".</code></pre>
 <div class="cell-output cell-output-stdout">
 <pre><code>There are no files to delete.</code></pre>
 </div>
-</div></div>
-<div class="cell-container column-page-left"><div class="cell-decorator"><pre>In [14]:</pre></div><div class="cell" data-execution_count="14">
+</div>
+<div class="cell" data-execution_count="14">
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> HumanActionDataset(Dataset):</span>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
 <span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="co">    A class to create a PyTorch dataset using the video files directory,</span></span>
@@ -665,8 +596,8 @@ There are 0 directories and 136 files in "data/fall_floor".</code></pre>
 <span id="cb23-51"><a href="#cb23-51" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> <span class="va">self</span>.transform(selected_frame), label</span>
 <span id="cb23-52"><a href="#cb23-52" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span>:</span>
 <span id="cb23-53"><a href="#cb23-53" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> selected_frame, label</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div></div>
-<div class="cell-container column-page-left"><div class="cell-decorator"><pre>In [15]:</pre></div><div class="cell" data-execution_count="15">
+</div>
+<div class="cell" data-execution_count="15">
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Creating the dataset</span></span>
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>dataset <span class="op">=</span> HumanActionDataset(video_dir<span class="op">=</span>DATA_PATH, seq_len<span class="op">=</span>SEQUENCE_LENGTH, num_classes<span class="op">=</span>NUM_CLASSES)</span>
 <span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f'Length of the dataset: </span><span class="sc">{</span><span class="bu">len</span>(dataset)<span class="sc">}</span><span class="ss">'</span>)</span>
@@ -704,11 +635,11 @@ tensor([[[ 0.,  0.,  0.,  ...,  0.,  0.,  0.],
 label tensor: 16
 Shape of the video tensor: torch.Size([16, 3, 240, 320]) and shape of the label: torch.Size([])</code></pre>
 </div>
-</div></div>
+</div>
 </section>
-<section id="creating-a-pretrained-model" class="level2 page-columns page-full">
+<section id="creating-a-pretrained-model" class="level2">
 <h2 class="anchored" data-anchor-id="creating-a-pretrained-model">Creating A Pretrained Model</h2>
-<div class="cell-container column-page-left"><div class="cell-decorator"><pre>In [16]:</pre></div><div class="cell" data-execution_count="16">
+<div class="cell" data-execution_count="16">
 <div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> create_model(num_classes: <span class="bu">int</span>, device: torch.device, seed: <span class="bu">int</span> <span class="op">=</span> <span class="dv">42</span>):</span>
 <span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
 <span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="co">    A function to create a model.</span></span>
@@ -738,12 +669,12 @@ Shape of the video tensor: torch.Size([16, 3, 240, 320]) and shape of the label:
 <span id="cb26-27"><a href="#cb26-27" aria-hidden="true" tabindex="-1"></a>        torch.nn.Linear(in_features<span class="op">=</span>in_features, out_features<span class="op">=</span>num_classes, bias<span class="op">=</span><span class="va">True</span>, device<span class="op">=</span>device)</span>
 <span id="cb26-28"><a href="#cb26-28" aria-hidden="true" tabindex="-1"></a>    )</span>
 <span id="cb26-29"><a href="#cb26-29" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> model.to(device), transforms</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div></div>
-<div class="cell-container column-page-left"><div class="cell-decorator"><pre>In [17]:</pre></div><div class="cell" data-execution_count="17">
+</div>
+<div class="cell" data-execution_count="17">
 <div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Creating the model and transforms using the function.</span></span>
 <span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>model, transforms <span class="op">=</span> create_model(num_classes<span class="op">=</span><span class="bu">len</span>(dataset.classes), device<span class="op">=</span>device)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div></div>
-<div class="cell-container column-page-left"><div class="cell-decorator"><pre>In [18]:</pre></div><div class="cell" data-execution_count="18">
+</div>
+<div class="cell" data-execution_count="18">
 <div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>summary(model, </span>
 <span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>        input_size<span class="op">=</span>(<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">16</span>, <span class="dv">224</span>, <span class="dv">224</span>),</span>
 <span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>        col_names<span class="op">=</span>[<span class="st">"input_size"</span>, <span class="st">"output_size"</span>, <span class="st">"num_params"</span>, <span class="st">"trainable"</span>],</span>
@@ -897,8 +828,8 @@ Params size (MB): 136.46
 Estimated Total Size (MB): 1805.02
 ==================================================================================================================================</code></pre>
 </div>
-</div></div>
-<div class="cell-container column-page-left"><div class="cell-decorator"><pre>In [19]:</pre></div><div class="cell" data-execution_count="19">
+</div>
+<div class="cell" data-execution_count="19">
 <div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Checking the model transforms and applying it on the dataset</span></span>
 <span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f'Pretrained Model Transforms:</span><span class="ch">\n</span><span class="sc">{</span>transforms<span class="sc">}</span><span class="ch">\n</span><span class="ss">'</span>)</span>
 <span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>dataset <span class="op">=</span> HumanActionDataset(video_dir<span class="op">=</span>DATA_PATH, seq_len<span class="op">=</span>SEQUENCE_LENGTH, num_classes<span class="op">=</span>NUM_CLASSES, transform<span class="op">=</span>transforms)</span>
@@ -1008,11 +939,11 @@ tensor([[[ 2.4604e+02,  2.3502e+02,  2.2911e+02,  ...,  2.8675e+02,
 label tensor: 16
 Shape of the video tensor: torch.Size([3, 16, 224, 224]) and shape of the label: torch.Size([])</code></pre>
 </div>
-</div></div>
+</div>
 </section>
-<section id="creating-dataloaders" class="level2 page-columns page-full">
+<section id="creating-dataloaders" class="level2">
 <h2 class="anchored" data-anchor-id="creating-dataloaders">Creating DataLoaders</h2>
-<div class="cell-container column-page-left"><div class="cell-decorator"><pre>In [20]:</pre></div><div class="cell" data-execution_count="20">
+<div class="cell" data-execution_count="20">
 <div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Spliting the dataset in train and test dataset for ratio of 75:25.</span></span>
 <span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>dataset <span class="op">=</span> HumanActionDataset(video_dir<span class="op">=</span>DATA_PATH, </span>
 <span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>                             seq_len<span class="op">=</span>SEQUENCE_LENGTH,</span>
@@ -1025,8 +956,8 @@ Shape of the video tensor: torch.Size([3, 16, 224, 224]) and shape of the label:
 <div class="cell-output cell-output-stdout">
 <pre><code>Train Dataset Length: 1898 and Test Dataset length: 632</code></pre>
 </div>
-</div></div>
-<div class="cell-container column-page-left"><div class="cell-decorator"><pre>In [21]:</pre></div><div class="cell" data-execution_count="21">
+</div>
+<div class="cell" data-execution_count="21">
 <div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Creating train and test dataloaders.</span></span>
 <span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> create_dataloaders(dataset, batch, shuffle, workers):</span>
 <span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
@@ -1058,9 +989,9 @@ Shape of the video tensor: torch.Size([3, 16, 224, 224]) and shape of the label:
 <pre><code>Dataloaders Length: 118 for a batch size of: 16
 Dataloaders Length: 39 for a batch size of: 16</code></pre>
 </div>
-</div></div>
+</div>
 <p><strong>Label Distribution and Zero Rule Benchmark</strong></p>
-<div class="cell-container column-page-left"><div class="cell-decorator"><pre>In [22]:</pre></div><div class="cell" data-execution_count="22">
+<div class="cell" data-execution_count="22">
 <div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>train_counter <span class="op">=</span> Counter()</span>
 <span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> frames, labels <span class="kw">in</span> train_dataloader:</span>
 <span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>    train_counter.update(labels.tolist())</span>
@@ -1069,8 +1000,8 @@ Dataloaders Length: 39 for a batch size of: 16</code></pre>
 <pre><code>Training Dataset Distribution:
  [(0, 78), (1, 92), (2, 83), (3, 79), (4, 94), (5, 72), (6, 77), (7, 79), (8, 85), (9, 103), (10, 90), (11, 106), (12, 88), (13, 78), (14, 180), (15, 70), (16, 87), (17, 100), (18, 171), (19, 76)]</code></pre>
 </div>
-</div></div>
-<div class="cell-container column-page-left"><div class="cell-decorator"><pre>In [23]:</pre></div><div class="cell" data-execution_count="23">
+</div>
+<div class="cell" data-execution_count="23">
 <div class="sourceCode cell-code" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>test_counter <span class="op">=</span> Counter()</span>
 <span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> frames, labels <span class="kw">in</span> test_dataloader:</span>
 <span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>    test_counter.update(labels.tolist())</span>
@@ -1079,8 +1010,8 @@ Dataloaders Length: 39 for a batch size of: 16</code></pre>
 <pre><code>Testing Dataset Distribution:
  [(0, 30), (1, 32), (2, 24), (3, 23), (4, 29), (5, 32), (6, 30), (7, 24), (8, 27), (9, 27), (10, 17), (11, 35), (12, 37), (13, 24), (14, 58), (15, 33), (16, 29), (17, 26), (18, 60), (19, 27)]</code></pre>
 </div>
-</div></div>
-<div class="cell-container column-page-left"><div class="cell-decorator"><pre>In [24]:</pre></div><div class="cell" data-execution_count="24">
+</div>
+<div class="cell" data-execution_count="24">
 <div class="sourceCode cell-code" id="cb41"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Zero Rule Benchmark</span></span>
 <span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>major_class <span class="op">=</span> test_counter.most_common(<span class="dv">1</span>)[<span class="dv">0</span>]</span>
 <span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f'The Major class in Testing DataLoader is: Class Name: </span><span class="sc">{</span>CLASSES[major_class[<span class="dv">0</span>]]<span class="sc">}</span><span class="ss">, Class Index: </span><span class="sc">{</span>major_class[<span class="dv">0</span>]<span class="sc">}</span><span class="ss"> and Total Number of Data: </span><span class="sc">{</span>major_class[<span class="dv">1</span>]<span class="sc">}</span><span class="ss">'</span>)</span>
@@ -1091,11 +1022,11 @@ Dataloaders Length: 39 for a batch size of: 16</code></pre>
 <pre><code>The Major class in Testing DataLoader is: Class Name: hug, Class Index: 18 and Total Number of Data: 60
 Zero Rule Basline Benchmark Accuracy for predicting the major class: 9.62%</code></pre>
 </div>
-</div></div>
+</div>
 </section>
-<section id="pytorch---model-training-and-testing" class="level2 page-columns page-full">
+<section id="pytorch---model-training-and-testing" class="level2">
 <h2 class="anchored" data-anchor-id="pytorch---model-training-and-testing">PyTorch - Model Training and Testing</h2>
-<div class="cell-container column-page-left"><div class="cell-decorator"><pre>In [54]:</pre></div><div class="cell" data-execution_count="54">
+<div class="cell" data-execution_count="54">
 <div class="sourceCode cell-code" id="cb43"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> train_step(model, dataloader, loss_fn, optimizer, device, num_classes):</span>
 <span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
 <span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Trains a pytorch model by going into train mode and applying forward pass,</span></span>
@@ -1249,10 +1180,10 @@ Zero Rule Basline Benchmark Accuracy for predicting the major class: 9.62%</code
 <span id="cb43-151"><a href="#cb43-151" aria-hidden="true" tabindex="-1"></a>    total_train_time <span class="op">=</span> (model_train_end_time <span class="op">-</span> model_train_start_time)<span class="op">/</span><span class="dv">60</span></span>
 <span id="cb43-152"><a href="#cb43-152" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f'</span><span class="ch">\n</span><span class="ss">Total Model Training Time: </span><span class="sc">{</span>total_train_time<span class="sc">:.4f}</span><span class="ss"> min'</span>)</span>
 <span id="cb43-153"><a href="#cb43-153" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> results, total_train_time</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div></div>
-<section id="exp-1-pytorch-before-2.0-pytorch-eager-mode" class="level3 page-columns page-full">
+</div>
+<section id="exp-1-pytorch-before-2.0-pytorch-eager-mode" class="level3">
 <h3 class="anchored" data-anchor-id="exp-1-pytorch-before-2.0-pytorch-eager-mode">Exp 1: PyTorch Before 2.0 (PyTorch Eager Mode)</h3>
-<div class="cell-container column-page-left"><div class="cell-decorator"><pre>In [26]:</pre></div><div class="cell" data-execution_count="26">
+<div class="cell" data-execution_count="26">
 <div class="sourceCode cell-code" id="cb44"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>set_seed(<span class="dv">42</span>)</span>
 <span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Initializing the model and dataloaders</span></span>
@@ -1319,8 +1250,8 @@ Total Model Training Time: 5.7940 min</code></pre>
 {"model_id":"2d8844b12aa24c29abfdd5f941f4c43e","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
 </script>
 </div>
-</div></div>
-<div class="cell-container column-page-left"><div class="cell-decorator"><pre>In [27]:</pre></div><div class="cell" data-execution_count="27">
+</div>
+<div class="cell" data-execution_count="27">
 <div class="sourceCode cell-code" id="cb46"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Creating a result directory</span></span>
 <span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>RESULTS_DIR <span class="op">=</span> <span class="st">'results'</span></span>
 <span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> os.path.exists(RESULTS_DIR):</span>
@@ -1386,8 +1317,8 @@ Total Model Training Time: 5.7940 min</code></pre>
 
 </div>
 </div>
-</div></div>
-<div class="cell-container column-page-left"><div class="cell-decorator"><pre>In [28]:</pre></div><div class="cell" data-execution_count="28">
+</div>
+<div class="cell" data-execution_count="28">
 <div class="sourceCode cell-code" id="cb48"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Creating and saving a dataframe for model train time </span></span>
 <span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>model_train_time_filename <span class="op">=</span> <span class="st">'model_train_time.csv'</span></span>
 <span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a>model_train_time_df <span class="op">=</span> pd.DataFrame({<span class="st">'model'</span>: [<span class="st">'Pytorch Eager'</span>], <span class="st">'training_time(min)'</span>: [exp1_total_train_time]})</span>
@@ -1416,11 +1347,11 @@ Total Model Training Time: 5.7940 min</code></pre>
 
 </div>
 </div>
-</div></div>
+</div>
 </section>
-<section id="exp-2-pytorch-2.0-pytorch-compile-mode" class="level3 page-columns page-full">
+<section id="exp-2-pytorch-2.0-pytorch-compile-mode" class="level3">
 <h3 class="anchored" data-anchor-id="exp-2-pytorch-2.0-pytorch-compile-mode">Exp 2: PyTorch 2.0 (PyTorch Compile Mode)</h3>
-<div class="cell-container column-page-left"><div class="cell-decorator"><pre>In [29]:</pre></div><div class="cell" data-execution_count="29">
+<div class="cell" data-execution_count="29">
 <div class="sourceCode cell-code" id="cb49"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>set_seed(<span class="dv">42</span>)</span>
 <span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Initializing the model and dataloaders</span></span>
@@ -1495,8 +1426,8 @@ Total Model Training Time: 7.7908 min</code></pre>
 {"model_id":"b4eac88506954c5dac90e8983595ab2f","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
 </script>
 </div>
-</div></div>
-<div class="cell-container column-page-left"><div class="cell-decorator"><pre>In [30]:</pre></div><div class="cell" data-execution_count="30">
+</div>
+<div class="cell" data-execution_count="30">
 <div class="sourceCode cell-code" id="cb52"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Saving the result in csv format</span></span>
 <span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a>exp2_results_filename <span class="op">=</span> <span class="st">'exp2_results.csv'</span></span>
 <span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a>exp2_results_df <span class="op">=</span> pd.DataFrame(exp2_results)</span>
@@ -1551,8 +1482,8 @@ Total Model Training Time: 7.7908 min</code></pre>
 
 </div>
 </div>
-</div></div>
-<div class="cell-container column-page-left"><div class="cell-decorator"><pre>In [31]:</pre></div><div class="cell" data-execution_count="31">
+</div>
+<div class="cell" data-execution_count="31">
 <div class="sourceCode cell-code" id="cb53"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Updating and saving a dataframe for model train time </span></span>
 <span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a>model_train_time_df.loc[<span class="bu">len</span>(model_train_time_df)] <span class="op">=</span> [<span class="st">'Pytorch Compile'</span>, exp2_total_train_time]</span>
 <span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a>model_train_time_df.to_csv(os.path.join(RESULTS_DIR, model_train_time_filename), index<span class="op">=</span><span class="va">False</span>)</span>
@@ -1585,12 +1516,12 @@ Total Model Training Time: 7.7908 min</code></pre>
 
 </div>
 </div>
-</div></div>
+</div>
 </section>
 </section>
-<section id="pytorch-lightning---model-training-and-testing" class="level2 page-columns page-full">
+<section id="pytorch-lightning---model-training-and-testing" class="level2">
 <h2 class="anchored" data-anchor-id="pytorch-lightning---model-training-and-testing">PyTorch Lightning - Model Training and Testing</h2>
-<div class="cell-container column-page-left"><div class="cell-decorator"><pre>In [32]:</pre></div><div class="cell" data-execution_count="32">
+<div class="cell" data-execution_count="32">
 <div class="sourceCode cell-code" id="cb54"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> PyLightHMDB51(L.LightningModule):</span>
 <span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
 <span id="cb54-3"><a href="#cb54-3" aria-hidden="true" tabindex="-1"></a><span class="co">    A Lightning Module containing Model training and validation step.</span></span>
@@ -1634,10 +1565,10 @@ Total Model Training Time: 7.7908 min</code></pre>
 <span id="cb54-41"><a href="#cb54-41" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> configure_optimizers(<span class="va">self</span>):</span>
 <span id="cb54-42"><a href="#cb54-42" aria-hidden="true" tabindex="-1"></a>        optimizers <span class="op">=</span> <span class="va">self</span>.optimizer</span>
 <span id="cb54-43"><a href="#cb54-43" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> optimizers</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div></div>
-<section id="exp-3-pytorch-lightning" class="level3 page-columns page-full">
+</div>
+<section id="exp-3-pytorch-lightning" class="level3">
 <h3 class="anchored" data-anchor-id="exp-3-pytorch-lightning">Exp 3: PyTorch Lightning</h3>
-<div class="cell-container column-page-left"><div class="cell-decorator"><pre>In [33]:</pre></div><div class="cell" data-execution_count="33">
+<div class="cell" data-execution_count="33">
 <div class="sourceCode cell-code" id="cb55"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a>set_seed(<span class="dv">42</span>)</span>
 <span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb55-3"><a href="#cb55-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Creating the pytorch lightning trainer</span></span>
@@ -1722,8 +1653,8 @@ Total Time to train the model: 7.6887 min</code></pre>
 {"model_id":"","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
 </script>
 </div>
-</div></div>
-<div class="cell-container column-page-left"><div class="cell-decorator"><pre>In [34]:</pre></div><div class="cell" data-execution_count="34">
+</div>
+<div class="cell" data-execution_count="34">
 <div class="sourceCode cell-code" id="cb58"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Updating and saving a dataframe for model train time </span></span>
 <span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a>model_train_time_df.loc[<span class="bu">len</span>(model_train_time_df)] <span class="op">=</span> [<span class="st">'Pytorch Lightning'</span>, exp3_total_train_time]</span>
 <span id="cb58-3"><a href="#cb58-3" aria-hidden="true" tabindex="-1"></a>model_train_time_df.to_csv(os.path.join(RESULTS_DIR, model_train_time_filename), index<span class="op">=</span><span class="va">False</span>)</span>
@@ -1761,11 +1692,11 @@ Total Time to train the model: 7.6887 min</code></pre>
 
 </div>
 </div>
-</div></div>
+</div>
 </section>
-<section id="exp-4-pytorch-lightning---compile-mode" class="level3 page-columns page-full">
+<section id="exp-4-pytorch-lightning---compile-mode" class="level3">
 <h3 class="anchored" data-anchor-id="exp-4-pytorch-lightning---compile-mode">Exp 4: PyTorch Lightning - Compile Mode</h3>
-<div class="cell-container column-page-left"><div class="cell-decorator"><pre>In [35]:</pre></div><div class="cell" data-execution_count="35">
+<div class="cell" data-execution_count="35">
 <div class="sourceCode cell-code" id="cb59"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a>set_seed(<span class="dv">42</span>)</span>
 <span id="cb59-2"><a href="#cb59-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb59-3"><a href="#cb59-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Creating the pytorch lightning trainer</span></span>
@@ -1854,8 +1785,8 @@ Total Time to train the model: 10.5425 min</code></pre>
 {"model_id":"","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
 </script>
 </div>
-</div></div>
-<div class="cell-container column-page-left"><div class="cell-decorator"><pre>In [36]:</pre></div><div class="cell" data-execution_count="36">
+</div>
+<div class="cell" data-execution_count="36">
 <div class="sourceCode cell-code" id="cb62"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Updating and saving a dataframe for model train time </span></span>
 <span id="cb62-2"><a href="#cb62-2" aria-hidden="true" tabindex="-1"></a>model_train_time_df.loc[<span class="bu">len</span>(model_train_time_df)] <span class="op">=</span> [<span class="st">'PyTorch Lightning + Compile'</span>, exp4_total_train_time]</span>
 <span id="cb62-3"><a href="#cb62-3" aria-hidden="true" tabindex="-1"></a>model_train_time_df.to_csv(os.path.join(RESULTS_DIR, model_train_time_filename), index<span class="op">=</span><span class="va">False</span>)</span>
@@ -1898,12 +1829,12 @@ Total Time to train the model: 10.5425 min</code></pre>
 
 </div>
 </div>
-</div></div>
+</div>
 </section>
 </section>
-<section id="lightning-fabric---model-training-and-testing" class="level2 page-columns page-full">
+<section id="lightning-fabric---model-training-and-testing" class="level2">
 <h2 class="anchored" data-anchor-id="lightning-fabric---model-training-and-testing">Lightning Fabric - Model training and Testing</h2>
-<div class="cell-container column-page-left"><div class="cell-decorator"><pre>In [37]:</pre></div><div class="cell" data-execution_count="37">
+<div class="cell" data-execution_count="37">
 <div class="sourceCode cell-code" id="cb63"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> train_step(model, dataloader, loss_fn, optimizer, fabric, num_classes):</span>
 <span id="cb63-2"><a href="#cb63-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
 <span id="cb63-3"><a href="#cb63-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Trains a pytorch model by going into train mode and applying forward pass,</span></span>
@@ -2058,10 +1989,10 @@ Total Time to train the model: 10.5425 min</code></pre>
 <span id="cb63-152"><a href="#cb63-152" aria-hidden="true" tabindex="-1"></a>    total_train_time <span class="op">=</span> (model_train_end_time <span class="op">-</span> model_train_start_time)<span class="op">/</span><span class="dv">60</span></span>
 <span id="cb63-153"><a href="#cb63-153" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f'</span><span class="ch">\n</span><span class="ss">Total Model Training Time: </span><span class="sc">{</span>total_train_time<span class="sc">:.4f}</span><span class="ss"> min'</span>)</span>
 <span id="cb63-154"><a href="#cb63-154" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> results, total_train_time</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div></div>
-<section id="exp-5-fabric-lightning" class="level3 page-columns page-full">
+</div>
+<section id="exp-5-fabric-lightning" class="level3">
 <h3 class="anchored" data-anchor-id="exp-5-fabric-lightning">Exp 5: Fabric Lightning</h3>
-<div class="cell-container column-page-left"><div class="cell-decorator"><pre>In [38]:</pre></div><div class="cell" data-execution_count="38">
+<div class="cell" data-execution_count="38">
 <div class="sourceCode cell-code" id="cb64"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a>set_seed(<span class="dv">42</span>)</span>
 <span id="cb64-2"><a href="#cb64-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb64-3"><a href="#cb64-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Initializing Fabric # New by Fabric</span></span>
@@ -2138,8 +2069,8 @@ Total Model Training Time: 6.5512 min</code></pre>
 {"model_id":"10d2855521d04cb38c34a35f16c65b71","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
 </script>
 </div>
-</div></div>
-<div class="cell-container column-page-left"><div class="cell-decorator"><pre>In [39]:</pre></div><div class="cell" data-execution_count="39">
+</div>
+<div class="cell" data-execution_count="39">
 <div class="sourceCode cell-code" id="cb67"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Saving the result in csv format</span></span>
 <span id="cb67-2"><a href="#cb67-2" aria-hidden="true" tabindex="-1"></a>exp5_results_filename <span class="op">=</span> <span class="st">'exp5_results.csv'</span></span>
 <span id="cb67-3"><a href="#cb67-3" aria-hidden="true" tabindex="-1"></a>exp5_results_df <span class="op">=</span> pd.DataFrame(exp5_results)</span>
@@ -2194,8 +2125,8 @@ Total Model Training Time: 6.5512 min</code></pre>
 
 </div>
 </div>
-</div></div>
-<div class="cell-container column-page-left"><div class="cell-decorator"><pre>In [40]:</pre></div><div class="cell" data-execution_count="40">
+</div>
+<div class="cell" data-execution_count="40">
 <div class="sourceCode cell-code" id="cb68"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Updating and saving a dataframe for model train time </span></span>
 <span id="cb68-2"><a href="#cb68-2" aria-hidden="true" tabindex="-1"></a>model_train_time_df.loc[<span class="bu">len</span>(model_train_time_df)] <span class="op">=</span> [<span class="st">'Fabric Lightning'</span>, exp5_total_train_time]</span>
 <span id="cb68-3"><a href="#cb68-3" aria-hidden="true" tabindex="-1"></a>model_train_time_df.to_csv(os.path.join(RESULTS_DIR, model_train_time_filename), index<span class="op">=</span><span class="va">False</span>)</span>
@@ -2243,11 +2174,11 @@ Total Model Training Time: 6.5512 min</code></pre>
 
 </div>
 </div>
-</div></div>
+</div>
 </section>
-<section id="exp-6-fabric-lightning---compile-mode" class="level3 page-columns page-full">
+<section id="exp-6-fabric-lightning---compile-mode" class="level3">
 <h3 class="anchored" data-anchor-id="exp-6-fabric-lightning---compile-mode">Exp 6: Fabric Lightning - Compile mode</h3>
-<div class="cell-container column-page-left"><div class="cell-decorator"><pre>In [41]:</pre></div><div class="cell" data-execution_count="41">
+<div class="cell" data-execution_count="41">
 <div class="sourceCode cell-code" id="cb69"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a>set_seed(<span class="dv">42</span>)</span>
 <span id="cb69-2"><a href="#cb69-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb69-3"><a href="#cb69-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Initializing Fabric # New by Fabric</span></span>
@@ -2328,8 +2259,8 @@ Total Model Training Time: 7.6056 min</code></pre>
 {"model_id":"d5883100cc0d454d9b306bd6c2618727","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
 </script>
 </div>
-</div></div>
-<div class="cell-container column-page-left"><div class="cell-decorator"><pre>In [42]:</pre></div><div class="cell" data-execution_count="42">
+</div>
+<div class="cell" data-execution_count="42">
 <div class="sourceCode cell-code" id="cb72"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb72-1"><a href="#cb72-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Saving the result in csv format</span></span>
 <span id="cb72-2"><a href="#cb72-2" aria-hidden="true" tabindex="-1"></a>exp6_results_filename <span class="op">=</span> <span class="st">'exp6_results.csv'</span></span>
 <span id="cb72-3"><a href="#cb72-3" aria-hidden="true" tabindex="-1"></a>exp6_results_df <span class="op">=</span> pd.DataFrame(exp6_results)</span>
@@ -2384,8 +2315,8 @@ Total Model Training Time: 7.6056 min</code></pre>
 
 </div>
 </div>
-</div></div>
-<div class="cell-container column-page-left"><div class="cell-decorator"><pre>In [43]:</pre></div><div class="cell" data-execution_count="43">
+</div>
+<div class="cell" data-execution_count="43">
 <div class="sourceCode cell-code" id="cb73"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb73-1"><a href="#cb73-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Updating and saving a dataframe for model train time </span></span>
 <span id="cb73-2"><a href="#cb73-2" aria-hidden="true" tabindex="-1"></a>model_train_time_df.loc[<span class="bu">len</span>(model_train_time_df)] <span class="op">=</span> [<span class="st">'Fabric + Compile'</span>, exp6_total_train_time]</span>
 <span id="cb73-3"><a href="#cb73-3" aria-hidden="true" tabindex="-1"></a>model_train_time_df.to_csv(os.path.join(RESULTS_DIR, model_train_time_filename), index<span class="op">=</span><span class="va">False</span>)</span>
@@ -2438,11 +2369,11 @@ Total Model Training Time: 7.6056 min</code></pre>
 
 </div>
 </div>
-</div></div>
+</div>
 </section>
-<section id="exp-7-fabric-precision" class="level3 page-columns page-full">
+<section id="exp-7-fabric-precision" class="level3">
 <h3 class="anchored" data-anchor-id="exp-7-fabric-precision">Exp 7: Fabric + Precision</h3>
-<div class="cell-container column-page-left"><div class="cell-decorator"><pre>In [44]:</pre></div><div class="cell" data-execution_count="44">
+<div class="cell" data-execution_count="44">
 <div class="sourceCode cell-code" id="cb74"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb74-1"><a href="#cb74-1" aria-hidden="true" tabindex="-1"></a>set_seed(<span class="dv">42</span>)</span>
 <span id="cb74-2"><a href="#cb74-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb74-3"><a href="#cb74-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Initializing Fabric # New by Fabric</span></span>
@@ -2520,8 +2451,8 @@ Total Model Training Time: 6.3157 min</code></pre>
 {"model_id":"5174ccb69bdb4c51a52c32108a4b2a66","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
 </script>
 </div>
-</div></div>
-<div class="cell-container column-page-left"><div class="cell-decorator"><pre>In [45]:</pre></div><div class="cell" data-execution_count="45">
+</div>
+<div class="cell" data-execution_count="45">
 <div class="sourceCode cell-code" id="cb77"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb77-1"><a href="#cb77-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Saving the result in csv format</span></span>
 <span id="cb77-2"><a href="#cb77-2" aria-hidden="true" tabindex="-1"></a>exp7_results_filename <span class="op">=</span> <span class="st">'exp7_results.csv'</span></span>
 <span id="cb77-3"><a href="#cb77-3" aria-hidden="true" tabindex="-1"></a>exp7_results_df <span class="op">=</span> pd.DataFrame(exp7_results)</span>
@@ -2576,8 +2507,8 @@ Total Model Training Time: 6.3157 min</code></pre>
 
 </div>
 </div>
-</div></div>
-<div class="cell-container column-page-left"><div class="cell-decorator"><pre>In [46]:</pre></div><div class="cell" data-execution_count="46">
+</div>
+<div class="cell" data-execution_count="46">
 <div class="sourceCode cell-code" id="cb78"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb78-1"><a href="#cb78-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Updating and saving a dataframe for model train time </span></span>
 <span id="cb78-2"><a href="#cb78-2" aria-hidden="true" tabindex="-1"></a>model_train_time_df.loc[<span class="bu">len</span>(model_train_time_df)] <span class="op">=</span> [<span class="st">'Fabric + Precision'</span>, exp7_total_train_time]</span>
 <span id="cb78-3"><a href="#cb78-3" aria-hidden="true" tabindex="-1"></a>model_train_time_df.to_csv(os.path.join(RESULTS_DIR, model_train_time_filename), index<span class="op">=</span><span class="va">False</span>)</span>
@@ -2635,11 +2566,11 @@ Total Model Training Time: 6.3157 min</code></pre>
 
 </div>
 </div>
-</div></div>
+</div>
 </section>
-<section id="exp-8-fabric-precision-compile" class="level3 page-columns page-full">
+<section id="exp-8-fabric-precision-compile" class="level3">
 <h3 class="anchored" data-anchor-id="exp-8-fabric-precision-compile">Exp 8: Fabric + Precision + Compile</h3>
-<div class="cell-container column-page-left"><div class="cell-decorator"><pre>In [47]:</pre></div><div class="cell" data-execution_count="47">
+<div class="cell" data-execution_count="47">
 <div class="sourceCode cell-code" id="cb79"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb79-1"><a href="#cb79-1" aria-hidden="true" tabindex="-1"></a>set_seed(<span class="dv">42</span>)</span>
 <span id="cb79-2"><a href="#cb79-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb79-3"><a href="#cb79-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Initializing Fabric # New by Fabric</span></span>
@@ -2721,8 +2652,8 @@ Total Model Training Time: 8.4427 min</code></pre>
 {"model_id":"1e0d63bc660d4012bf5ffc6342c4f6e9","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
 </script>
 </div>
-</div></div>
-<div class="cell-container column-page-left"><div class="cell-decorator"><pre>In [48]:</pre></div><div class="cell" data-execution_count="48">
+</div>
+<div class="cell" data-execution_count="48">
 <div class="sourceCode cell-code" id="cb82"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb82-1"><a href="#cb82-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Saving the result in csv format</span></span>
 <span id="cb82-2"><a href="#cb82-2" aria-hidden="true" tabindex="-1"></a>exp8_results_filename <span class="op">=</span> <span class="st">'exp8_results.csv'</span></span>
 <span id="cb82-3"><a href="#cb82-3" aria-hidden="true" tabindex="-1"></a>exp8_results_df <span class="op">=</span> pd.DataFrame(exp8_results)</span>
@@ -2777,8 +2708,8 @@ Total Model Training Time: 8.4427 min</code></pre>
 
 </div>
 </div>
-</div></div>
-<div class="cell-container column-page-left"><div class="cell-decorator"><pre>In [49]:</pre></div><div class="cell" data-execution_count="49">
+</div>
+<div class="cell" data-execution_count="49">
 <div class="sourceCode cell-code" id="cb83"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb83-1"><a href="#cb83-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Updating and saving a dataframe for model train time </span></span>
 <span id="cb83-2"><a href="#cb83-2" aria-hidden="true" tabindex="-1"></a>model_train_time_df.loc[<span class="bu">len</span>(model_train_time_df)] <span class="op">=</span> [<span class="st">'Fabric + Precision + Compile'</span>, exp8_total_train_time]</span>
 <span id="cb83-3"><a href="#cb83-3" aria-hidden="true" tabindex="-1"></a>model_train_time_df.to_csv(os.path.join(RESULTS_DIR, model_train_time_filename), index<span class="op">=</span><span class="va">False</span>)</span>
@@ -2841,8 +2772,8 @@ Total Model Training Time: 8.4427 min</code></pre>
 
 </div>
 </div>
-</div></div>
-<div class="cell-container column-page-left"><div class="cell-decorator"><pre>In [50]:</pre></div><div class="cell" data-execution_count="50">
+</div>
+<div class="cell" data-execution_count="50">
 <div class="sourceCode cell-code" id="cb84"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb84-1"><a href="#cb84-1" aria-hidden="true" tabindex="-1"></a><span class="co"># plot the train time</span></span>
 <span id="cb84-2"><a href="#cb84-2" aria-hidden="true" tabindex="-1"></a>model_train_time_df.plot.barh(x<span class="op">=</span><span class="st">'model'</span>, </span>
 <span id="cb84-3"><a href="#cb84-3" aria-hidden="true" tabindex="-1"></a>                              y<span class="op">=</span><span class="st">'training_time(min)'</span>, </span>
@@ -2854,27 +2785,27 @@ Total Model Training Time: 8.4427 min</code></pre>
 <div class="cell-output cell-output-display">
 <p><img src="HMDB51_human_action_recognition_pytorch_files/figure-html/cell-51-output-1.png" class="img-fluid"></p>
 </div>
-</div></div>
+</div>
 </section>
 </section>
-<section id="training-and-testing-on-full-dataset-and-deploying-the-model" class="level2 page-columns page-full">
+<section id="training-and-testing-on-full-dataset-and-deploying-the-model" class="level2">
 <h2 class="anchored" data-anchor-id="training-and-testing-on-full-dataset-and-deploying-the-model">Training and Testing on Full Dataset and Deploying the Model</h2>
-<section id="creating-the-model" class="level3 page-columns page-full">
+<section id="creating-the-model" class="level3">
 <h3 class="anchored" data-anchor-id="creating-the-model">Creating the model</h3>
-<div class="cell-container column-page-left"><div class="cell-decorator"><pre>In [51]:</pre></div><div class="cell" data-execution_count="51">
+<div class="cell" data-execution_count="51">
 <div class="sourceCode cell-code" id="cb85"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb85-1"><a href="#cb85-1" aria-hidden="true" tabindex="-1"></a>NUM_CLASSES <span class="op">=</span> <span class="dv">51</span></span>
 <span id="cb85-2"><a href="#cb85-2" aria-hidden="true" tabindex="-1"></a>SEQUENCE_LENGTH <span class="op">=</span> <span class="dv">16</span></span>
 <span id="cb85-3"><a href="#cb85-3" aria-hidden="true" tabindex="-1"></a>BATCH_SIZE <span class="op">=</span> <span class="dv">16</span></span>
 <span id="cb85-4"><a href="#cb85-4" aria-hidden="true" tabindex="-1"></a>WORKERS <span class="op">=</span> os.cpu_count()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div></div>
-<div class="cell-container column-page-left"><div class="cell-decorator"><pre>In [52]:</pre></div><div class="cell" data-execution_count="52">
+</div>
+<div class="cell" data-execution_count="52">
 <div class="sourceCode cell-code" id="cb86"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb86-1"><a href="#cb86-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Creating the model and transforms using the function.</span></span>
 <span id="cb86-2"><a href="#cb86-2" aria-hidden="true" tabindex="-1"></a>model, transforms <span class="op">=</span> create_model(num_classes<span class="op">=</span>NUM_CLASSES, device<span class="op">=</span>device)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div></div>
+</div>
 </section>
-<section id="getting-the-full-dataset-and-dataloaders" class="level3 page-columns page-full">
+<section id="getting-the-full-dataset-and-dataloaders" class="level3">
 <h3 class="anchored" data-anchor-id="getting-the-full-dataset-and-dataloaders">Getting the Full Dataset and Dataloaders</h3>
-<div class="cell-container column-page-left"><div class="cell-decorator"><pre>In [53]:</pre></div><div class="cell" data-execution_count="53">
+<div class="cell" data-execution_count="53">
 <div class="sourceCode cell-code" id="cb87"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb87-1"><a href="#cb87-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Creating the dataset.</span></span>
 <span id="cb87-2"><a href="#cb87-2" aria-hidden="true" tabindex="-1"></a>dataset <span class="op">=</span> HumanActionDataset(video_dir<span class="op">=</span>DATA_PATH, </span>
 <span id="cb87-3"><a href="#cb87-3" aria-hidden="true" tabindex="-1"></a>                             seq_len<span class="op">=</span>SEQUENCE_LENGTH,</span>
@@ -2893,11 +2824,11 @@ Total Model Training Time: 8.4427 min</code></pre>
 Dataloaders Length: 317 for a batch size of: 16
 Dataloaders Length: 105 for a batch size of: 16</code></pre>
 </div>
-</div></div>
+</div>
 </section>
-<section id="training-model-for-full-dataset" class="level3 page-columns page-full">
+<section id="training-model-for-full-dataset" class="level3">
 <h3 class="anchored" data-anchor-id="training-model-for-full-dataset">Training Model for Full Dataset</h3>
-<div class="cell-container column-page-left"><div class="cell-decorator"><pre>In [55]:</pre></div><div class="cell" data-execution_count="55">
+<div class="cell" data-execution_count="55">
 <div class="sourceCode cell-code" id="cb89"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb89-1"><a href="#cb89-1" aria-hidden="true" tabindex="-1"></a>set_seed(<span class="dv">42</span>)</span>
 <span id="cb89-2"><a href="#cb89-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb89-3"><a href="#cb89-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Intializing loss and optimizer</span></span>
@@ -3033,11 +2964,11 @@ Total Model Training Time: 66.9688 min</code></pre>
 {"model_id":"bb7b7955f0574507ab03142177fb8d17","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
 </script>
 </div>
-</div></div>
+</div>
 </section>
-<section id="storing-files-for-demo-app." class="level3 page-columns page-full">
+<section id="storing-files-for-demo-app." class="level3">
 <h3 class="anchored" data-anchor-id="storing-files-for-demo-app.">Storing Files for Demo App.</h3>
-<div class="cell-container column-page-left"><div class="cell-decorator"><pre>In [56]:</pre></div><div class="cell" data-execution_count="56">
+<div class="cell" data-execution_count="56">
 <div class="sourceCode cell-code" id="cb91"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb91-1"><a href="#cb91-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Creating a directory for the app</span></span>
 <span id="cb91-2"><a href="#cb91-2" aria-hidden="true" tabindex="-1"></a>demo_path <span class="op">=</span> <span class="st">'demo'</span></span>
 <span id="cb91-3"><a href="#cb91-3" aria-hidden="true" tabindex="-1"></a>demo_project_path <span class="op">=</span> os.path.join(demo_path, <span class="st">'human_action_recognition'</span>)</span>
@@ -3053,8 +2984,8 @@ Total Model Training Time: 66.9688 min</code></pre>
 <div class="cell-output cell-output-stdout">
 <pre><code>[INFO] "demo/human_action_recognition" and "demo/human_action_recognition/examples" directory is been created.</code></pre>
 </div>
-</div></div>
-<div class="cell-container column-page-left"><div class="cell-decorator"><pre>In [57]:</pre></div><div class="cell" data-execution_count="57">
+</div>
+<div class="cell" data-execution_count="57">
 <div class="sourceCode cell-code" id="cb93"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb93-1"><a href="#cb93-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Saving some example files</span></span>
 <span id="cb93-2"><a href="#cb93-2" aria-hidden="true" tabindex="-1"></a>example_files <span class="op">=</span> [<span class="st">'data/shoot_bow/6arrowswithin30seconds_shoot_bow_f_nm_np1_fr_med_3.avi'</span>,</span>
 <span id="cb93-3"><a href="#cb93-3" aria-hidden="true" tabindex="-1"></a>                 <span class="st">'data/golf/Golf_Tips_-_Hit_The_Driver_300+_Yards!!!_golf_f_nm_np1_fr_med_0.avi'</span>,</span>
@@ -3073,8 +3004,8 @@ data/climb/(HQ)_Rock_Climbing_-_Free_Solo_Speed_Climb_-_Dan_Osman_climb_f_cm_np1
 data/punch/AdvancedBoxingTechniquesandExercises_punch_u_nm_np1_ba_med_23.avi File is been copied.
 data/swing_baseball/BaseballHitinSlowMotion_swing_baseball_f_nm_np1_fr_bad_0.avi File is been copied.</code></pre>
 </div>
-</div></div>
-<div class="cell-container column-page-left"><div class="cell-decorator"><pre>In [58]:</pre></div><div class="cell" data-execution_count="58">
+</div>
+<div class="cell" data-execution_count="58">
 <div class="sourceCode cell-code" id="cb95"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb95-1"><a href="#cb95-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Saving the classes names to text file</span></span>
 <span id="cb95-2"><a href="#cb95-2" aria-hidden="true" tabindex="-1"></a>class_names_path <span class="op">=</span> os.path.join(demo_project_path, <span class="st">'class_names.txt'</span>)</span>
 <span id="cb95-3"><a href="#cb95-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -3084,8 +3015,8 @@ data/swing_baseball/BaseballHitinSlowMotion_swing_baseball_f_nm_np1_fr_bad_0.avi
 <div class="cell-output cell-output-stdout">
 <pre><code>[INFO] Saving class names to: "demo/human_action_recognition/class_names.txt"</code></pre>
 </div>
-</div></div>
-<div class="cell-container column-page-left"><div class="cell-decorator"><pre>In [59]:</pre></div><div class="cell" data-execution_count="59">
+</div>
+<div class="cell" data-execution_count="59">
 <div class="sourceCode cell-code" id="cb97"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb97-1"><a href="#cb97-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Reading the text file</span></span>
 <span id="cb97-2"><a href="#cb97-2" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(class_names_path, <span class="st">'r'</span>) <span class="im">as</span> f:</span>
 <span id="cb97-3"><a href="#cb97-3" aria-hidden="true" tabindex="-1"></a>    class_names_read <span class="op">=</span> [i.strip() <span class="cf">for</span> i <span class="kw">in</span> f.readlines()]</span>
@@ -3094,15 +3025,15 @@ data/swing_baseball/BaseballHitinSlowMotion_swing_baseball_f_nm_np1_fr_bad_0.avi
 <div class="cell-output cell-output-display" data-execution_count="59">
 <pre><code>['smoke', 'dive', 'cartwheel', 'throw', 'hit']</code></pre>
 </div>
-</div></div>
+</div>
 </section>
-<section id="saving-and-loading-the-model" class="level3 page-columns page-full">
+<section id="saving-and-loading-the-model" class="level3">
 <h3 class="anchored" data-anchor-id="saving-and-loading-the-model">Saving and Loading the Model</h3>
-<div class="cell-container column-page-left"><div class="cell-decorator"><pre>In [60]:</pre></div><div class="cell" data-execution_count="60">
+<div class="cell" data-execution_count="60">
 <div class="sourceCode cell-code" id="cb99"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb99-1"><a href="#cb99-1" aria-hidden="true" tabindex="-1"></a>model_save_name <span class="op">=</span> <span class="st">'mvit_v2_pretrained_model_hmdb51.pth'</span></span>
 <span id="cb99-2"><a href="#cb99-2" aria-hidden="true" tabindex="-1"></a>model_save_path <span class="op">=</span> os.path.join(demo_project_path, model_save_name)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div></div>
-<div class="cell-container column-page-left"><div class="cell-decorator"><pre>In [61]:</pre></div><div class="cell" data-execution_count="61">
+</div>
+<div class="cell" data-execution_count="61">
 <div class="sourceCode cell-code" id="cb100"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb100-1"><a href="#cb100-1" aria-hidden="true" tabindex="-1"></a><span class="co"># saving the model state</span></span>
 <span id="cb100-2"><a href="#cb100-2" aria-hidden="true" tabindex="-1"></a>torch.save(obj<span class="op">=</span>model.state_dict(), </span>
 <span id="cb100-3"><a href="#cb100-3" aria-hidden="true" tabindex="-1"></a>           f<span class="op">=</span>model_save_path)</span>
@@ -3110,19 +3041,19 @@ data/swing_baseball/BaseballHitinSlowMotion_swing_baseball_f_nm_np1_fr_bad_0.avi
 <div class="cell-output cell-output-stdout">
 <pre><code>[INFO] Model is been saved to: "demo/human_action_recognition/mvit_v2_pretrained_model_hmdb51.pth"</code></pre>
 </div>
-</div></div>
-<div class="cell-container column-page-left"><div class="cell-decorator"><pre>In [62]:</pre></div><div class="cell" data-execution_count="62">
+</div>
+<div class="cell" data-execution_count="62">
 <div class="sourceCode cell-code" id="cb102"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb102-1"><a href="#cb102-1" aria-hidden="true" tabindex="-1"></a><span class="co"># loading the model state</span></span>
 <span id="cb102-2"><a href="#cb102-2" aria-hidden="true" tabindex="-1"></a>model, transforms <span class="op">=</span> create_model(num_classes<span class="op">=</span>NUM_CLASSES, device<span class="op">=</span>device)</span>
 <span id="cb102-3"><a href="#cb102-3" aria-hidden="true" tabindex="-1"></a>model.load_state_dict(torch.load(model_save_path))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="62">
 <pre><code>&lt;All keys matched successfully&gt;</code></pre>
 </div>
-</div></div>
+</div>
 </section>
-<section id="creating-a-text-file-for-modules-and-packages" class="level3 page-columns page-full">
+<section id="creating-a-text-file-for-modules-and-packages" class="level3">
 <h3 class="anchored" data-anchor-id="creating-a-text-file-for-modules-and-packages">Creating a text file for Modules and Packages</h3>
-<div class="cell-container column-page-left"><div class="cell-decorator"><pre>In [63]:</pre></div><div class="cell" data-execution_count="63">
+<div class="cell" data-execution_count="63">
 <div class="sourceCode cell-code" id="cb104"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb104-1"><a href="#cb104-1" aria-hidden="true" tabindex="-1"></a><span class="op">%%</span>writefile demo<span class="op">/</span>human_action_recognition<span class="op">/</span>requirements.txt</span>
 <span id="cb104-2"><a href="#cb104-2" aria-hidden="true" tabindex="-1"></a>av<span class="op">==</span><span class="fl">10.0.0</span></span>
 <span id="cb104-3"><a href="#cb104-3" aria-hidden="true" tabindex="-1"></a>torch<span class="op">==</span><span class="fl">2.0.0</span></span>
@@ -3132,11 +3063,11 @@ data/swing_baseball/BaseballHitinSlowMotion_swing_baseball_f_nm_np1_fr_bad_0.avi
 <div class="cell-output cell-output-stdout">
 <pre><code>Writing demo/human_action_recognition/requirements.txt</code></pre>
 </div>
-</div></div>
+</div>
 </section>
-<section id="creating-a-python-script-to-preprocess-the-data" class="level3 page-columns page-full">
+<section id="creating-a-python-script-to-preprocess-the-data" class="level3">
 <h3 class="anchored" data-anchor-id="creating-a-python-script-to-preprocess-the-data">Creating a Python Script to Preprocess the Data</h3>
-<div class="cell-container column-page-left"><div class="cell-decorator"><pre>In [64]:</pre></div><div class="cell" data-execution_count="64">
+<div class="cell" data-execution_count="64">
 <div class="sourceCode cell-code" id="cb106"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb106-1"><a href="#cb106-1" aria-hidden="true" tabindex="-1"></a><span class="op">%%</span>writefile demo<span class="op">/</span>human_action_recognition<span class="op">/</span>utils.py</span>
 <span id="cb106-2"><a href="#cb106-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch</span>
 <span id="cb106-3"><a href="#cb106-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torchvision</span>
@@ -3166,11 +3097,11 @@ data/swing_baseball/BaseballHitinSlowMotion_swing_baseball_f_nm_np1_fr_bad_0.avi
 <div class="cell-output cell-output-stdout">
 <pre><code>Writing demo/human_action_recognition/utils.py</code></pre>
 </div>
-</div></div>
+</div>
 </section>
-<section id="creating-a-python-script-to-create-the-model" class="level3 page-columns page-full">
+<section id="creating-a-python-script-to-create-the-model" class="level3">
 <h3 class="anchored" data-anchor-id="creating-a-python-script-to-create-the-model">Creating a Python Script to Create the Model</h3>
-<div class="cell-container column-page-left"><div class="cell-decorator"><pre>In [65]:</pre></div><div class="cell" data-execution_count="65">
+<div class="cell" data-execution_count="65">
 <div class="sourceCode cell-code" id="cb108"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb108-1"><a href="#cb108-1" aria-hidden="true" tabindex="-1"></a><span class="op">%%</span>writefile demo<span class="op">/</span>human_action_recognition<span class="op">/</span>model.py</span>
 <span id="cb108-2"><a href="#cb108-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch</span>
 <span id="cb108-3"><a href="#cb108-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torchvision</span>
@@ -3206,11 +3137,11 @@ data/swing_baseball/BaseballHitinSlowMotion_swing_baseball_f_nm_np1_fr_bad_0.avi
 <div class="cell-output cell-output-stdout">
 <pre><code>Writing demo/human_action_recognition/model.py</code></pre>
 </div>
-</div></div>
+</div>
 </section>
-<section id="creating-a-python-script-for-gradio-app" class="level3 page-columns page-full">
+<section id="creating-a-python-script-for-gradio-app" class="level3">
 <h3 class="anchored" data-anchor-id="creating-a-python-script-for-gradio-app">Creating a Python Script for Gradio App</h3>
-<div class="cell-container column-page-left"><div class="cell-decorator"><pre>In [66]:</pre></div><div class="cell" data-execution_count="66">
+<div class="cell" data-execution_count="66">
 <div class="sourceCode cell-code" id="cb110"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb110-1"><a href="#cb110-1" aria-hidden="true" tabindex="-1"></a><span class="op">%%</span>writefile demo<span class="op">/</span>human_action_recognition<span class="op">/</span>app.py</span>
 <span id="cb110-2"><a href="#cb110-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> gradio <span class="im">as</span> gr</span>
 <span id="cb110-3"><a href="#cb110-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
@@ -3287,11 +3218,11 @@ data/swing_baseball/BaseballHitinSlowMotion_swing_baseball_f_nm_np1_fr_bad_0.avi
 <div class="cell-output cell-output-stdout">
 <pre><code>Writing demo/human_action_recognition/app.py</code></pre>
 </div>
-</div></div>
+</div>
 </section>
-<section id="deploying-on-huggingface" class="level3 page-columns page-full">
+<section id="deploying-on-huggingface" class="level3">
 <h3 class="anchored" data-anchor-id="deploying-on-huggingface">Deploying on HuggingFace</h3>
-<div class="cell-container column-page-left"><div class="cell-decorator"><pre>In [67]:</pre></div><div class="cell" data-execution_count="67">
+<div class="cell" data-execution_count="67">
 <div class="sourceCode cell-code" id="cb112"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb112-1"><a href="#cb112-1" aria-hidden="true" tabindex="-1"></a>IFrame(src<span class="op">=</span><span class="st">'https://hf.space/embed/JohnPinto/Human_Activity_Recognition-HAR-Video_Classification-HMDB51-Dataset'</span>,</span>
 <span id="cb112-2"><a href="#cb112-2" aria-hidden="true" tabindex="-1"></a>       width<span class="op">=</span><span class="dv">1050</span>,</span>
 <span id="cb112-3"><a href="#cb112-3" aria-hidden="true" tabindex="-1"></a>       height<span class="op">=</span><span class="dv">700</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -3300,31 +3231,14 @@ data/swing_baseball/BaseballHitinSlowMotion_swing_baseball_f_nm_np1_fr_bad_0.avi
         <iframe width="1050" height="700" src="https://hf.space/embed/JohnPinto/Human_Activity_Recognition-HAR-Video_Classification-HMDB51-Dataset" frameborder="0" allowfullscreen=""></iframe>
         
 </div>
-</div></div>
+</div>
 
 
 </section>
 </section>
-     </main> <!-- /main -->  <div>
-    <hr>
-    <h3>Stay in touch</h3>
-    <p>If you enjoyed my blog and don't want to miss out on any future articles you can subscribe to my newsletters.</p>
-    <iframe src="https://embeds.beehiiv.com/e7421b93-7002-413c-b016-9c72444d77b6?slim=true" data-test-id="beehiiv-embed" height="52" frameborder="0" scrolling="no" style="margin: 0; border-radius: 0px !important; background-color: transparent;">
-    </iframe>
-    <h3>Click to share</h3>
-    <div style="display: inline-flex; align-items: center;">
-        <div style="display: flex; margin-top: 10%; margin-right: 10%;">
-            <a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-size="large" data-via="john77272002" data-show-count="false">Tweet
-            </a>
-            <script async="" src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
-        </div>
-        <div style="display: flex;">
-            <script src="https://platform.linkedin.com/in.js" type="text/javascript">lang: en_US</script>
-            <script type="IN/Share" data-url="https://www.linkedin.com"></script>
-        </div>
-    </div>
-    <hr>
-</div>  <script id="quarto-html-after-body" type="application/javascript">
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
     const mode = bsSheetEl.getAttribute("data-mode");
@@ -3671,8 +3585,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
   }
 });
-</script>  <script src="https://giscus.app/client.js" data-repo="JohnPPinto/blog" data-repo-id="R_kgDOJTakLg" data-category="General" data-category-id="DIC_kwDOJTakLs4CVlze" data-mapping="title" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="light" data-lang="en" crossorigin="anonymous" async="">
-</script>  </div> <!-- /content -->
+</script>
+</div> <!-- /content -->
 <footer class="footer">
   <div class="nav-footer">
     <div class="nav-footer-left">John Pinto <i class="fa-copyright fa-regular" aria-label="regular"></i> 2023 made with HTML5 <i class="fab fa-html5"></i>, CSS3 <i class="fa-brands fa-css3"></i> and <a href="https://quarto.org">Quarto</a>.</div>   
@@ -3681,7 +3595,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       &nbsp;
     </div>
   </div>
-</footer> 
-  
+</footer>
+
+
 
 </body></html>

@@ -1,108 +1,86 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
-    <meta charset="utf-8">
-    <meta name="generator" content="quarto-1.3.302">
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.302">
 
-    <meta name="author" content="John Pinto">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-    <title>John Pinto – blog_figures</title>    <style>
-      code{white-space: pre-wrap;}
-      span.smallcaps{font-variant: small-caps;}
-      div.columns{display: flex; gap: min(4vw, 1.5em);}
-      div.column{flex: auto; overflow-x: auto;}
-      div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-      ul.task-list{list-style: none;}
-      ul.task-list li input[type="checkbox"] {
-        width: 0.8em;
-        margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
-        vertical-align: middle;
-      }
-      /* CSS for syntax highlighting */
-      pre > code.sourceCode { white-space: pre; position: relative; }
-      pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-      pre > code.sourceCode > span:empty { height: 1.2em; }
-      .sourceCode { overflow: visible; }
-      code.sourceCode > span { color: inherit; text-decoration: inherit; }
-      div.sourceCode { margin: 1em 0; }
-      pre.sourceCode { margin: 0; }
-      @media screen {
-      div.sourceCode { overflow: auto; }
-      }
-      @media print {
-      pre > code.sourceCode { white-space: pre-wrap; }
-      pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-      }
-      pre.numberSource code
-        { counter-reset: source-line 0; }
-      pre.numberSource code > span
-        { position: relative; left: -4em; counter-increment: source-line; }
-      pre.numberSource code > span > a:first-child::before
-        { content: counter(source-line);
-          position: relative; left: -1em; text-align: right; vertical-align: baseline;
-          border: none; display: inline-block;
-          -webkit-touch-callout: none; -webkit-user-select: none;
-          -khtml-user-select: none; -moz-user-select: none;
-          -ms-user-select: none; user-select: none;
-          padding: 0 4px; width: 4em;
-        }
-      pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-      div.sourceCode
-        {   }
-      @media screen {
-      pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-      }
-    </style>
-    <style>
-      .quarto-embed-header {
-        height: 3em;
-        width: 100%;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        border-bottom: solid 1px;
-      }
-      .quarto-embed-header h6 {
-        font-size: 1em;
-        padding-top: 0.6em;
-        margin-left: 1em;
-        margin-right: 1em;
-        font-weight: 300;
-      }
-      .quarto-embed-header a.quarto-download-embed {
-        font-size: 0.7em;
-        margin-top: 1em;
-        margin-bottom: 1em;
-        margin-left: 1em;
-        margin-right: 1em;
-      }
-    </style>
-    
-<script src="../../../site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="../../../site_libs/quarto-nav/headroom.min.js"></script>
-<script src="../../../site_libs/clipboard/clipboard.min.js"></script>
-<script src="../../../site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="../../../site_libs/quarto-search/fuse.min.js"></script>
-<script src="../../../site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="../../../">
-<link href="../../../assets/images/favicon.png" rel="icon" type="image/png">
-<script src="../../../site_libs/cookie-consent/cookie-consent.js"></script>
-<link href="../../../site_libs/cookie-consent/cookie-consent.css" rel="stylesheet">
-<script src="../../../site_libs/quarto-html/quarto.js"></script>
-<script src="../../../site_libs/quarto-html/popper.min.js"></script>
-<script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="../../../site_libs/quarto-html/anchor.min.js"></script>
-<link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../../../site_libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="../../../site_libs/quarto-contrib/fontawesome6-0.1.0/all.css" rel="stylesheet">
-<link href="../../../site_libs/quarto-contrib/fontawesome6-0.1.0/latex-fontsize.css" rel="stylesheet">
-     <script id="quarto-search-options" type="application/json">{
+
+<title>John Pinto – blog_pytorch2_0</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../../">
+<link href="../../../../assets/images/favicon.png" rel="icon" type="image/png">
+<script src="../../../../site_libs/cookie-consent/cookie-consent.js"></script>
+<link href="../../../../site_libs/cookie-consent/cookie-consent.css" rel="stylesheet">
+<script src="../../../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../../../site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<script src="../../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../../../site_libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../../../../site_libs/quarto-contrib/fontawesome6-0.1.0/all.css" rel="stylesheet">
+<link href="../../../../site_libs/quarto-contrib/fontawesome6-0.1.0/latex-fontsize.css" rel="stylesheet">
+<script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
   "collapse-after": 3,
@@ -120,7 +98,8 @@
     "search-detached-cancel-button-title": "Cancel",
     "search-submit-button-title": "Submit"
   }
-}</script>  <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-6DE2RCBFFM"></script>
+}</script>
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-6DE2RCBFFM"></script>
 
 <script type="text/plain" cookie-consent="tracking">
 
@@ -128,7 +107,8 @@ window.dataLayer = window.dataLayer || [];
 function gtag(){dataLayer.push(arguments);}
 gtag('js', new Date());
 gtag('config', 'G-6DE2RCBFFM', { 'anonymize_ip': true});
-</script>  
+</script>
+
 <script type="text/javascript" charset="UTF-8">
 document.addEventListener('DOMContentLoaded', function () {
 cookieconsent.run({
@@ -143,20 +123,20 @@ cookieconsent.run({
   });
 });
 </script> 
-    
-        <link rel="stylesheet" href="../../../styles.css">
-      </head>
-  <body class="floating nav-fixed quarto-notebook">
-    <div class="quarto-embed-header">
-      <h6><i class="bi bi-journal-code"></i> blog_figures.ipynb</h6>
-      <a href="../../../posts/2023-04-01_pytorch_&amp;_lightning_2.0/notebooks/notebooks/blog_figures.ipynb" class="btn btn-primary quarto-download-embed" download="blog_figures.ipynb">Download Notebook</a>
-    </div>
-     <div id="quarto-search-results"></div>
+  
+
+
+<link rel="stylesheet" href="../../../../styles.css">
+</head>
+
+<body class="nav-fixed fullcontent">
+
+<div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
     <nav class="navbar navbar-expand-lg navbar-dark ">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container">
-    <a class="navbar-brand" href="../../../index.html">
+    <a class="navbar-brand" href="../../../../index.html">
     <span class="navbar-title">John Pinto</span>
     </a>
   </div>
@@ -167,11 +147,11 @@ cookieconsent.run({
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../../../blog.html" rel="" target="">
+    <a class="nav-link" href="../../../../blog.html" rel="" target="">
  <span class="menu-text">Blog</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../../about.html" rel="" target="">
+    <a class="nav-link" href="../../../../about.html" rel="" target="">
  <span class="menu-text">About</span></a>
   </li>  
   <li class="nav-item">
@@ -201,7 +181,7 @@ cookieconsent.run({
  <span class="menu-text"></span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="../../../blog.xml" rel="" target="_blank"><i class="bi bi-rss" role="img">
+    <a class="nav-link" href="../../../../blog.xml" rel="" target="_blank"><i class="bi bi-rss" role="img">
 </i> 
  <span class="menu-text"></span></a>
   </li>  
@@ -216,32 +196,31 @@ cookieconsent.run({
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
-    
-</nav>
-<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-    </div>
+    
 <!-- main -->
-<main class="content quarto-banner-title-block page-columns page-full" id="quarto-document-content">    <div class="cell-container column-page-left"><div class="cell-decorator"><pre>In [1]:</pre></div><div class="cell" data-execution_count="1">
+<main class="content" id="quarto-document-content">
+
+
+
+<div class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div></div>
-<div class="cell-container column-page-left"><div class="cell-decorator"><pre>In [2]:</pre></div><div class="cell" data-execution_count="2">
+</div>
+<div class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>exp1, exp2 <span class="op">=</span> pd.read_csv(<span class="st">'/content/exp1_results.csv'</span>), pd.read_csv(<span class="st">'/content/exp2_results.csv'</span>)</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>exp3, exp4 <span class="op">=</span> pd.read_csv(<span class="st">'/content/lightning.csv'</span>), pd.read_csv(<span class="st">'/content/lightning_compile.csv'</span>)</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>exp5, exp6 <span class="op">=</span> pd.read_csv(<span class="st">'/content/exp5_results.csv'</span>), pd.read_csv(<span class="st">'/content/exp6_results.csv'</span>)</span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>exp7, exp8 <span class="op">=</span> pd.read_csv(<span class="st">'/content/exp7_results.csv'</span>), pd.read_csv(<span class="st">'/content/exp8_results.csv'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div></div>
-<div class="cell-container column-page-left"><div class="cell-decorator"><pre>In [3]:</pre></div><div class="cell" data-execution_count="3">
+</div>
+<div class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>epochs <span class="op">=</span> np.array(<span class="bu">range</span>(<span class="bu">len</span>(exp1)))</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>label_fs <span class="op">=</span> <span class="dv">14</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>title_fs <span class="op">=</span> <span class="dv">16</span></span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>stitle_fs <span class="op">=</span> <span class="dv">18</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div></div>
-<div class="cell-container column-page-left"><div class="cell-decorator"><pre>In [4]:</pre></div><div class="cell" data-outputid="8447c764-4a71-4dbf-bafa-1c4b8c5a0765" data-execution_count="4">
+</div>
+<div class="cell" data-outputid="8447c764-4a71-4dbf-bafa-1c4b8c5a0765" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">25</span>, <span class="dv">8</span>))</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>plt.subplot(<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">1</span>)</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>plt.plot(epochs, exp1[<span class="st">'train_loss'</span>], label<span class="op">=</span><span class="st">'eager_train_loss'</span>)</span>
@@ -271,13 +250,13 @@ cookieconsent.run({
 <div class="cell-output cell-output-display">
 <div id="fig-pytorch-exp" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
-<p><img src="blog_figures_files/figure-html/fig-pytorch-exp-output-1.png" class="img-fluid figure-img"></p>
+<p><img src="blog_pytorch2_0_files/figure-html/fig-pytorch-exp-output-1.png" class="img-fluid figure-img"></p>
 <p></p><figcaption class="figure-caption">Figure&nbsp;1: Benchmark Comparison between PyTorch Eager and Compile Mode for 3 Epochs.</figcaption><p></p>
 </figure>
 </div>
 </div>
-</div></div>
-<div class="cell-container column-page-left"><div class="cell-decorator"><pre>In [5]:</pre></div><div class="cell" data-execution_count="5">
+</div>
+<div class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>exp3_dict <span class="op">=</span> []</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i, dfg <span class="kw">in</span> exp3.groupby(<span class="st">'epoch'</span>):</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    agg <span class="op">=</span> <span class="bu">dict</span>(dfg.mean())</span>
@@ -289,8 +268,8 @@ cookieconsent.run({
 <span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>    agg[<span class="st">'epoch'</span>] <span class="op">=</span> i</span>
 <span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>    exp4_dict.append(agg)</span>
 <span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>exp3, exp4 <span class="op">=</span> pd.DataFrame(exp3_dict), pd.DataFrame(exp4_dict)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div></div>
-<div class="cell-container column-page-left"><div class="cell-decorator"><pre>In [6]:</pre></div><div class="cell" data-outputid="178b7758-7fdc-4265-fb40-69b9d98ab09f" data-execution_count="6">
+</div>
+<div class="cell" data-outputid="178b7758-7fdc-4265-fb40-69b9d98ab09f" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">20</span>, <span class="dv">6</span>))</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>plt.subplot(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">1</span>)</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>plt.plot(epochs, exp3[<span class="st">'train_loss'</span>], label<span class="op">=</span><span class="st">'eager_train_loss'</span>)</span>
@@ -312,13 +291,13 @@ cookieconsent.run({
 <div class="cell-output cell-output-display">
 <div id="fig-pytorch-light-exp" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
-<p><img src="blog_figures_files/figure-html/fig-pytorch-light-exp-output-1.png" class="img-fluid figure-img"></p>
+<p><img src="blog_pytorch2_0_files/figure-html/fig-pytorch-light-exp-output-1.png" class="img-fluid figure-img"></p>
 <p></p><figcaption class="figure-caption">Figure&nbsp;2: Benchmark Comparison between PyTorch Lightning Eager and Compile Mode for 3 Epochs.</figcaption><p></p>
 </figure>
 </div>
 </div>
-</div></div>
-<div class="cell-container column-page-left"><div class="cell-decorator"><pre>In [7]:</pre></div><div class="cell" data-outputid="23349e30-1e78-489b-e5a8-ea7322e9e136" data-execution_count="7">
+</div>
+<div class="cell" data-outputid="23349e30-1e78-489b-e5a8-ea7322e9e136" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">25</span>, <span class="dv">8</span>))</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>plt.subplot(<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">1</span>)</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>plt.plot(epochs, exp5[<span class="st">'train_loss'</span>], label<span class="op">=</span><span class="st">'eager_train_loss'</span>)</span>
@@ -348,13 +327,13 @@ cookieconsent.run({
 <div class="cell-output cell-output-display">
 <div id="fig-fabric-exp" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
-<p><img src="blog_figures_files/figure-html/fig-fabric-exp-output-1.png" class="img-fluid figure-img"></p>
+<p><img src="blog_pytorch2_0_files/figure-html/fig-fabric-exp-output-1.png" class="img-fluid figure-img"></p>
 <p></p><figcaption class="figure-caption">Figure&nbsp;3: Benchmark Comparison between Lightning Fabric Eager and Compile Mode for 3 Epochs.</figcaption><p></p>
 </figure>
 </div>
 </div>
-</div></div>
-<div class="cell-container column-page-left"><div class="cell-decorator"><pre>In [8]:</pre></div><div class="cell" data-outputid="72cdd12e-b006-49b1-e211-bb65d94302dc" data-execution_count="8">
+</div>
+<div class="cell" data-outputid="72cdd12e-b006-49b1-e211-bb65d94302dc" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">25</span>, <span class="dv">8</span>))</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>plt.subplot(<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">1</span>)</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>plt.plot(epochs, exp7[<span class="st">'train_loss'</span>], label<span class="op">=</span><span class="st">'eager_train_loss'</span>)</span>
@@ -384,34 +363,17 @@ cookieconsent.run({
 <div class="cell-output cell-output-display">
 <div id="fig-fabric16-exp" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
-<p><img src="blog_figures_files/figure-html/fig-fabric16-exp-output-1.png" class="img-fluid figure-img"></p>
+<p><img src="blog_pytorch2_0_files/figure-html/fig-fabric16-exp-output-1.png" class="img-fluid figure-img"></p>
 <p></p><figcaption class="figure-caption">Figure&nbsp;4: Benchmark Comparison between Lightning Fabric (TF16 Mixed Precision) Eager and Compile Mode for 3 Epochs.</figcaption><p></p>
 </figure>
 </div>
 </div>
-</div></div>
+</div>
 
 
-     </main> <!-- /main -->  <div>
-    <hr>
-    <h3>Stay in touch</h3>
-    <p>If you enjoyed my blog and don't want to miss out on any future articles you can subscribe to my newsletters.</p>
-    <iframe src="https://embeds.beehiiv.com/e7421b93-7002-413c-b016-9c72444d77b6?slim=true" data-test-id="beehiiv-embed" height="52" frameborder="0" scrolling="no" style="margin: 0; border-radius: 0px !important; background-color: transparent;">
-    </iframe>
-    <h3>Click to share</h3>
-    <div style="display: inline-flex; align-items: center;">
-        <div style="display: flex; margin-top: 10%; margin-right: 10%;">
-            <a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-size="large" data-via="john77272002" data-show-count="false">Tweet
-            </a>
-            <script async="" src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
-        </div>
-        <div style="display: flex;">
-            <script src="https://platform.linkedin.com/in.js" type="text/javascript">lang: en_US</script>
-            <script type="IN/Share" data-url="https://www.linkedin.com"></script>
-        </div>
-    </div>
-    <hr>
-</div>  <script id="quarto-html-after-body" type="application/javascript">
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
     const mode = bsSheetEl.getAttribute("data-mode");
@@ -758,8 +720,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
   }
 });
-</script>  <script src="https://giscus.app/client.js" data-repo="JohnPPinto/blog" data-repo-id="R_kgDOJTakLg" data-category="General" data-category-id="DIC_kwDOJTakLs4CVlze" data-mapping="title" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="light" data-lang="en" crossorigin="anonymous" async="">
-</script>  </div> <!-- /content -->
+</script>
+</div> <!-- /content -->
 <footer class="footer">
   <div class="nav-footer">
     <div class="nav-footer-left">John Pinto <i class="fa-copyright fa-regular" aria-label="regular"></i> 2023 made with HTML5 <i class="fab fa-html5"></i>, CSS3 <i class="fa-brands fa-css3"></i> and <a href="https://quarto.org">Quarto</a>.</div>   
@@ -768,7 +730,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       &nbsp;
     </div>
   </div>
-</footer> 
-  
+</footer>
+
+
 
 </body></html>
