@@ -43,7 +43,7 @@
 background-color: null;
 font-style: inherit;">compile</span>()</span></code></pre></div>
 <p>They have even mentioned the details while testing the new functionality and how the <code>torch.compile()</code> can improve the speed of the models from different sources [<a href="https://github.com/huggingface/transformers">HuggingFace</a>, <a href="https://github.com/rwightman/pytorch-image-models">TIMM</a> and <a href="https://github.com/pytorch/benchmark/">TorchBench</a>].</p>
-<p>To run this amazing compiled model, PyTorch introduces new technologies - TorchDynamo, AOTAutograd, PrimTorch and TorchInductor. All of these new technologies are working in a flow and they are broken down into three phases - Graph Acquisition, Graph Lowering and Graph Compilation. You can check all of this over <a href="https://pytorch.org/get-started/pytorch-2.0/">here</a>, they have explained the complex system in easy to understand way.</p>
+<p>To run this amazing compiled model, PyTorch introduces new technologies - <strong>TorchDynamo, AOTAutograd, PrimTorch and TorchInductor</strong>. All of these new technologies are working in a flow and they are broken down into three phases - <strong>Graph Acquisition, Graph Lowering and Graph Compilation</strong>. You can check all of this over <a href="https://pytorch.org/get-started/pytorch-2.0/">here</a>, they have explained the complex system in easy to understand way.</p>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">

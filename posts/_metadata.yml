@@ -23,10 +23,10 @@ comments:
   giscus: 
     repo: JohnPPinto/blog
 
-# footer setting
+# html setting
 format: 
   html: 
     include-after-body: ../footer.html
-
+    
 website: 
   favicon: assets\images\favicon.png
