@@ -10,7 +10,555 @@
 <atom:link href="https://johnppinto.github.io/blog/blog.xml" rel="self" type="application/rss+xml"/>
 <description>This is John Pinto&#39;s Personal Blog.</description>
 <generator>quarto-1.3.302</generator>
-<lastBuildDate>Fri, 31 Mar 2023 18:30:00 GMT</lastBuildDate>
+<lastBuildDate>Tue, 11 Jul 2023 18:30:00 GMT</lastBuildDate>
+<item>
+  <title>Orchestrate MLOps - Deployment Pipeline Part 1</title>
+  <dc:creator>John Pinto</dc:creator>
+  <link>https://johnppinto.github.io/blog/posts/2023-07-12_deployment_part1/index.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<style>
+.quarto-figure-center > figure {
+  text-align: center;
+}
+</style>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><a href="featured.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1"><img src="https://johnppinto.github.io/blog/posts/2023-07-12_deployment_part1/featured.png" class="img-fluid figure-img" width="367"></a></p>
+</figure>
+</div>
+<p>One of the hot topics right now is Machine Learning, especially the field of Deep Learning, after the emergence of ChatGPT and various other Artificial Intelligence products. Many have taken an interest in this field and day by day the field is growing tremendously large, with the growing community many online tutorials and information for anyone to start learning is been improving and getting easy.</p>
+<p>Many beginners that start learning machine learning go through the initial stages of the ML pipeline, i.e.&nbsp;Data Stage and Model Stage. This is a good way to learn and understand the basic concept when starting. But as your knowledge grows you will need to learn how to produce a project which fits the Machine Learning Life Cycle, even called Machine Learning Operations (MLOps).</p>
+<p>Once you have worked on the Data Stage and the Model Stage, next comes the Deployment of the Model, here you need to make the model available to anyone. Make an interactive application that communicates with the model and produces the prediction as a result for the user. The important point in the deployment stage is the communication of the model, the backend with the frontend of the application. In Python, this can be achieved using the famous REST API, for a long time, Flask, was the go-to framework for implementing REST API, but the new framework FastAPI has gained popularity because it is much faster compared to the other frameworks including Flask.</p>
+<p>With that, we’re going to build a FastAPI app for our backend that will produce and serve our prediction whenever requested, and for taking inputs and displaying results we will create a frontend user interface using the Streamlit application framework. Streamlit is one of the best ways for rapid prototyping and it is very easy to implement different UI components.</p>
+<section id="project-setup" class="level1">
+<h1>Project Setup</h1>
+<p>For this article, I will be using a pre-trained model to demonstrate the deployment stage, the pre-trained called BLIP - Bootstrapping Language-Image Pre-training, this model framework works in achieving tasks using vision and language. All the project code is present in my GitHub repository, you can check it over <a href="https://github.com/JohnPPinto/Blog-Project-Orchestrate-MLOps-Deployment-Pipeline.git">here</a>.</p>
+<p>Starting with the project, create two directories within your project directory.</p>
+<div class="sourceCode" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">$</span> mkdir frontend</span>
+<span id="cb1-2"><span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">$</span> mkdir backend</span></code></pre></div>
+<p>Add <em>__init__.py</em> files to each directories.</p>
+<section id="fastapi-backend" class="level2">
+<h2 class="anchored" data-anchor-id="fastapi-backend">FastAPI Backend</h2>
+<p>In the backend directory add everything that the backend will need like the models and the scripts to load the data and the model and help in producing the result by running the model. For this project I have added the models and scripts that process the input data and run the model which in return provides the required prediction. You can click <a href="https://github.com/JohnPPinto/Blog-Project-Orchestrate-MLOps-Deployment-Pipeline/tree/main/backend">here</a> to check the backend of my project.</p>
+<p>To build your FastAPI app, you can add a new file called ‘main.py’ in the backend directory.</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>backend/main.py</strong></pre>
+</div>
+<div class="sourceCode" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> uvicorn</span>
+<span id="cb2-2"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> io <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> BytesIO</span>
+<span id="cb2-3"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> PIL <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> Image</span>
+<span id="cb2-4"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> fastapi <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> FastAPI</span>
+<span id="cb2-5"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> fastapi <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> File</span>
+<span id="cb2-6"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> fastapi <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> UploadFile</span>
+<span id="cb2-7"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> predict <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> predict</span>
+<span id="cb2-8"></span>
+<span id="cb2-9"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Initiating FastAPI</span></span>
+<span id="cb2-10">app <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> FastAPI()</span>
+<span id="cb2-11"></span>
+<span id="cb2-12"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># A demo get method</span></span>
+<span id="cb2-13"><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">@app.get</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"/"</span>)</span>
+<span id="cb2-14"><span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">async</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">def</span> read_root():</span>
+<span id="cb2-15">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">return</span> {<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'message'</span>: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Welcome, You can type docs in the URL to check the API documentation."</span>}</span>
+<span id="cb2-16"></span>
+<span id="cb2-17"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># A post method to return the prediction</span></span>
+<span id="cb2-18"><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">@app.post</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'/predict'</span>)</span>
+<span id="cb2-19"><span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">async</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">def</span> predict_image(<span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">file</span>: UploadFile <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> File(...),</span>
+<span id="cb2-20">                        <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">type</span>: <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">str</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'caption'</span>,</span>
+<span id="cb2-21">                        decode_method: <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">str</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'beam'</span>,</span>
+<span id="cb2-22">                        question <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">None</span>):</span>
+<span id="cb2-23">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Reading the image file</span></span>
+<span id="cb2-24">    content <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">await</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">file</span>.read()</span>
+<span id="cb2-25">    image <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> Image.<span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">open</span>(BytesIO(content))</span>
+<span id="cb2-26"></span>
+<span id="cb2-27">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Getting the prediction</span></span>
+<span id="cb2-28">    result <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> predict(image<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>image,</span>
+<span id="cb2-29">                     <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">type</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">type</span>,</span>
+<span id="cb2-30">                     decode_method<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>decode_method,</span>
+<span id="cb2-31">                     question<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>question)</span>
+<span id="cb2-32">    </span>
+<span id="cb2-33">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">return</span> result</span>
+<span id="cb2-34"></span>
+<span id="cb2-35"><span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">if</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">__name__</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">==</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'__main__'</span>:</span>
+<span id="cb2-36">    uvicorn.run(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'main:app'</span>, host<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'0.0.0.0'</span>, port<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">8080</span>)</span></code></pre></div>
+</div>
+<p>Going through the whole code at once and reading it line by line is the best way to understand what is happening exactly, now that you have seen the code it’s time to explain the workings.</p>
+<ol type="1">
+<li>Starting of the file we import all the necessary libraries for running the script. Fastapi and uvicorn are the core package for the FastAPI app. Package io and PIL are for processing and loading the data and predict is the local package that loads and run the model.</li>
+<li>After importing the packages, I initialize the FastAPI app, creating a instance for the app this instance communicate with the server and the processing of the model and data. You can keep it empty or add you application title and description as an argument.</li>
+<li>The first think I create is a Get method, you use a get method only when you want to provide any form of data. Get method is only used for retrieving data whenever requested, within the get method I haven’t provided any name, this means that direct URL request will provide the information. The information needs to been a function and returned as a JSON format.</li>
+<li>Now that the demo get is shown, the main working of the app is in the Post method, you use post method when you want to retrieve data whenever requested but need an input data before sending the requested data. This is exactly what we need, a image will be taken and the predicted text will be provided in return. Similar to get method, we name the post method and create a function, the function takes the following arguments, a file declared as a FastAPI upload file type, rest of the arguments are for the predict function.</li>
+<li>Within the post method, the predict image function initially reads the file data, reading the file data which is in bytes format needs to be stored for further processing and for that BytesIO does the best work to store in the memory, using the stored data PIL.Image can open it efficiently. Use the PIL data now the predict function provides us the result. The result data is in JSON format.</li>
+<li>At the end, we use uvicorn to run the server on the main.py file at the localhost i.e.&nbsp;0.0.0.0 and default port 8080.</li>
+</ol>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Once your data is been stored in BytesIO and opened by PIL you can even convert your data into numy for a tensor like data.</p>
+<p>``<code>np.asarray()</code>``` can take a PIL format file and convert it into a numpy array.</p>
+</div>
+</div>
+<p>Once you run the main.py file, the FastAPI and uvicorn will run the app on the URL http://localhost:8080/docs, the docs is the documentation that the FastAPI auto generates. You can now use the GUI to try out the working of the application.</p>
+</section>
+<section id="streamlit-frontend" class="level2">
+<h2 class="anchored" data-anchor-id="streamlit-frontend">Streamlit Frontend</h2>
+<p>In our frontend, we will be using streamlit. Streamlit is easy to understand and using it is not at all difficult. Most of the components are single line of code and rest of the features are dynamically handled by streamlit in the back. Streamlit even offers a modern looking GUI by default so even the designing part is not needed. So No HTML and CSS is needed for using streamlit.</p>
+<p>I won’t be going into explaining streamlit and it’s components, all of the code is self explanatory, you can use the documents for understanding each components. You can check the streamlit document over <a href="https://docs.streamlit.io/library/api-reference">here</a>.</p>
+<p>To build the streamlit app, you can add a main.py file in the frontend directory.</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>backend/main.py</strong></pre>
+</div>
+<div class="sourceCode" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> requests</span>
+<span id="cb3-2"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> streamlit <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">as</span> st</span>
+<span id="cb3-3"></span>
+<span id="cb3-4"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Setting page layout</span></span>
+<span id="cb3-5">st.set_page_config(page_title<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'Demo App'</span>,</span>
+<span id="cb3-6">                   page_icon<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'📷'</span>,</span>
+<span id="cb3-7">                   layout<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'wide'</span>,</span>
+<span id="cb3-8">                   initial_sidebar_state<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'expanded'</span>)</span>
+<span id="cb3-9"></span>
+<span id="cb3-10"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Setting default values</span></span>
+<span id="cb3-11"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">type</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'caption'</span></span>
+<span id="cb3-12">decode_method <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'beam'</span></span>
+<span id="cb3-13">question <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">None</span></span>
+<span id="cb3-14"></span>
+<span id="cb3-15"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Navbar</span></span>
+<span id="cb3-16"><span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">with</span> st.sidebar:</span>
+<span id="cb3-17">    st.header(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'Configuration:'</span>)</span>
+<span id="cb3-18"></span>
+<span id="cb3-19">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Upload a image</span></span>
+<span id="cb3-20">    image <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> st.file_uploader(label<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'Upload a Image...'</span>, <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">type</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'jpg'</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'png'</span>))</span>
+<span id="cb3-21"></span>
+<span id="cb3-22">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Display radio for type of prediction</span></span>
+<span id="cb3-23">    <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">type</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> st.radio(label<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'Choose a type for prediction'</span>,</span>
+<span id="cb3-24">                    options<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'caption'</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'vqa'</span>),</span>
+<span id="cb3-25">                    horizontal<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">True</span>)</span>
+<span id="cb3-26">    </span>
+<span id="cb3-27">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">if</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">type</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">==</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'caption'</span>:</span>
+<span id="cb3-28">        decode_method <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> st.radio(label<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'Choose a decode method for caption'</span>,</span>
+<span id="cb3-29">                                 options<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'beam'</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'nucleus'</span>),</span>
+<span id="cb3-30">                                 horizontal<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">True</span>)</span>
+<span id="cb3-31">        </span>
+<span id="cb3-32">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">elif</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">type</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">==</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'vqa'</span>:</span>
+<span id="cb3-33">        question <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> st.text_input(label<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'Enter your question for the image.'</span>,</span>
+<span id="cb3-34">                                 placeholder<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'Eg. What is there in this image?'</span>)</span>
+<span id="cb3-35"></span>
+<span id="cb3-36">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Display button for submitting the image</span></span>
+<span id="cb3-37">    submit_button <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> st.button(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'Submit'</span>, use_container_width<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">True</span>)</span>
+<span id="cb3-38"></span>
+<span id="cb3-39"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Column for main part</span></span>
+<span id="cb3-40">col1, col2 <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> st.columns(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>)</span>
+<span id="cb3-41"></span>
+<span id="cb3-42"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Displaying image</span></span>
+<span id="cb3-43"><span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">with</span> col1:</span>
+<span id="cb3-44">    st.header(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'Image'</span>)</span>
+<span id="cb3-45">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">if</span> image <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">is</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">not</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">None</span>:  </span>
+<span id="cb3-46">        contents <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> image.getvalue()</span>
+<span id="cb3-47">        st.image(contents)</span>
+<span id="cb3-48"></span>
+<span id="cb3-49"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Displaying result</span></span>
+<span id="cb3-50"><span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">with</span> col2:</span>
+<span id="cb3-51">    st.header(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'Result'</span>)</span>
+<span id="cb3-52">    </span>
+<span id="cb3-53">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">if</span> submit_button <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">and</span> image <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">is</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">not</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">None</span>:</span>
+<span id="cb3-54">        files <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> {<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'file'</span>: image.getvalue()}</span>
+<span id="cb3-55">    </span>
+<span id="cb3-56">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">with</span> st.spinner(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'Loading, this will be quick...'</span>):</span>
+<span id="cb3-57">            params <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> {<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'type'</span>: <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">type</span>,</span>
+<span id="cb3-58">                      <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'decode_method'</span>: decode_method,</span>
+<span id="cb3-59">                      <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'question'</span>: question}</span>
+<span id="cb3-60">            </span>
+<span id="cb3-61">            <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Requesting for the prediction</span></span>
+<span id="cb3-62">            res <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> requests.post(<span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">f'http://localhost:8080/predict'</span>, </span>
+<span id="cb3-63">                                files<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>files, </span>
+<span id="cb3-64">                                params<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>params)</span>
+<span id="cb3-65">            result <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> res.json()</span>
+<span id="cb3-66">            </span>
+<span id="cb3-67">            <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Displaying the prediction</span></span>
+<span id="cb3-68">            st.write(result[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'prediction'</span>])</span></code></pre></div>
+</div>
+<p>Now, that you have the seen the code, I will explain how the frontend communicates with the backend, if you check the <em>Displaying result</em> ``<code>with col2</code>``` section, within that I use the requests library to call the post function where I provide the URL of the backend and also provide the files data that has the bytes data of the image file. Along with the image data, I also provide the remaining arguments that the predict function will need for making prediction.</p>
+<p>To run the streamlit file you just need to call the script file using the following command: ``<code>streamlit run main.py</code>```. This will run the frontend code on the default URL i.e.&nbsp;http://localhost:8501.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Remember this that running the frontend only won’t provide the prediction, you will also need to run the backend main.py file.</p>
+<p>When both are actively running will make a complete cycle of communication.</p>
+</div>
+</div>
+<p>Now, that you have read the whole article, you might be wondering that there must be a way to make a single environment that holds both frontend and backend, where on single click the app should run and activating the complete development process.</p>
+<p>If you are wondering then you are right it’s possible and I will be explaining that in the part 2 of this series.</p>
+<p>Thank you for reading my article and I hope that you have enjoyed it. If you want to check the projects code, you can find it over here. If I have left out something do mention it in the github repo issues or in the comments of this article, I am more than happy to improve this article.</p>
+
+
+</section>
+</section>
+
+ ]]></description>
+  <category>PyTorch</category>
+  <category>AI</category>
+  <category>Image-to-Text</category>
+  <category>NLP</category>
+  <category>MLOps</category>
+  <guid>https://johnppinto.github.io/blog/posts/2023-07-12_deployment_part1/index.html</guid>
+  <pubDate>Tue, 11 Jul 2023 18:30:00 GMT</pubDate>
+  <media:content url="https://johnppinto.github.io/blog/posts/2023-07-12_deployment_part1/featured.png" medium="image" type="image/png" height="157" width="144"/>
+</item>
 <item>
   <title>Riding the Waves - PyTorch and Lightning 2.0</title>
   <dc:creator>John Pinto</dc:creator>
@@ -27,7 +575,7 @@
 </style>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="https://johnppinto.github.io/blog/posts/2023-04-01_pytorch_and_lightning_2.0/featured.png" class="img-fluid figure-img"></p>
+<p><a href="featured.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1"><img src="https://johnppinto.github.io/blog/posts/2023-04-01_pytorch_and_lightning_2.0/featured.png" class="img-fluid figure-img"></a></p>
 </figure>
 </div>
 <section id="quick-facts-on-pytorch-and-lightning-2.0-release" class="level1">
@@ -60,7 +608,7 @@ Tip
 <p><strong>PyTorch Lightning</strong> on the other hand was just kind of following PyTorch, they have just mentioned that Lightning supports PyTorch 2.0 with backward compatibility and this itself makes it a mature release. But what makes Lightning amazing in this release is not the support but the introduction to a new library “<a href="https://lightning.ai/pages/open-source/fabric/">Lightning Fabric</a>”.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="https://johnppinto.github.io/blog/posts/2023-04-01_pytorch_and_lightning_2.0/images/fabric.png" class="img-fluid figure-img"></p>
+<p><a href="images/fabric.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="The space where “Lightning Fabric” occupies."><img src="https://johnppinto.github.io/blog/posts/2023-04-01_pytorch_and_lightning_2.0/images/fabric.png" class="img-fluid figure-img"></a></p>
 <p></p><figcaption class="figure-caption">The space where “Lightning Fabric” occupies.</figcaption><p></p>
 </figure>
 </div>
@@ -848,10 +1396,10 @@ font-style: inherit;">len</span>(dataset.classes))</span></code></pre></div>
 <div data-notebook="notebooks/blog_figures.ipynb">
 <div class="cell" data-outputid="8447c764-4a71-4dbf-bafa-1c4b8c5a0765" data-execution_count="4">
 <div class="cell-output cell-output-display">
-<div id="fig-pytorch-exp" class="quarto-figure quarto-figure-center anchored">
+<div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="https://johnppinto.github.io/blog/posts/2023-04-01_pytorch_and_lightning_2.0/index_files/figure-html/fig-pytorch-exp-output-1.png" class="img-fluid figure-img"></p>
-<p></p><figcaption class="figure-caption">Figure&nbsp;1: Benchmark Comparison between PyTorch Eager and Compile Mode for 3 Epochs.</figcaption><p></p>
+<p><a href="index_files/figure-html/fig-pytorch-exp-output-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="Benchmark Comparison between PyTorch Eager and Compile Mode for 3 Epochs."><img src="https://johnppinto.github.io/blog/posts/2023-04-01_pytorch_and_lightning_2.0/index_files/figure-html/fig-pytorch-exp-output-1.png" class="img-fluid figure-img"></a></p>
+<p></p><figcaption class="figure-caption">Benchmark Comparison between PyTorch Eager and Compile Mode for 3 Epochs.</figcaption><p></p>
 </figure>
 </div>
 </div>
@@ -1290,10 +1838,10 @@ font-style: inherit;"> min'</span>)</span></code></pre></div>
 <div data-notebook="notebooks/blog_figures.ipynb">
 <div class="cell" data-outputid="178b7758-7fdc-4265-fb40-69b9d98ab09f" data-execution_count="6">
 <div class="cell-output cell-output-display">
-<div id="fig-pytorch-light-exp" class="quarto-figure quarto-figure-center anchored">
+<div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="https://johnppinto.github.io/blog/posts/2023-04-01_pytorch_and_lightning_2.0/index_files/figure-html/fig-pytorch-light-exp-output-1.png" class="img-fluid figure-img"></p>
-<p></p><figcaption class="figure-caption">Figure&nbsp;2: Benchmark Comparison between PyTorch Lightning Eager and Compile Mode for 3 Epochs.</figcaption><p></p>
+<p><a href="index_files/figure-html/fig-pytorch-light-exp-output-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4" title="Benchmark Comparison between PyTorch Lightning Eager and Compile Mode for 3 Epochs."><img src="https://johnppinto.github.io/blog/posts/2023-04-01_pytorch_and_lightning_2.0/index_files/figure-html/fig-pytorch-light-exp-output-1.png" class="img-fluid figure-img"></a></p>
+<p></p><figcaption class="figure-caption">Benchmark Comparison between PyTorch Lightning Eager and Compile Mode for 3 Epochs.</figcaption><p></p>
 </figure>
 </div>
 </div>
@@ -2072,10 +2620,10 @@ font-style: inherit;">len</span>(dataset.classes))</span></code></pre></div>
 <div data-notebook="notebooks/blog_figures.ipynb">
 <div class="cell" data-outputid="23349e30-1e78-489b-e5a8-ea7322e9e136" data-execution_count="7">
 <div class="cell-output cell-output-display">
-<div id="fig-fabric-exp" class="quarto-figure quarto-figure-center anchored">
+<div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="https://johnppinto.github.io/blog/posts/2023-04-01_pytorch_and_lightning_2.0/index_files/figure-html/fig-fabric-exp-output-1.png" class="img-fluid figure-img"></p>
-<p></p><figcaption class="figure-caption">Figure&nbsp;3: Benchmark Comparison between Lightning Fabric Eager and Compile Mode for 3 Epochs.</figcaption><p></p>
+<p><a href="index_files/figure-html/fig-fabric-exp-output-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-5" title="Benchmark Comparison between Lightning Fabric Eager and Compile Mode for 3 Epochs."><img src="https://johnppinto.github.io/blog/posts/2023-04-01_pytorch_and_lightning_2.0/index_files/figure-html/fig-fabric-exp-output-1.png" class="img-fluid figure-img"></a></p>
+<p></p><figcaption class="figure-caption">Benchmark Comparison between Lightning Fabric Eager and Compile Mode for 3 Epochs.</figcaption><p></p>
 </figure>
 </div>
 </div>
@@ -2229,10 +2777,10 @@ font-style: inherit;">len</span>(dataset.classes))</span></code></pre></div>
 <div data-notebook="notebooks/blog_figures.ipynb">
 <div class="cell" data-outputid="72cdd12e-b006-49b1-e211-bb65d94302dc" data-execution_count="8">
 <div class="cell-output cell-output-display">
-<div id="fig-fabric16-exp" class="quarto-figure quarto-figure-center anchored">
+<div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="https://johnppinto.github.io/blog/posts/2023-04-01_pytorch_and_lightning_2.0/index_files/figure-html/fig-fabric16-exp-output-1.png" class="img-fluid figure-img"></p>
-<p></p><figcaption class="figure-caption">Figure&nbsp;4: Benchmark Comparison between Lightning Fabric (TF16 Mixed Precision) Eager and Compile Mode for 3 Epochs.</figcaption><p></p>
+<p><a href="index_files/figure-html/fig-fabric16-exp-output-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-6" title="Benchmark Comparison between Lightning Fabric (TF16 Mixed Precision) Eager and Compile Mode for 3 Epochs."><img src="https://johnppinto.github.io/blog/posts/2023-04-01_pytorch_and_lightning_2.0/index_files/figure-html/fig-fabric16-exp-output-1.png" class="img-fluid figure-img"></a></p>
+<p></p><figcaption class="figure-caption">Benchmark Comparison between Lightning Fabric (TF16 Mixed Precision) Eager and Compile Mode for 3 Epochs.</figcaption><p></p>
 </figure>
 </div>
 </div>
@@ -2247,21 +2795,17 @@ font-style: inherit;">len</span>(dataset.classes))</span></code></pre></div>
 <p>So now that all the experiments are completed, it’s time to check the overall comparison of all the experiments and which one has performed the best.</p>
 <div class="quarto-layout-panel">
 <div class="quarto-layout-row quarto-layout-valign-top">
-<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
-<div class="quarto-figure quarto-figure-center">
+<div class="quarto-figure quarto-figure-center" style="flex-basis: 50.0%;justify-content: center;">
 <figure class="figure">
-<p><img src="https://johnppinto.github.io/blog/posts/2023-04-01_pytorch_and_lightning_2.0/images/model_train_time_a4000.png" class="img-fluid figure-img"></p>
+<p><a href="images/model_train_time_a4000.png" class="lightbox" data-gallery="quarto-lightbox-gallery-7" title="Nvidia RTX A4000"><img src="https://johnppinto.github.io/blog/posts/2023-04-01_pytorch_and_lightning_2.0/images/model_train_time_a4000.png" class="img-fluid figure-img"></a></p>
 <p></p><figcaption class="figure-caption">Nvidia RTX A4000</figcaption><p></p>
 </figure>
 </div>
-</div>
-<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
-<div class="quarto-figure quarto-figure-center">
+<div class="quarto-figure quarto-figure-center" style="flex-basis: 50.0%;justify-content: center;">
 <figure class="figure">
-<p><img src="https://johnppinto.github.io/blog/posts/2023-04-01_pytorch_and_lightning_2.0/images/model_train_time_teslat4.png" class="img-fluid figure-img"></p>
+<p><a href="images/model_train_time_teslat4.png" class="lightbox" data-gallery="quarto-lightbox-gallery-8" title="Nvidia Tesla T4"><img src="https://johnppinto.github.io/blog/posts/2023-04-01_pytorch_and_lightning_2.0/images/model_train_time_teslat4.png" class="img-fluid figure-img"></a></p>
 <p></p><figcaption class="figure-caption">Nvidia Tesla T4</figcaption><p></p>
 </figure>
-</div>
 </div>
 </div>
 </div>

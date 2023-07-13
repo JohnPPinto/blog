@@ -57,5 +57,11 @@
   },
   "docs/posts/2023-04-01_pytorch_and_lightning_2.0/notebooks/HMDB51_human_action_recognition_pytorch.ipynb": {
     "HMDB51_human_action_recognition_pytorch.html": "34c139f8"
+  },
+  "docs/posts/2023-04-01_pytorch_and_lightning_2.0/notebooks/blog_figures.ipynb": {
+    "blog_figures.html": "5d1841a5"
+  },
+  "posts/2023-07-12_deployment_part1/index.qmd": {
+    "index.html": "c64e2a20"
   }
 }

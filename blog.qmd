@@ -1,5 +1,5 @@
 ---
-title: "All My Blog Posts"
+title: "My Blog Posts"
 listing:
   contents: posts/**/*.qmd
   sort: "date desc"

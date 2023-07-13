@@ -1,0 +1,202 @@
+---
+title: "Orchestrate MLOps - Deployment Pipeline Part 1"
+description: "In this series, I will be talking about the Deployment stage which is part of the ML pipeline. This is Part 1 of this series, the beginning of any project's deployment." 
+author: "John Pinto"
+date: "2023-07-12"
+categories: ["PyTorch", "AI", "Image-to-Text", "NLP", "MLOps"]
+image: "featured.png"
+toc: true
+page-layout: full
+code-fold: true
+notebook-links: false
+filters:
+   - lightbox
+lightbox: auto
+---
+
+```{=html}
+<style>
+.quarto-figure-center > figure {
+  text-align: center;
+}
+</style>
+```
+![](featured.png){fig-align="center" width="367"}
+
+One of the hot topics right now is Machine Learning, especially the field of Deep Learning, after the emergence of ChatGPT and various other Artificial Intelligence products. Many have taken an interest in this field and day by day the field is growing tremendously large, with the growing community many online tutorials and information for anyone to start learning is been improving and getting easy.
+
+Many beginners that start learning machine learning go through the initial stages of the ML pipeline, i.e. Data Stage and Model Stage. This is a good way to learn and understand the basic concept when starting. But as your knowledge grows you will need to learn how to produce a project which fits the Machine Learning Life Cycle, even called Machine Learning Operations (MLOps).
+
+Once you have worked on the Data Stage and the Model Stage, next comes the Deployment of the Model, here you need to make the model available to anyone. Make an interactive application that communicates with the model and produces the prediction as a result for the user. The important point in the deployment stage is the communication of the model, the backend with the frontend of the application. In Python, this can be achieved using the famous REST API, for a long time, Flask, was the go-to framework for implementing REST API, but the new framework FastAPI has gained popularity because it is much faster compared to the other frameworks including Flask.
+
+With that, we're going to build a FastAPI app for our backend that will produce and serve our prediction whenever requested, and for taking inputs and displaying results we will create a frontend user interface using the Streamlit application framework. Streamlit is one of the best ways for rapid prototyping and it is very easy to implement different UI components.
+
+# Project Setup
+
+For this article, I will be using a pre-trained model to demonstrate the deployment stage, the pre-trained called BLIP - Bootstrapping Language-Image Pre-training, this model framework works in achieving tasks using vision and language. All the project code is present in my GitHub repository, you can check it over [here](https://github.com/JohnPPinto/Blog-Project-Orchestrate-MLOps-Deployment-Pipeline.git).
+
+Starting with the project, create two directories within your project directory.
+
+``` bash
+$ mkdir frontend
+$ mkdir backend
+```
+
+Add *\_\_init\_\_.py* files to each directory.
+
+## FastAPI Backend
+
+In the backend directory add everything that the backend will need like the models and the scripts to load the data and the model and help in producing the result by running the model. For this project, I have added the models and scripts that process the input data and run the model which in return provides the required prediction. You can click [here](https://github.com/JohnPPinto/Blog-Project-Orchestrate-MLOps-Deployment-Pipeline/tree/main/backend) to check the backend of my project.
+
+To build your FastAPI app, you can add a new file called 'main.py' in the backend directory.
+
+``` {.python filename="backend/main.py" code-line-numbers="true"}
+import uvicorn
+from io import BytesIO
+from PIL import Image
+from fastapi import FastAPI
+from fastapi import File
+from fastapi import UploadFile
+from predict import predict
+
+# Initiating FastAPI
+app = FastAPI()
+
+# A demo get method
+@app.get("/")
+async def read_root():
+    return {'message': "Welcome, You can type docs in the URL to check the API documentation."}
+
+# A post method to return the prediction
+@app.post('/predict')
+async def predict_image(file: UploadFile = File(...),
+                        type: str = 'caption',
+                        decode_method: str = 'beam',
+                        question = None):
+    # Reading the image file
+    content = await file.read()
+    image = Image.open(BytesIO(content))
+
+    # Getting the prediction
+    result = predict(image=image,
+                     type=type,
+                     decode_method=decode_method,
+                     question=question)
+    
+    return result
+
+if __name__ == '__main__':
+    uvicorn.run('main:app', host='0.0.0.0', port=8080)
+```
+
+Going through the whole code at once and reading it line by line is the best way to understand what is happening exactly, now that you have seen the code it's time to explain the workings.
+
+1.  Starting with the file we import all the necessary libraries for running the script. Fastapi and uvicorn are the core package for the FastAPI app. Package io and PIL are for processing and loading the data and predict is the local package that loads and runs the model.
+2.  After importing the packages, I initialize the FastAPI app, creating an instance for the app this instance communicates with the server and the processing of the model and data. You can keep it empty or add your application title and description as an argument.
+3.  The first thing I create is a Get method, you use an Get method only when you want to provide any form of data. The Get method is only used for retrieving data whenever requested, within the Get method I haven't provided any name, which means that a direct URL request will provide the information. The information needs to be a function and returned in JSON format.
+4.  Now that the demo get is shown, the main working of the app is in the Post method, you use the Post method when you want to retrieve data whenever requested but need input data before sending the requested data. This is exactly what we need, an image will be taken and the predicted text will be provided in return. Similar to the Get method, we name the post method and create a function, the function takes the following arguments, a file declared as a FastAPI upload file type, rest of the arguments are for the predict function.
+5.  Within the post method, the predict image function initially reads the file data, reading the file data which is in bytes format needs to be stored for further processing and for that BytesIO does the best work to store in the memory, using the stored data PIL.Image can open it efficiently. Using the PIL data now the predict function provides us with the result. The result data is in JSON format.
+6.  At the end, we use uvicorn to run the server on the main.py file at the localhost i.e. 0.0.0.0 and default port 8080.
+
+::: callout-tip
+Once your data is been stored in BytesIO and opened by PIL you can even convert your data into numpy for tensor like data.
+
+`np.asarray()` can take a PIL format file and convert it into a numpy array.
+:::
+
+Once you run the main.py file, the FastAPI and uvicorn will run the app on the URL http://localhost:8080/docs, the docs are the documentation that the FastAPI auto-generates. You can now use the GUI to try out the working of the application.
+
+## Streamlit Frontend
+
+In our frontend, we will be using Streamlit. Streamlit is easy to understand and using it is not at all difficult. Most of the components are a single line of code and the rest of the features are dynamically handled by Streamlit in the back. Streamlit even offers a modern-looking GUI by default so even the designing part is not needed. So No HTML and CSS are needed for using Streamlit.
+
+I won't be going into explaining Streamlit and its components, all of the code is self-explanatory, and you can use the documents for understanding each component. You can check the streamlit document over [here](https://docs.streamlit.io/library/api-reference).
+
+To build the Streamlit app, you can add a main.py file in the frontend directory.
+
+``` {.python filename="backend/main.py" code-line-numbers="true"}
+import requests
+import streamlit as st
+
+# Setting page layout
+st.set_page_config(page_title='Demo App',
+                   page_icon='📷',
+                   layout='wide',
+                   initial_sidebar_state='expanded')
+
+# Setting default values
+type = 'caption'
+decode_method = 'beam'
+question = None
+
+# Navbar
+with st.sidebar:
+    st.header('Configuration:')
+
+    # Upload a image
+    image = st.file_uploader(label='Upload a Image...', type=('jpg', 'png'))
+
+    # Display radio for type of prediction
+    type = st.radio(label='Choose a type for prediction',
+                    options=('caption', 'vqa'),
+                    horizontal=True)
+    
+    if type == 'caption':
+        decode_method = st.radio(label='Choose a decode method for caption',
+                                 options=('beam', 'nucleus'),
+                                 horizontal=True)
+        
+    elif type == 'vqa':
+        question = st.text_input(label='Enter your question for the image.',
+                                 placeholder='Eg. What is there in this image?')
+
+    # Display button for submitting the image
+    submit_button = st.button('Submit', use_container_width=True)
+
+# Column for main part
+col1, col2 = st.columns(2)
+
+# Displaying image
+with col1:
+    st.header('Image')
+    if image is not None:  
+        contents = image.getvalue()
+        st.image(contents)
+
+# Displaying result
+with col2:
+    st.header('Result')
+    
+    if submit_button and image is not None:
+        files = {'file': image.getvalue()}
+    
+        with st.spinner('Loading, this will be quick...'):
+            params = {'type': type,
+                      'decode_method': decode_method,
+                      'question': question}
+            
+            # Requesting for the prediction
+            res = requests.post(f'http://localhost:8080/predict', 
+                                files=files, 
+                                params=params)
+            result = res.json()
+            
+            # Displaying the prediction
+            st.write(result['prediction'])
+```
+
+Now, that you have seen the code, I will explain how the frontend communicates with the backend, if you check the *Displaying result* `with col2` section, within that I use the requests library to call the post function where I provide the URL of the backend and also provide the file's data that has the bytes data of the image file. Along with the image data, I also provide the remaining arguments that the predict function will need for making the prediction.
+
+To run the streamlit file you just need to call the script file using the following command: `streamlit run main.py`. This will run the frontend code on the default URL i.e. http://localhost:8501.
+
+::: callout-note
+Remember that running the frontend only won't provide the prediction, you will also need to run the backend main.py file also.
+
+When both are actively running will make a complete cycle of communication.
+:::
+
+Now, that you have read the whole article, you might be wondering if there must be a way to make a single environment that holds both frontend and backend, where with a single click the app should run and activate the complete development process.
+
+If you are wondering then you are right it's possible and I will be explaining that in part 2 of this series.
+
+Thank you for reading my article and I hope that you have enjoyed it. If you want to check the project's code, you can find it over [here](https://github.com/JohnPPinto/Blog-Project-Orchestrate-MLOps-Deployment-Pipeline.git). If I have left out something do mention it in the GitHub repo issues or the comments of this article, I am more than happy to improve this article.

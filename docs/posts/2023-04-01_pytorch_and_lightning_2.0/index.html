@@ -81,6 +81,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
 <link href="../../site_libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<script src="../../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="../../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="../../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
 <link href="../../site_libs/quarto-contrib/fontawesome6-0.1.0/all.css" rel="stylesheet">
 <link href="../../site_libs/quarto-contrib/fontawesome6-0.1.0/latex-fontsize.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
@@ -290,7 +293,7 @@ cookieconsent.run({
 </style>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="featured.png" class="img-fluid figure-img"></p>
+<p><a href="featured.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1"><img src="featured.png" class="img-fluid figure-img"></a></p>
 </figure>
 </div>
 <section id="quick-facts-on-pytorch-and-lightning-2.0-release" class="level1">
@@ -321,7 +324,7 @@ Tip
 <p><strong>PyTorch Lightning</strong> on the other hand was just kind of following PyTorch, they have just mentioned that Lightning supports PyTorch 2.0 with backward compatibility and this itself makes it a mature release. But what makes Lightning amazing in this release is not the support but the introduction to a new library “<a href="https://lightning.ai/pages/open-source/fabric/">Lightning Fabric</a>”.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="images/fabric.png" class="img-fluid figure-img"></p>
+<p><a href="images/fabric.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="The space where “Lightning Fabric” occupies."><img src="images/fabric.png" class="img-fluid figure-img"></a></p>
 <p></p><figcaption class="figure-caption">The space where “Lightning Fabric” occupies.</figcaption><p></p>
 </figure>
 </div>
@@ -579,10 +582,10 @@ Code
 <div data-notebook="notebooks/blog_figures.ipynb">
 <div class="cell" data-outputid="8447c764-4a71-4dbf-bafa-1c4b8c5a0765" data-execution_count="4">
 <div class="cell-output cell-output-display">
-<div id="fig-pytorch-exp" class="quarto-figure quarto-figure-center anchored">
+<div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="index_files/figure-html/fig-pytorch-exp-output-1.png" class="img-fluid figure-img"></p>
-<p></p><figcaption class="figure-caption">Figure&nbsp;1: Benchmark Comparison between PyTorch Eager and Compile Mode for 3 Epochs.</figcaption><p></p>
+<p><a href="index_files/figure-html/fig-pytorch-exp-output-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="Benchmark Comparison between PyTorch Eager and Compile Mode for 3 Epochs."><img src="index_files/figure-html/fig-pytorch-exp-output-1.png" class="img-fluid figure-img"></a></p>
+<p></p><figcaption class="figure-caption">Benchmark Comparison between PyTorch Eager and Compile Mode for 3 Epochs.</figcaption><p></p>
 </figure>
 </div>
 </div>
@@ -689,10 +692,10 @@ Code
 <div data-notebook="notebooks/blog_figures.ipynb">
 <div class="cell" data-outputid="178b7758-7fdc-4265-fb40-69b9d98ab09f" data-execution_count="6">
 <div class="cell-output cell-output-display">
-<div id="fig-pytorch-light-exp" class="quarto-figure quarto-figure-center anchored">
+<div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="index_files/figure-html/fig-pytorch-light-exp-output-1.png" class="img-fluid figure-img"></p>
-<p></p><figcaption class="figure-caption">Figure&nbsp;2: Benchmark Comparison between PyTorch Lightning Eager and Compile Mode for 3 Epochs.</figcaption><p></p>
+<p><a href="index_files/figure-html/fig-pytorch-light-exp-output-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4" title="Benchmark Comparison between PyTorch Lightning Eager and Compile Mode for 3 Epochs."><img src="index_files/figure-html/fig-pytorch-light-exp-output-1.png" class="img-fluid figure-img"></a></p>
+<p></p><figcaption class="figure-caption">Benchmark Comparison between PyTorch Lightning Eager and Compile Mode for 3 Epochs.</figcaption><p></p>
 </figure>
 </div>
 </div>
@@ -917,10 +920,10 @@ Code
 <div data-notebook="notebooks/blog_figures.ipynb">
 <div class="cell" data-outputid="23349e30-1e78-489b-e5a8-ea7322e9e136" data-execution_count="7">
 <div class="cell-output cell-output-display">
-<div id="fig-fabric-exp" class="quarto-figure quarto-figure-center anchored">
+<div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="index_files/figure-html/fig-fabric-exp-output-1.png" class="img-fluid figure-img"></p>
-<p></p><figcaption class="figure-caption">Figure&nbsp;3: Benchmark Comparison between Lightning Fabric Eager and Compile Mode for 3 Epochs.</figcaption><p></p>
+<p><a href="index_files/figure-html/fig-fabric-exp-output-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-5" title="Benchmark Comparison between Lightning Fabric Eager and Compile Mode for 3 Epochs."><img src="index_files/figure-html/fig-fabric-exp-output-1.png" class="img-fluid figure-img"></a></p>
+<p></p><figcaption class="figure-caption">Benchmark Comparison between Lightning Fabric Eager and Compile Mode for 3 Epochs.</figcaption><p></p>
 </figure>
 </div>
 </div>
@@ -970,10 +973,10 @@ Code
 <div data-notebook="notebooks/blog_figures.ipynb">
 <div class="cell" data-outputid="72cdd12e-b006-49b1-e211-bb65d94302dc" data-execution_count="8">
 <div class="cell-output cell-output-display">
-<div id="fig-fabric16-exp" class="quarto-figure quarto-figure-center anchored">
+<div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="index_files/figure-html/fig-fabric16-exp-output-1.png" class="img-fluid figure-img"></p>
-<p></p><figcaption class="figure-caption">Figure&nbsp;4: Benchmark Comparison between Lightning Fabric (TF16 Mixed Precision) Eager and Compile Mode for 3 Epochs.</figcaption><p></p>
+<p><a href="index_files/figure-html/fig-fabric16-exp-output-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-6" title="Benchmark Comparison between Lightning Fabric (TF16 Mixed Precision) Eager and Compile Mode for 3 Epochs."><img src="index_files/figure-html/fig-fabric16-exp-output-1.png" class="img-fluid figure-img"></a></p>
+<p></p><figcaption class="figure-caption">Benchmark Comparison between Lightning Fabric (TF16 Mixed Precision) Eager and Compile Mode for 3 Epochs.</figcaption><p></p>
 </figure>
 </div>
 </div>
@@ -988,21 +991,17 @@ Code
 <p>So now that all the experiments are completed, it’s time to check the overall comparison of all the experiments and which one has performed the best.</p>
 <div class="quarto-layout-panel">
 <div class="quarto-layout-row quarto-layout-valign-top">
-<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
-<div class="quarto-figure quarto-figure-center">
+<div class="quarto-figure quarto-figure-center" style="flex-basis: 50.0%;justify-content: center;">
 <figure class="figure">
-<p><img src="images/model_train_time_a4000.png" class="img-fluid figure-img"></p>
+<p><a href="images/model_train_time_a4000.png" class="lightbox" data-gallery="quarto-lightbox-gallery-7" title="Nvidia RTX A4000"><img src="images/model_train_time_a4000.png" class="img-fluid figure-img"></a></p>
 <p></p><figcaption class="figure-caption">Nvidia RTX A4000</figcaption><p></p>
 </figure>
 </div>
-</div>
-<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
-<div class="quarto-figure quarto-figure-center">
+<div class="quarto-figure quarto-figure-center" style="flex-basis: 50.0%;justify-content: center;">
 <figure class="figure">
-<p><img src="images/model_train_time_teslat4.png" class="img-fluid figure-img"></p>
+<p><a href="images/model_train_time_teslat4.png" class="lightbox" data-gallery="quarto-lightbox-gallery-8" title="Nvidia Tesla T4"><img src="images/model_train_time_teslat4.png" class="img-fluid figure-img"></a></p>
 <p></p><figcaption class="figure-caption">Nvidia Tesla T4</figcaption><p></p>
 </figure>
-</div>
 </div>
 </div>
 </div>
@@ -1399,6 +1398,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     </div>
   </div>
 </footer>
+<script>var lightboxQuarto = GLightbox({"openEffect":"zoom","loop":true,"selector":".lightbox","closeEffect":"zoom","descPosition":"bottom"});</script>
 
 
 

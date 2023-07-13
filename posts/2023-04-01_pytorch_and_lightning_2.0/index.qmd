@@ -9,6 +9,9 @@ toc: true
 page-layout: full
 code-fold: true
 notebook-links: false
+filters:
+   - lightbox
+lightbox: auto
 ---
 
 ```{=html}

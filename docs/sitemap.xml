@@ -2,15 +2,15 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://johnppinto.github.io/blog/posts/2022-11-20_tf_modelling/index.html</loc>
-    <lastmod>2023-04-11T09:31:09.673Z</lastmod>
+    <lastmod>2023-07-12T09:37:57.668Z</lastmod>
   </url>
   <url>
     <loc>https://johnppinto.github.io/blog/index.html</loc>
-    <lastmod>2023-04-21T10:20:21.978Z</lastmod>
+    <lastmod>2023-07-13T11:01:02.718Z</lastmod>
   </url>
   <url>
     <loc>https://johnppinto.github.io/blog/blog.html</loc>
-    <lastmod>2023-04-21T10:20:22.798Z</lastmod>
+    <lastmod>2023-07-13T11:01:11.099Z</lastmod>
   </url>
   <url>
     <loc>https://johnppinto.github.io/blog/about.html</loc>
@@ -22,7 +22,7 @@
   </url>
   <url>
     <loc>https://johnppinto.github.io/blog/posts/2023-04-01_pytorch_and_lightning_2.0/index.html</loc>
-    <lastmod>2023-04-21T10:20:21.218Z</lastmod>
+    <lastmod>2023-07-12T09:53:38.758Z</lastmod>
   </url>
   <url>
     <loc>https://johnppinto.github.io/blog/docs/posts/2023-04-01_pytorch_&_lightning_2.0/notebooks/blog_figures.html</loc>
@@ -38,7 +38,7 @@
   </url>
   <url>
     <loc>https://johnppinto.github.io/blog/posts/2023-04-01_pytorch_and_lightning_2.0/notebooks/blog_figures.html</loc>
-    <lastmod>2023-04-13T10:00:32.016Z</lastmod>
+    <lastmod>2023-07-12T09:38:02.483Z</lastmod>
   </url>
   <url>
     <loc>https://johnppinto.github.io/blog/posts/2023-04-01_pytorch_and_lightning_2.0/notebooks/HMDB51_human_action_recognition_pytorch.html</loc>
@@ -47,5 +47,13 @@
   <url>
     <loc>https://johnppinto.github.io/blog/docs/posts/2023-04-01_pytorch_and_lightning_2.0/notebooks/HMDB51_human_action_recognition_pytorch.html</loc>
     <lastmod>2023-04-13T10:39:10.979Z</lastmod>
+  </url>
+  <url>
+    <loc>https://johnppinto.github.io/blog/docs/posts/2023-04-01_pytorch_and_lightning_2.0/notebooks/blog_figures.html</loc>
+    <lastmod>2023-07-12T09:37:54.255Z</lastmod>
+  </url>
+  <url>
+    <loc>https://johnppinto.github.io/blog/posts/2023-07-12_deployment_part1/index.html</loc>
+    <lastmod>2023-07-13T11:15:20.554Z</lastmod>
   </url>
 </urlset>
