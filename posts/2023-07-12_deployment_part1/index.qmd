@@ -114,7 +114,7 @@ I won't be going into explaining Streamlit and its components, all of the code i
 
 To build the Streamlit app, you can add a main.py file in the frontend directory.
 
-``` {.python filename="backend/main.py" code-line-numbers="true"}
+``` {.python filename="frontend/main.py" code-line-numbers="true"}
 import requests
 import streamlit as st
 
