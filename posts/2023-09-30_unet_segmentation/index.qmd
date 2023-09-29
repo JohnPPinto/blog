@@ -1,0 +1,298 @@
+---
+title: "Construct your First Multiclass U-Net in PyTorch"
+description: "Building blocks for a strong foundation in image segmentation journey." 
+author: "John Pinto"
+date: "2023-09-30"
+categories: ["PyTorch", "AI", "Computer Vision", "Image Segmentation"]
+image: "featured.jpg"
+toc: true
+page-layout: full
+code-fold: true
+notebook-links: false
+filters:
+   - lightbox
+lightbox: auto
+draft: true
+---
+
+```{=html}
+<style>
+.quarto-figure-center > figure {
+  text-align: center;
+}
+</style>
+```
+![](featured.jpg){fig-align="center"}
+
+# What is Semantic Segmentation and U-Net?
+
+The field of Computer Vision is quite vast and the general idea is to make the machine able to perceive and understand real-world elements. All the tasks within the field of computer vision have some method to let the machines see the world, among these tasks is semantic segmentation.
+
+Semantic segmentation has a simple objective, to learn and understand each and every pixel that the camera has captured. If you have already been reading and learning about machine learning, then you might know numbers are everything in this field. So, what makes semantic segmentation special is the way it represents the pixel. All the information of the pixel is labeled with a class, whether it's a binary(0 or 1) or a multiclass(more than 2) problem.
+
+Learning about semantic segmentation and applying this method to solve problems was one of the difficult tasks traditionally until deep learning methods showed up, one of the starting methods to boost this field was called U-Net. U-Net is a deep learning architecture, that was introduced for a task in [Biomedical Image Segmentation](https://arxiv.org/pdf/1505.04597.pdf), the model has given amazing results and even to date it can handle most of the segmentation problem.
+
+In this article, we will learn more about U-Net and construct our own PyTorch implementation of the U-Net architecture. 
+
+## How does it look?
+
+![](images/U-Net.jpg){fig-align="center" width="600"}
+
+The model has a representation same as the name states. A 'U' shape model. The reason for the 'U' shape comes from the working of the model, the model starts from the left-hand side and moves towards the center compressing the data and keeping only the features of the image, this part of the model is even called an encoder. Then the data moves toward the right-hand corner where the data is reconstructed with all the known features and provided in the form of a mask, this part of the model is called the decoder. 
+
+### Encoder(Contraction Path)
+
+The encoder path takes in the image data and progressively starts performing the downsampling method, this is performed with the help of convolution and pooling layers. 
+
+If you see the architecture you might notice a pattern, all the downsample layers have two convolution layers. we will build a class of ```torch.nn.Module``` having two convolution layers. While using the convolution layers, we won't change the spatial dimension by applying padding and along with convolution a batch normalization for bias and ReLU activation to make it non-linear. 
+
+``` {.python code-line-numbers="true"}
+class DoubleConvLayer(nn.Module):
+    """
+    Creates two convolution layers with batch normalization
+    and relu activation.
+    These convolution layers do not change the spatial dimension
+    and only affects the feature dimension.
+    If you check the architecture dig., this class creates the
+    layer indicated by the blue arrow.
+    """
+    def __init__(self, in_channels, out_channels):
+        super().__init__()
+        self.double_conv = nn.Sequential(
+            # First convolution layer
+            nn.Conv2d(in_channels=in_channels,
+                      out_channels=out_channels,
+                      kernel_size=3,
+                      stride=1,
+                      padding=1,
+                      bias=False),
+            nn.BatchNorm2d(num_features=out_channels),
+            nn.ReLU(inplace=True),
+
+            # Second convolution layer
+            nn.Conv2d(in_channels=out_channels,
+                      out_channels=out_channels,
+                      kernel_size=3,
+                      stride=1,
+                      padding=1,
+                      bias=False),
+            nn.BatchNorm2d(num_features=out_channels),
+            nn.ReLU(inplace=True)
+        )
+
+    def forward(self, x):
+        return self.double_conv(x)
+```
+After the data passes through the convolution layers, it needs to move down, this is done by using the max pooling layer. Once, the data reaches down it can go through the same convolution layer that we created above, a simple model of passing data. 
+
+``` {.python code-line-numbers="true"}
+class DownSampling(nn.Module):
+    """
+    This class implements the downsampling part of the architecture.
+    If you check the architecture dig., the left path displays the red arrow
+    indicating the downsampled layer using the max pool.
+    """
+    def __init__(self, in_channels, out_channels):
+        super().__init__()
+        self.down_sample = nn.Sequential(
+            nn.MaxPool2d(kernel_size=2, stride=2),
+
+            # Initializing the layer using the double convolution layer class
+            DoubleConvLayer(in_channels=in_channels,
+                            out_channels=out_channels)
+        )
+
+    def forward(self, x):
+        return self.down_sample(x)
+```
+
+::: {.callout-note}
+While using downsampling, the model learns the features within the image, but also loses spatial information. So to get the lost data back we need to perform the decoder after this.
+:::
+
+### Decoder(Expansion Path)
+
+Once the data reaches the bottom, it needs to move up to increase the spatial dimension and start to select only the most important features, to perform this method we will be using the transposed convolution and following that we will concatenate the downsampling layer with the double convolution. This way the model learns the features and brings them back to the original input image shape. 
+
+If you have read the paper, it will be mentioned that they have used the upsampling method which is also great, but the recent method for decoding in segmentation and GAN's is been done using transposed convolution. so we will stick with the present best method.
+
+```{.python code-line-numbers="true"}
+class UpSampling(nn.Module):
+    """
+    This class implements the upsampling part of the architecture.
+    If you check the architecture dig., the right path displays the green arrow
+    indicating the upsampled layer.
+    """
+    def __init__(self, in_channels, out_channels):
+        super().__init__()
+        # Using Transposed convolution for upsampling
+        self.up_sample = nn.ConvTranspose2d(in_channels=in_channels,
+                                            out_channels=out_channels,
+                                            kernel_size=2,
+                                            stride=2)
+        self.double_conv = DoubleConvLayer(in_channels=in_channels,
+                                           out_channels=out_channels)
+
+    def forward(self, x1, x2):
+        """
+        x1 is the output tensor of the previous layer, which will be upsampled.
+        x2 is the skip connection tensor that was generated during
+        downsampling.
+        """
+        x1 = self.up_sample(x1)
+
+        # Correcting the shape after upsampling
+        if x1.shape != x2.shape:
+            x1 = TF.resize(img=x1, size=x2.shape[2:], antialias=True)
+
+        x = torch.cat((x2, x1), 1)
+        return self.double_conv(x)
+```
+
+### Complete U-Net Architecture
+
+Now, that we have created both the downsampling and upsampling of the model, we can complete the model by assembling the pieces and completing the puzzle.
+
+* We start with downsampling for 4 layers(including the input layer), every layer increases the features by 2x and decreases the spatial dimension by 2x.
+* Then we create the bottom convolution layer, which is just meant to pass the data to the upsampling stage.
+* Once we receive the bottom layer data it moves up to upsampling along with that it takes in the skip connection data from the downsampling and moves up to 4 layers.
+*  Finally reaching the last layers, the data goes through the final layer where the features data is convoluted as per the total number of classes present and shaping the image as per the original shape.
+
+```{.python code-line-numbers="true"}
+class UnetModel(nn.Module):
+    def __init__(self,
+                 n_classes: int,
+                 in_channels=3):
+        super().__init__()
+        features = [64, 128, 256]
+        self.encoder = nn.ModuleList()
+        self.decoder = nn.ModuleList()
+        self.skip_connection = []
+
+        # The input layer of the model [BCHW]
+        # Eg. input tensor shape: [1, 3, 572, 572]
+        self.encoder.append(DoubleConvLayer(in_channels=in_channels,
+                                            out_channels=features[0]))
+        # Eg. output tensor shape: [1, 64, 572, 572]
+
+        # A 3 layer downsampling
+        # Eg. input tensor shape: [1, 64, 572, 572]
+        for feature in features:
+            self.encoder.append(DownSampling(in_channels=feature,
+                                             out_channels=feature * 2))
+        # Eg. output tensor shape: [1, 512, 71, 71]
+
+        # Bottom layer of the UNet Model
+        # Eg. input tensor shape: [1, 512, 71, 71]
+        self.bottom_layer = DownSampling(in_channels=features[-1]*2,
+                                         out_channels=features[-1]*4)
+        # Eg. output tensor shape: [1, 1024, 35, 35]
+
+        # A 3-layer upsampling
+        # Eg. input tensor shape: [1, 1024, 35, 35]
+        for feature in reversed(features):
+            self.decoder.append(UpSampling(in_channels=feature * 4,
+                                           out_channels=feature * 2))
+        # Eg. output tensor shape: [1, 128, 286, 286]
+
+        # Upsampling before the final layer
+        # Eg. input tensor shape: [1, 128, 286, 286]
+        self.decoder.append(UpSampling(in_channels=features[1],
+                                       out_channels=features[0]))
+        # Eg. output tensor shape: [1, 64, 572, 572]
+
+        # Final layer of the model, giving the predicted mask
+        # Eg. input tensor shape: [1, 64, 572, 572]
+        self.final_layer = nn.Conv2d(in_channels=features[0],
+                                     out_channels=n_classes,
+                                     kernel_size=1)
+        # Eg. output tensor shape: [1, n_classes, 572, 572]
+
+    def forward(self, x):
+        for encode in self.encoder:
+            x = encode(x)
+            # Appending all the downsampled output for skip connection
+            self.skip_connection.append(x)
+
+        x = self.bottom_layer(x)
+
+        for decode, skip in zip(self.decoder,
+                                reversed(self.skip_connection)):
+            # Upsampling using the skip connection that was collected durning downsampling
+            x = decode(x, skip)
+
+        return self.final_layer(x)
+```
+
+## Implementation
+
+We have successfully constructed the U-Net Model, and with this, our model is ready for semantic segmentation tasks.
+
+To test our model and to know whether it's capable of performing and producing multiclass masks for any image we will need to train the model on a dataset, to implement this I have already done model training in a notebook, you can check the notebook over [here](https://nbviewer.org/github/JohnPPinto/Deep-Learning-Projects/blob/main/06_unet_segmentation_on_a_drone_dataset.ipynb).
+
+Implementation is similar to the other task of computer vision, with some minor changes. While building the PyTorch dataset, the mask tensor needs to be labeled encoded. This means that the pixel of the image will have an RGB value representation, this needs to be converted into label representation.
+
+```{.python code-line-numbers="true"}
+def rgbmask_to_label(rgb_mask: numpy.ndarray,
+                     colormap: list):
+        """
+        Converts a single RGB mask into one-hot encoding mask and finally
+        creates a single channel class index label.
+        Parameters:
+            rgb_mask: An array containing the mask in RGB format and shape (HWC).
+            colormap: A list with all the RGB colors for every single class
+                      in the proper sequence.
+        Returns:
+            output: An array that is converted from RGB mask to label encoded in
+                    shape (H x W).
+        """
+        # An array to fill the output later.
+        output = np.zeros(rgb_mask.shape[:2])
+
+        for label, color in enumerate(colormap):
+            if label < len(colormap):
+                # Matching the mask with the colormap
+                # Then replace with classes index
+                output[np.all(np.equal(rgb_mask, color), axis=-1)] = label
+
+        return output
+```
+
+While performing the model training, you will require proper metrics that can represent the performance of the model. This indicator will help us understand, how well the model is learning and improving, I have used the following in the notebook:
+
+### Loss
+While performing the model training the most important factor is to calculate the loss. Usually, the rule of thumb is to use Binary Cross-Entropy Loss for binary classification and  Cross-entropy Loss for multiclass classification. In PyTorch, while using the Binary Cross-Entropy Loss there is an option to use raw data(logits) directly or with an activation function like Sigmoid. When working with multiclass you can use PyTorch Cross-Entropy Loss, here only raw data is allowed to be provided to the function, the function itself makes a Softmax calculation. 
+*You can learn more about Loss function from this [article](https://machinelearningmastery.com/loss-functions-in-pytorch-models/).*
+
+### Accuracy
+Accuracy is the simplest way to learn about the model performance, but the real truth can be hidden when you see the values given by the accuracy metrics. The reason why accuracy can't be trusted is because if the problem has an imbalanced dataset then it is very easy to get a higher accuracy score by having all the scores from the majority class. So using accuracy as your only metric is not good enough but want an overall look at the prediction it is better to use accuracy. 
+
+The Formula of accuracy is:
+$$Accuracy = \dfrac {TP + TN}{TP + TN + FP + FN}$$
+
+*You can read more about accuracy from this [article](https://deepchecks.com/how-to-check-the-accuracy-of-your-machine-learning-model/).*
+
+### IoU and Dice
+Intersection over Union(IoU), also known as the Jaccard Index, is one of the most preferred metrics when working on an object detection problem. Another metric that is also preferred for classification problems is called Dice, also known as F1-Score. These metrics make a clear definition by considering only the true positive for the class it is been calculated while representing mathematically both of the metrics are quite related by they both show different representations for the same class. This is because in general IoU metric tends to penalize the bad class more than the Dice metric, even though they both agree on the same instance. So it is preferred to use one of the metrics from these two.
+
+The reason can be explained by the following equation:
+
+Let, $$a = TP, b = TP + TN + FP$$
+
+Then, $$IoU = \dfrac {TP}{TP + FP + TN} = \dfrac {a}{b}$$
+
+and $$Dice = \dfrac {TP + TP}{TP + TP + FP + TN} = \dfrac {2a}{a + b}$$
+
+Hence, $$Dice = \dfrac {\dfrac {2a}{b}}{\dfrac {a+b}{b}} = \dfrac {2 \cdot \dfrac {a}{b}}{\dfrac {a}{b} + 1} = \dfrac {2 \cdot IoU}{ IoU + 1}$$
+
+*You can further read about IoU and Dice from this [article](https://medium.datadriveninvestor.com/deep-learning-in-medical-imaging-3c1008431aaf)*
+
+Now, that we have constructed the model and learned something about the metrics, it's time to see whether the model runs successfully, below are the predicted results after running the model for 3 epochs.
+
+![](images/prediction.png){fig-align="center"}
+
+As you can see the model is been able to identify a large pixel area mask like the paved area(purple) and grass(green) only after training the model for 3 epochs, but still, the smaller pixel area classes will need much longer training time. Due to limited training, the model is currently underfitting which can be improved by training the model for much longer.
+
+You can try my [notebook](https://nbviewer.org/github/JohnPPinto/Deep-Learning-Projects/blob/main/06_unet_segmentation_on_a_drone_dataset.ipynb) and train the model for much longer, and if you use the dataset you will need to create a credentials.py file to store the password provided by the owner of the dataset. You can get the password by visiting the dataset site and following the instructions - website: [https://www.tugraz.at/index.php?id=22387](https://www.tugraz.at/index.php?id=22387). 
+
+Thank you for reading my article and I hope that you have enjoyed it. If I have left out something do mention it in the GitHub repo issues or the comments of this article, I am more than happy to improve this article.

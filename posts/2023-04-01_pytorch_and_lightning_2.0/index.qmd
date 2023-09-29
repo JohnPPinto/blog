@@ -3,7 +3,7 @@ title: "Riding the Waves - PyTorch and Lightning 2.0"
 description: "In this post, I will be talking about the new release by PyTorch and PyTorch Lightning. Also testing the potential of the new updates." 
 author: "John Pinto"
 date: "2023-04-01"
-categories: ["PyTorch", "Lightning", "Fabric", "AI", "Video Classification"]
+categories: ["PyTorch", "Lightning", "Fabric", "AI", "Video Classification", "Computer Vision"]
 image: "featured.png"
 toc: true
 page-layout: full

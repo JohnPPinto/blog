@@ -63,5 +63,8 @@
   },
   "posts/2023-07-12_deployment_part1/index.qmd": {
     "index.html": "c64e2a20"
+  },
+  "posts/2023-09-30_unet_segmentation/index.qmd": {
+    "index.html": "74484637"
   }
 }

@@ -2,7 +2,7 @@
 title: "Orchestrate MLOps - Deployment Pipeline Part 1"
 description: "In this series, I will be talking about the Deployment stage which is part of the ML pipeline. This is Part 1 of this series, the beginning of any project's deployment." 
 author: "John Pinto"
-date: "2023-07-12"
+date: "2023-07-30"
 date-modified: ""
 categories: ["PyTorch", "AI", "Image-to-Text", "NLP", "MLOps"]
 image: "featured.png"
@@ -25,9 +25,9 @@ draft: true
 ```
 ![](featured.png){fig-align="center" width="367"}
 
-One of the hot topics right now is Machine Learning, especially the field of Deep Learning, after the emergence of ChatGPT and various other Artificial Intelligence products. Many have taken an interest in this field and day by day the field is growing tremendously large, with the growing community many online tutorials and information for anyone to start learning is been improving and getting easy.
+One of the hot topics right now is Machine Learning, especially the field of Deep Learning, after the emergence of ChatGPT and various other Artificial Intelligence products. Many have taken an interest in this field and day by day the field is growing tremendously large, with the growing community many online tutorials and information for anyone to start learning have been improving and getting easy.
 
-Many beginners that start learning machine learning go through the initial stages of the ML pipeline, i.e. Data Stage and Model Stage. This is a good way to learn and understand the basic concept when starting. But as your knowledge grows you will need to learn how to produce a project which fits the Machine Learning Life Cycle, even called Machine Learning Operations (MLOps).
+Many beginners that start learning machine learning go through the initial stages of the ML pipeline, i.e. Data Stage and Model Stage. This is a good way to learn and understand the basic concepts when starting. But as your knowledge grows you will need to learn how to produce a project that fits the Machine Learning Life Cycle, even called Machine Learning Operations (MLOps).
 
 Once you have worked on the Data Stage and the Model Stage, next comes the Deployment of the Model, here you need to make the model available to anyone. Make an interactive application that communicates with the model and produces the prediction as a result for the user. The important point in the deployment stage is the communication of the model, the backend with the frontend of the application. In Python, this can be achieved using the famous REST API, for a long time, Flask, was the go-to framework for implementing REST API, but the new framework FastAPI has gained popularity because it is much faster compared to the other frameworks including Flask.
 
@@ -95,9 +95,9 @@ Going through the whole code at once and reading it line by line is the best way
 
 1.  Starting with the file we import all the necessary libraries for running the script. Fastapi and uvicorn are the core package for the FastAPI app. Package io and PIL are for processing and loading the data and predict is the local package that loads and runs the model.
 2.  After importing the packages, I initialize the FastAPI app, creating an instance for the app this instance communicates with the server and the processing of the model and data. You can keep it empty or add your application title and description as an argument.
-3.  The first thing I create is a Get method, you use an Get method only when you want to provide any form of data. The Get method is only used for retrieving data whenever requested, within the Get method I haven't provided any name, which means that a direct URL request will provide the information. The information needs to be a function and returned in JSON format.
-4.  Now that the demo get is shown, the main working of the app is in the Post method, you use the Post method when you want to retrieve data whenever requested but need input data before sending the requested data. This is exactly what we need, an image will be taken and the predicted text will be provided in return. Similar to the Get method, we name the post method and create a function, the function takes the following arguments, a file declared as a FastAPI upload file type, rest of the arguments are for the predict function.
-5.  Within the post method, the predict image function initially reads the file data, reading the file data which is in bytes format needs to be stored for further processing and for that BytesIO does the best work to store in the memory, using the stored data PIL.Image can open it efficiently. Using the PIL data now the predict function provides us with the result. The result data is in JSON format.
+3.  The first thing I create is a Get method, you use a Get method only when you want to provide any form of data. The Get method is only used for retrieving data whenever requested, within the Get method I haven't provided any name, which means that a direct URL request will provide the information. The information needs to be a function and returned in JSON format.
+4.  Now that the demo "get" is shown, the main working of the app is in the Post method, you use the Post method when you want to retrieve data whenever requested but need input data before sending the requested data. This is exactly what we need, an image will be taken and the predicted text will be provided in return. Similar to the Get method, we name the post method and create a function, the function takes the following arguments, a file declared as a FastAPI upload file type, rest of the arguments are for the predict function.
+5.  Within the post method, the predict image function initially reads the file data, reading the file data which is in bytes format needs to be stored for further processing and for that BytesIO does the best work to store in the memory, using the stored data PIL.Image can open it efficiently. Using the PIL data the predict function provides us with the result. The result data is in JSON format.
 6.  At the end, we use uvicorn to run the server on the main.py file at the localhost i.e. 0.0.0.0 and default port 8080.
 
 ::: callout-tip
