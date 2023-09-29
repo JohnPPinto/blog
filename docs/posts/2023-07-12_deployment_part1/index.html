@@ -446,7 +446,7 @@ Tip
 <span id="cb3-67"><a href="#cb3-67"></a>            <span class="co"># Displaying the prediction</span></span>
 <span id="cb3-68"><a href="#cb3-68"></a>            st.write(result[<span class="st">'prediction'</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Now, that you have seen the code, I will explain how the frontend communicates with the backend, if you check the <em>Displaying result</em> <code>with col2</code> section, within that I use the requests library to call the post function where I provide the URL of the backend and also provide the file’s data that has the bytes data of the image file. Along with the image data, I also provide the remaining arguments that the predict function will need for making the prediction.</p>
+<p>Now, that you have seen the code, I will explain how the frontend communicates with the backend, if you check the <em>Displaying result</em> <code>with col2</code> section on lines number 61 - 65, I use the requests library to call the post function where I provide the URL of the backend and also provide the file’s data that has the bytes data of the image file. Along with the image data, I also provide the remaining arguments that the prediction function will need for making the prediction.</p>
 <p>To run the streamlit file you just need to call the script file using the following command: <code>streamlit run main.py</code>. This will run the frontend code on the default URL i.e.&nbsp;http://localhost:8501.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -851,7 +851,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     </div>
   </div>
 </footer>
-<script>var lightboxQuarto = GLightbox({"selector":".lightbox","closeEffect":"zoom","descPosition":"bottom","loop":true,"openEffect":"zoom"});</script>
+<script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","descPosition":"bottom","openEffect":"zoom","selector":".lightbox","loop":true});</script>
 
 
 

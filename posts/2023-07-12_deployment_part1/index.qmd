@@ -3,6 +3,7 @@ title: "Orchestrate MLOps - Deployment Pipeline Part 1"
 description: "In this series, I will be talking about the Deployment stage which is part of the ML pipeline. This is Part 1 of this series, the beginning of any project's deployment." 
 author: "John Pinto"
 date: "2023-07-12"
+date-modified: ""
 categories: ["PyTorch", "AI", "Image-to-Text", "NLP", "MLOps"]
 image: "featured.png"
 toc: true
@@ -12,6 +13,7 @@ notebook-links: false
 filters:
    - lightbox
 lightbox: auto
+draft: true
 ---
 
 ```{=html}
@@ -185,7 +187,7 @@ with col2:
             st.write(result['prediction'])
 ```
 
-Now, that you have seen the code, I will explain how the frontend communicates with the backend, if you check the *Displaying result* `with col2` section, within that I use the requests library to call the post function where I provide the URL of the backend and also provide the file's data that has the bytes data of the image file. Along with the image data, I also provide the remaining arguments that the predict function will need for making the prediction.
+Now, that you have seen the code, I will explain how the frontend communicates with the backend, if you check the *Displaying result* `with col2` section on lines number 61 - 65, I use the requests library to call the post function where I provide the URL of the backend and also provide the file's data that has the bytes data of the image file. Along with the image data, I also provide the remaining arguments that the prediction function will need for making the prediction.
 
 To run the streamlit file you just need to call the script file using the following command: `streamlit run main.py`. This will run the frontend code on the default URL i.e. http://localhost:8501.
 
