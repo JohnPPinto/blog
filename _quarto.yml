@@ -15,10 +15,10 @@ website:
         href: blog.qmd
       - text: About
         href: about.qmd
-      - text: Portfolio
-        href: https://johnppinto.github.io/
-        target: _blank
     right:
+      - text: Portfolio
+        href: https://johnpinto.pythonanywhere.com/
+        target: _blank
       - icon: github
         href: https://github.com/JohnPPinto
         target: _blank
