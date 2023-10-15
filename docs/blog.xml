@@ -36,7 +36,7 @@
 <p>Semantic segmentation has a simple objective, to learn and understand each and every pixel that the camera has captured. If you have already been reading and learning about machine learning, then you might know numbers are everything in this field. So, what makes semantic segmentation special is the way it represents the pixel. All the information of the pixel is labeled with a class, whether it’s a binary(0 or 1) or a multiclass(more than 2) problem.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><a href="images/semantic_seg.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Example of label encoded mask. Image Source"><img src="https://johnppinto.github.io/blog/posts/2023-10-15_unet_segmentation/images/semantic_seg.png" class="img-fluid figure-img"></a></p>
+<p><a href="images/semantic_seg.png" class="lightbox" title="Example of label encoded mask. Image Source" data-gallery="quarto-lightbox-gallery-2"><img src="https://johnppinto.github.io/blog/posts/2023-10-15_unet_segmentation/images/semantic_seg.png" class="img-fluid figure-img"></a></p>
 <p></p><figcaption class="figure-caption">Example of label encoded mask. <a href="https://www.jeremyjordan.me/semantic-segmentation/" target="_blank" rel="noopener">Image Source</a></figcaption><p></p>
 </figure>
 </div>
