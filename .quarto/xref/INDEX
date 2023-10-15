@@ -66,5 +66,23 @@
   },
   "posts/2023-09-30_unet_segmentation/index.qmd": {
     "index.html": "74484637"
+  },
+  "posts/2023-04-10_tf_modelling/index.qmd": {
+    "index.html": "dcbd7983"
+  },
+  "posts/2023-05-15_pytorch_and_lightning_2.0/index.qmd": {
+    "index.html": "1cc14764"
+  },
+  "posts/2023-05-15_pytorch_and_lightning_2.0/notebooks/blog_figures.ipynb": {
+    "blog_figures.html": "a30f678e"
+  },
+  "posts/2023-10-15_unet_segmentation/index.qmd": {
+    "index.html": "b0a5f5cc"
+  },
+  "posts/deployment_part1/index.qmd": {
+    "index.html": "e634c058"
+  },
+  "posts/2023-00-00_deployment_part1/index.qmd": {
+    "index.html": "a80e1e85"
   }
 }

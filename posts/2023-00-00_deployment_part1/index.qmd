@@ -2,8 +2,7 @@
 title: "Orchestrate MLOps - Deployment Pipeline Part 1"
 description: "In this series, I will be talking about the Deployment stage which is part of the ML pipeline. This is Part 1 of this series, the beginning of any project's deployment." 
 author: "John Pinto"
-date: "2023-07-30"
-date-modified: ""
+date: "2023-00-00"
 categories: ["PyTorch", "AI", "Image-to-Text", "NLP", "MLOps"]
 image: "featured.png"
 toc: true

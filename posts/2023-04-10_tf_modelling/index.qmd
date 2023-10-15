@@ -2,7 +2,7 @@
 title: "TensorFlow Modelling — Sequential Vs Functional"
 description: "In this post, I introduce you to the Tensorflow neural network architectures that will help you in building AI Models." 
 author: "John Pinto"
-date: "2022-11-20"
+date: "2023-04-10"
 categories: ["Tensorflow", "Keras", "AI", "Neural Network", "Architecture"]
 image: "featured.webp"
 toc: true
@@ -12,11 +12,11 @@ toc: true
 
 *"A computer system modeled on the human brain and nervous system."* You can google it and this is the answer you will get. It's a simple answer but does not explain why it is used in Deep Learning.
 
-![](../2022-11-20_tf_modelling/images/nn_brain.webp){width="70%" fig-align="center"}
+![](../2023-04-10_tf_modelling/images/nn_brain.webp){width="70%" fig-align="center"}
 
 Neural Network also known as an Artificial Neural Network, mimics the same architecture of our human brain. It's the core of any Deep Learning or Machine Learning Algorithm. It consists of three essential factors also called **Nodes or Layers**, that make up the neural network architecture. First, the **Input Layer** is the entry point for any data. After the data passes through the input layer it moves toward multiple **Hidden Layers**, this is where patterns are learned by the neural network using weights and biases. Once the network has reached its mathematical conclusion in the hidden layers it passes to the **Output Layer**.
 
-Now, that we understand a neural network, how do we practically use them? Here comes TensorFlow, an open-source Python library for Deep Learning. **TensorFlow** helps us in creating neural network models that are capable to solve different types of deep learning problems, due to the complexity of neural networks TensorFlow uses the **Keras** library to make it simple and easy to use.
+Now, that we understand a neural network, how do we practically use them? Here comes TensorFlow, an open-source Python library for Deep Learning. **TensorFlow** helps us create neural network models that are capable of solving different types of deep learning problems, due to the complexity of neural networks TensorFlow uses the **Keras** library to make it simple and easy to use.
 
 Tensorflow and Keras provide us with two different methods to initiate and implement our neural network architecture, they are as follows:
 
@@ -62,7 +62,7 @@ model.add(tf.keras.layers.Dense(2, activation="sigmoid", name="output_layer"))
 
 <center>![Fig. 2: Model Architecture of the above Sequential Model example.](./images/sequential.webp)</center>
 
-If you are seeing this for the first time you might get confused, and questions might arise like what shape, Dense, activation, relu, sigmoid, and multiple different numbers? Let's understand everything line by line.
+If you are seeing this for the first time you might get confused, and questions might arise like what shape, Dense, activation, ReLU, sigmoid, and multiple different numbers? Let's understand everything line by line.
 
 1.  The first line initiates the sequential function within the name 'model'. *You can click and check the documentation for the [sequential](https://www.tensorflow.org/api_docs/python/tf/keras/Sequential) function*.
 
@@ -74,12 +74,12 @@ If you are seeing this for the first time you might get confused, and questions 
 
 ## 2. The Functional API Model
 
-Keras understood that the sequential model had some limitations like it couldn't handle multiple inputs and outputs. It is not flexible enough to build a neural network that has shared layers or a non-linear branched topology. Although, sequential models were capable to produce great results. It was not capable enough to solve complex problems like object detection in computer vision, speech-to-text recognition, or vice versa, and many more. Finally, Keras came up with **Functional API**, here everything is isolated and combined however you see fit. A neural network that is now customizable layer-to-layer.
+Keras understood that the sequential model had some limitations like it couldn't handle multiple inputs and outputs. It is not flexible enough to build a neural network that has shared layers or a non-linear branched topology. However, sequential models were capable of producing great results. It was not capable enough to solve complex problems like object detection in computer vision, speech-to-text recognition, or vice versa, and many more. Finally, Keras came up with **Functional API**, here everything is isolated and combined however you see fit. A neural network that is now customizable layer-to-layer.
 
 Functional API Example:
 
 ``` python
-# Taking similar example as above and making it more complex
+# Taking a similar example as above and making it more complex
 # importing packages
 import tensorflow as tf
 from tensorflow.keras.models import Model
@@ -107,7 +107,7 @@ model = Model(inputs = inputs, outputs = outputs)
 
 <center>![Fig. 3: Model Architecture of the above Functional API example.](./images/functional.webp)</center>
 
-Now, that you understand sequential architecture, the above functional API example should be easier for you. Most of the layers used in this example are similar to the sequential example. Just the way to represent the model has changed, but this change is powerful enough to build some of the famous pre-trained models(e.g. AlexNet, VGG, ResNet, Densenet, and many more). Let's understand the changes that are happening in the functional API model.
+Now, that you understand sequential architecture, the above functional API example should be easier for you. Most of the layers used in this example are similar to the sequential example. The way to represent the model has changed, but this change is powerful enough to build some of the famous pre-trained models(e.g. AlexNet, VGG, ResNet, Densenet, and many more). Let's understand the changes that are happening in the functional API model.
 
 1.  Similar to the sequential model example, we initialize the model by importing the packages and creating our first layer --- the input layer, but unlike the sequential model, we do not need to use any Keras function and can directly name the layers using a variable.
 
@@ -115,7 +115,7 @@ Now, that you understand sequential architecture, the above functional API examp
 
 3.  Now that we have created two branches but need the output from a single layer, we can use the concatenate layer. The last layer of the branches is the input for the concatenate layer which is finally connected with the output layer to give us the output probabilities.
 
-4.  All the layers are connected, so it is time to define the model, for this we will be using the Keras Model function. The Model function needs two Arguments inputs and outputs. It basically tells the start and end point and the flow of the model is created.
+4.  All the layers are connected, so it is time to define the model, for this, we will be using the Keras Model function. The Model function needs two Arguments inputs and outputs. It tells the start and end point and the flow of the model is created.
 
 # Closing
 

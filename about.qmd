@@ -15,11 +15,11 @@ about:
       target: _blank
     - icon: linkedin
       text: Linkedin
-      href: https://www.linkedin.com/in/john-p-pinto/
+      href: https://www.linkedin.com/in/johnppinto/
       target: _blank
     - icon: twitter
       text: Twitter
-      href: https://twitter.com/john77272002
+      href: https://twitter.com/ThisIsJohnPinto
       target: _blank
 
 page-layout: full

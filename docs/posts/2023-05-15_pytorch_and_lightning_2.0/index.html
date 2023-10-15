@@ -1,0 +1,1401 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.302">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="John Pinto">
+<meta name="dcterms.date" content="2023-05-15">
+<meta name="description" content="In this post, I will be talking about the new release by PyTorch and PyTorch Lightning. Also testing the potential of the new updates.">
+
+<title>John Pinto - Riding the Waves - PyTorch and Lightning 2.0</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../assets/images/favicon.png" rel="icon" type="image/png">
+<script src="../../site_libs/cookie-consent/cookie-consent.js"></script>
+<link href="../../site_libs/cookie-consent/cookie-consent.css" rel="stylesheet">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<script src="../../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="../../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="../../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
+<link href="../../site_libs/quarto-contrib/fontawesome6-0.1.0/all.css" rel="stylesheet">
+<link href="../../site_libs/quarto-contrib/fontawesome6-0.1.0/latex-fontsize.css" rel="stylesheet">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-6DE2RCBFFM"></script>
+
+<script type="text/plain" cookie-consent="tracking">
+
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-6DE2RCBFFM', { 'anonymize_ip': true});
+</script>
+
+<script type="text/javascript" charset="UTF-8">
+document.addEventListener('DOMContentLoaded', function () {
+cookieconsent.run({
+  "notice_banner_type":"simple",
+  "consent_type":"implied",
+  "palette":"light",
+  "language":"en",
+  "page_load_consent_levels":["strictly-necessary","functionality","tracking","targeting"],
+  "notice_banner_reject_button_hide":false,
+  "preferences_center_close_button_hide":false,
+  "website_name":""
+  });
+});
+</script> 
+  
+
+
+<link rel="stylesheet" href="../../styles.css">
+<meta property="og:title" content="John Pinto - Riding the Waves - PyTorch and Lightning 2.0">
+<meta property="og:description" content="In this post, I will be talking about the new release by PyTorch and PyTorch Lightning. Also testing the potential of the new updates.">
+<meta property="og:image" content="https://johnppinto.github.io/blog/posts/2023-05-15_pytorch_and_lightning_2.0/featured.png">
+<meta property="og:site-name" content="John Pinto">
+<meta property="og:image:height" content="395">
+<meta property="og:image:width" content="632">
+<meta name="twitter:title" content="John Pinto - Riding the Waves - PyTorch and Lightning 2.0">
+<meta name="twitter:description" content="In this post, I will be talking about the new release by PyTorch and PyTorch Lightning. Also testing the potential of the new updates.">
+<meta name="twitter:image" content="https://johnppinto.github.io/blog/posts/2023-05-15_pytorch_and_lightning_2.0/featured.png">
+<meta name="twitter:image-height" content="395">
+<meta name="twitter:image-width" content="632">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+
+<body class="floating nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">John Pinto</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../blog.html" rel="" target="">
+ <span class="menu-text">Blog</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html" rel="" target="">
+ <span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://johnppinto.github.io/" rel="" target="_blank">
+ <span class="menu-text">Portfolio</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/JohnPPinto" rel="" target="_blank"><i class="bi bi-github" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://www.linkedin.com/in/john-p-pinto/" rel="" target="_blank"><i class="bi bi-linkedin" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/john77272002" rel="" target="_blank"><i class="bi bi-twitter" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="../../blog.xml" rel="" target="_blank"><i class="bi bi-rss" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+            <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default toc-left page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-page-right">
+      <h1 class="title">Riding the Waves - PyTorch and Lightning 2.0</h1>
+                  <div>
+        <div class="description">
+          In this post, I will be talking about the new release by PyTorch and PyTorch Lightning. Also testing the potential of the new updates.
+        </div>
+      </div>
+                          <div class="quarto-categories">
+                <div class="quarto-category">PyTorch</div>
+                <div class="quarto-category">Lightning</div>
+                <div class="quarto-category">Fabric</div>
+                <div class="quarto-category">AI</div>
+                <div class="quarto-category">Video Classification</div>
+                <div class="quarto-category">Computer Vision</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>John Pinto </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">May 15, 2023</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
+    <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#quick-facts-on-pytorch-and-lightning-2.0-release" id="toc-quick-facts-on-pytorch-and-lightning-2.0-release" class="nav-link active" data-scroll-target="#quick-facts-on-pytorch-and-lightning-2.0-release">Quick Facts on PyTorch and Lightning 2.0 Release</a>
+  <ul class="collapse">
+  <li><a href="#caveats-part-of-the-release" id="toc-caveats-part-of-the-release" class="nav-link" data-scroll-target="#caveats-part-of-the-release">Caveats Part of the Release</a></li>
+  </ul></li>
+  <li><a href="#enough-theory-time-to-experiment" id="toc-enough-theory-time-to-experiment" class="nav-link" data-scroll-target="#enough-theory-time-to-experiment">Enough Theory, Time to Experiment…</a>
+  <ul class="collapse">
+  <li><a href="#methodology" id="toc-methodology" class="nav-link" data-scroll-target="#methodology">Methodology</a></li>
+  <li><a href="#dataset-dataloaders-and-model-details" id="toc-dataset-dataloaders-and-model-details" class="nav-link" data-scroll-target="#dataset-dataloaders-and-model-details">Dataset, Dataloaders and Model Details</a></li>
+  <li><a href="#phase-1---pytorch-implementation" id="toc-phase-1---pytorch-implementation" class="nav-link" data-scroll-target="#phase-1---pytorch-implementation">Phase 1 - PyTorch Implementation</a></li>
+  <li><a href="#phase-2---pytorch-lightning-implementation" id="toc-phase-2---pytorch-lightning-implementation" class="nav-link" data-scroll-target="#phase-2---pytorch-lightning-implementation">Phase 2 - PyTorch Lightning Implementation</a></li>
+  <li><a href="#phase-3---lightning-fabric-implementation" id="toc-phase-3---lightning-fabric-implementation" class="nav-link" data-scroll-target="#phase-3---lightning-fabric-implementation">Phase 3 - Lightning Fabric Implementation</a></li>
+  </ul></li>
+  <li><a href="#results" id="toc-results" class="nav-link" data-scroll-target="#results">Results</a></li>
+  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">Conclusion</a></li>
+  </ul>
+</nav>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block column-page-right" id="quarto-document-content">
+
+
+
+
+<style>
+.quarto-figure-center > figure {
+  text-align: center;
+}
+</style>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><a href="featured.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1"><img src="featured.png" class="img-fluid figure-img"></a></p>
+</figure>
+</div>
+<section id="quick-facts-on-pytorch-and-lightning-2.0-release" class="level1">
+<h1>Quick Facts on PyTorch and Lightning 2.0 Release</h1>
+<p>PyTorch and PyTorch Lightning (2.0) were released on 15 March 2023.</p>
+<p><strong>PyTorch</strong>: The main focus is the improvement in the speed, even the release article title says it</p>
+<blockquote class="blockquote">
+<p>“PyTorch 2.0: Our next-generation release that is faster, more Pythonic and Dynamic as ever”</p>
+</blockquote>
+<p>you can read the article over <a href="https://pytorch.org/blog/pytorch-2.0-release/">here</a>.</p>
+<p>This speed that they mention comes with just a single line of code. After you have created your model you just use this code and the code modifies your model to perform at its best level.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>torch.<span class="bu">compile</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>They have even mentioned the details while testing the new functionality and how the <code>torch.compile()</code> can improve the speed of the models from different sources [<a href="https://github.com/huggingface/transformers">HuggingFace</a>, <a href="https://github.com/rwightman/pytorch-image-models">TIMM</a> and <a href="https://github.com/pytorch/benchmark/">TorchBench</a>].</p>
+<p>To run this amazing compiled model, PyTorch introduces new technologies - <strong>TorchDynamo, AOTAutograd, PrimTorch and TorchInductor</strong>. All of these new technologies are working in a flow and they are broken down into three phases - <strong>Graph Acquisition, Graph Lowering and Graph Compilation</strong>. You can check all of this over <a href="https://pytorch.org/get-started/pytorch-2.0/">here</a>, they have explained the complex system in an easy-to-understand way.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Read the above-linked article, especially the section on <a href="https://pytorch.org/get-started/pytorch-2.0/#technology-overview">technology overview</a>, this will help you understand the hyper-parameters workings within the torch.compile().</p>
+</div>
+</div>
+<p><strong>PyTorch Lightning</strong> on the other hand was just kind of following PyTorch, they have just mentioned that Lightning supports PyTorch 2.0 with backward compatibility and this itself makes it a mature release. But what makes Lightning amazing in this release is not the support but the introduction to a new library “<a href="https://lightning.ai/pages/open-source/fabric/">Lightning Fabric</a>”.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><a href="images/fabric.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="The space where “Lightning Fabric” occupies."><img src="images/fabric.png" class="img-fluid figure-img"></a></p>
+<p></p><figcaption class="figure-caption">The space where “Lightning Fabric” occupies.</figcaption><p></p>
+</figure>
+</div>
+<p>PyTorch Lightning has a history of converting the vanilla style of PyTorch code by removing all the boilerplate code. This way it helps in setting up the model training much faster but at the cost of higher complexity when you try to control some things that you can’t. Now, that Fabric has come into the picture this changes the way you are going to train your model. They have given control of some of the complex tasks like accelerators, distributed strategies, and mixed precision, while still retaining full control of your training loop.</p>
+<section id="caveats-part-of-the-release" class="level2">
+<h2 class="anchored" data-anchor-id="caveats-part-of-the-release">Caveats Part of the Release</h2>
+<p>PyTorch and PyTorch Lightning 2.0 are stable releases but there is some information that needs attention.</p>
+<ol type="1">
+<li><strong>Hardware</strong>: This speed-up performance that the PyTorch team speaks of is based on specific hardware, broadly they have mentioned that NVIDIA Volta and Ampere server-class GPUs are capable of producing decent results. So desktop GPUs will need to wait for later releases.</li>
+<li><strong>Model Saving/Exporting</strong>: Right now the compiled model can only be saved using the <code>model.state_dict()</code> method. You won’t be able to save the object of the model, which returns an error if you try to. You can read the <a href="https://pytorch.org/get-started/pytorch-2.0/#serialization">serialization</a> part of the article that I have mentioned above. Along with the save part, the team will also introduce <code>torch.export()</code> mode in the later release.</li>
+</ol>
+</section>
+</section>
+<section id="enough-theory-time-to-experiment" class="level1">
+<h1>Enough Theory, Time to Experiment…</h1>
+<p>Before I start showing my code and results, let me brief you about it. Many websites were already showing the methodology and results of PyTorch 2.0 on different models, you can check the blog article of <a href="https://api.wandb.ai/links/gladiator/d0o6cxp0">Weights and Biases</a> that shows how they implemented and test the new features.</p>
+<p>I wanted to try something different so I chose to implement and test it on a video classification problem rather than an Image Classification or NLP problem. For my Video Classification problem, I went with the <a href="https://serre-lab.clps.brown.edu/resource/hmdb-a-large-human-motion-database">HMDB51 dataset</a>. Now, the next step was selecting the hardware, the majority of the websites had shown that they were using Nvidia A100 GPU, and even PyTorch themselves have shown the results based on this hardware and have recommended GPU similar to this type. For me the only available Ampere GPU was Nvidia <strong>A4000 (CUDA: 8.6)</strong> and as a reference, I even used a <strong>Tesla T4 (CUDA: 7.5)</strong>.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>There’s a reason why PyTorch compile mode needs Volta and Ampere GPUs because the minimum CUDA compute capability needs to be more than 8.0. You can check your hardware computing capability on the <a href="https://developer.nvidia.com/cuda-gpus">Nvidia website</a>.</p>
+</div>
+</div>
+<section id="methodology" class="level3">
+<h3 class="anchored" data-anchor-id="methodology">Methodology</h3>
+<p>The main motive of this testing is to compare the benchmark of PyTorch 1.13 (Eager Mode) and PyTorch 2.0 (Compile Mode).</p>
+<p>There are three Phases of testing that I have conducted:</p>
+<ol type="1">
+<li>PyTorch Test</li>
+<li>PyTorch Lightning Test</li>
+<li>Lightning Fabric Test</li>
+</ol>
+</section>
+<section id="dataset-dataloaders-and-model-details" class="level3">
+<h3 class="anchored" data-anchor-id="dataset-dataloaders-and-model-details">Dataset, Dataloaders and Model Details</h3>
+<ul>
+<li><p>The dataset contains 51 Classes, I have used only <strong>20 classes</strong> for all the experiments.</p></li>
+<li><p>The dataset contained a fixed sequence length of <strong>16 frames</strong>.</p></li>
+<li><p>Total Training Sample: <strong>1898</strong> and Total Validation/Testing Samples: <strong>632</strong>.</p></li>
+<li><p>Batch size: <strong>16</strong> and the number of workers was set to the max of CPU cores: <strong>8</strong>.</p></li>
+<li><p><a href="https://arxiv.org/abs/2104.11227">MVit V2 Small</a> Model was used for all the experiments from <a href="https://pytorch.org/vision/main/models/generated/torchvision.models.video.mvit_v2_s.html">torchvision</a>.</p></li>
+<li><p><strong>Cross entropy</strong> was used as a loss function and <strong>Adam optimizer</strong> was used for optimizing the model at a default learning rate of <strong>1e-4.</strong></p></li>
+<li><p>In all the experiments the model was trained for <strong>3 epochs</strong>.</p></li>
+</ul>
+<p>You can check my <a href="https://github.com/JohnPPinto/HMDB51_human_motion_recognition_pytorch/blob/main/HMDB51_human_action_recognition_pytorch.ipynb" target="_blank">Jupyter notebook</a> for a complete understanding of the dataset preprocessing, Dataloaders and model details.</p>
+</section>
+<section id="phase-1---pytorch-implementation" class="level3">
+<h3 class="anchored" data-anchor-id="phase-1---pytorch-implementation">Phase 1 - PyTorch Implementation</h3>
+<p>For this phase, I have used the basic training pipeline code used in PyTorch.</p>
+<p><strong>Defining Training Structure:</strong></p>
+<details>
+<summary>
+Code
+</summary>
+<div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> train_step(model, dataloader, loss_fn, optimizer, device, num_classes):</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Trains a pytorch model by going into train mode and applying forward pass,</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co">    loss calculation and optimizer step.</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co">    </span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co">    Parameters:</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co">        model: A pytorch model for training.</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="co">        dataloader: A pytorch dataloader for training.</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="co">        loss_fn: A pytorch loss to calculate the model's prediction loss.</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="co">        optimizer: A pytorch optimizer to minimize the loss function.</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="co">        device: A torch device to allocate tensors on 'cpu' or 'cuda'.</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="co">        num_classes: An integer that indicates the total number of classes in the dataset.</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="co">        </span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="co">    Returns: A tuple of training loss and training accuracy.</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="co">        </span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Model on training mode</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>    model.train()</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Setting train loss and accuracy </span></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>    train_loss <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>    train_acc <span class="op">=</span> torchmetrics.Accuracy(task<span class="op">=</span><span class="st">'multiclass'</span>, </span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>                                      num_classes<span class="op">=</span>num_classes).to(device)</span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Looping the dataloaders</span></span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> batch, (X, y) <span class="kw">in</span> tqdm(<span class="bu">enumerate</span>(dataloader), </span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>                              desc<span class="op">=</span><span class="st">'Model Training'</span>, </span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>                              total<span class="op">=</span><span class="bu">len</span>(dataloader), </span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>                              unit<span class="op">=</span><span class="st">'batch'</span>):</span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>        X, y <span class="op">=</span> X.to(device), y.to(device)</span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>        <span class="co"># 5 step to train a model</span></span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>        y_pred <span class="op">=</span> model(X) <span class="co"># 1. Forward pass</span></span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a>        loss <span class="op">=</span> loss_fn(y_pred, y) <span class="co"># 2. Calculate loss</span></span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a>        train_loss <span class="op">+=</span> loss.item() </span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a>        optimizer.zero_grad() <span class="co"># 3. Initiate optimizer</span></span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a>        loss.backward() <span class="co"># 4. Backward pass</span></span>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a>        optimizer.step() <span class="co"># 5. Updating the model parameters</span></span>
+<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Calculating the training accuracy</span></span>
+<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a>        y_pred_labels <span class="op">=</span> torch.argmax(torch.softmax(y_pred, dim<span class="op">=</span><span class="dv">1</span>), dim<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a>        train_acc.update(y_pred_labels, y)</span>
+<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Averaging the loss and accuracy</span></span>
+<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a>    train_loss <span class="op">=</span> train_loss <span class="op">/</span> <span class="bu">len</span>(dataloader)</span>
+<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a>    train_acc <span class="op">=</span> train_acc.compute()</span>
+<span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> train_loss, train_acc</span>
+<span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> test_step(model, dataloader, loss_fn, device, num_classes):</span>
+<span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
+<span id="cb2-51"><a href="#cb2-51" aria-hidden="true" tabindex="-1"></a><span class="co">    Test a pytorch model by going into eval mode and applying forward pass,</span></span>
+<span id="cb2-52"><a href="#cb2-52" aria-hidden="true" tabindex="-1"></a><span class="co">    and loss calculation.</span></span>
+<span id="cb2-53"><a href="#cb2-53" aria-hidden="true" tabindex="-1"></a><span class="co">    </span></span>
+<span id="cb2-54"><a href="#cb2-54" aria-hidden="true" tabindex="-1"></a><span class="co">    Parameters:</span></span>
+<span id="cb2-55"><a href="#cb2-55" aria-hidden="true" tabindex="-1"></a><span class="co">        model: A pytorch model for testing.</span></span>
+<span id="cb2-56"><a href="#cb2-56" aria-hidden="true" tabindex="-1"></a><span class="co">        dataloader: A pytorch dataloader for testing.</span></span>
+<span id="cb2-57"><a href="#cb2-57" aria-hidden="true" tabindex="-1"></a><span class="co">        loss_fn: A pytorch loss to calculate the model's prediction loss.</span></span>
+<span id="cb2-58"><a href="#cb2-58" aria-hidden="true" tabindex="-1"></a><span class="co">        device: A torch device to allocate tensors on 'cpu' or 'cuda'.</span></span>
+<span id="cb2-59"><a href="#cb2-59" aria-hidden="true" tabindex="-1"></a><span class="co">        num_classes: A integer that indicates total number of classes in the dataset.</span></span>
+<span id="cb2-60"><a href="#cb2-60" aria-hidden="true" tabindex="-1"></a><span class="co">        </span></span>
+<span id="cb2-61"><a href="#cb2-61" aria-hidden="true" tabindex="-1"></a><span class="co">    Returns: A tuple of testing loss and testing accuracy.</span></span>
+<span id="cb2-62"><a href="#cb2-62" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb2-63"><a href="#cb2-63" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Model on evaluation mode</span></span>
+<span id="cb2-64"><a href="#cb2-64" aria-hidden="true" tabindex="-1"></a>    model.<span class="bu">eval</span>()</span>
+<span id="cb2-65"><a href="#cb2-65" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb2-66"><a href="#cb2-66" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Setting train loss and accuracy </span></span>
+<span id="cb2-67"><a href="#cb2-67" aria-hidden="true" tabindex="-1"></a>    test_loss <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb2-68"><a href="#cb2-68" aria-hidden="true" tabindex="-1"></a>    test_acc <span class="op">=</span> torchmetrics.Accuracy(task<span class="op">=</span><span class="st">'multiclass'</span>, </span>
+<span id="cb2-69"><a href="#cb2-69" aria-hidden="true" tabindex="-1"></a>                                     num_classes<span class="op">=</span>num_classes).to(device)</span>
+<span id="cb2-70"><a href="#cb2-70" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb2-71"><a href="#cb2-71" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Using inference mode</span></span>
+<span id="cb2-72"><a href="#cb2-72" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> torch.no_grad():</span>
+<span id="cb2-73"><a href="#cb2-73" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Looping the dataloaders</span></span>
+<span id="cb2-74"><a href="#cb2-74" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> batch, (X, y) <span class="kw">in</span> tqdm(<span class="bu">enumerate</span>(dataloader), </span>
+<span id="cb2-75"><a href="#cb2-75" aria-hidden="true" tabindex="-1"></a>                                  desc<span class="op">=</span><span class="st">'Model Evaluation'</span>, </span>
+<span id="cb2-76"><a href="#cb2-76" aria-hidden="true" tabindex="-1"></a>                                  total<span class="op">=</span><span class="bu">len</span>(dataloader), </span>
+<span id="cb2-77"><a href="#cb2-77" aria-hidden="true" tabindex="-1"></a>                                  unit<span class="op">=</span><span class="st">'batch'</span>):</span>
+<span id="cb2-78"><a href="#cb2-78" aria-hidden="true" tabindex="-1"></a>            X, y <span class="op">=</span> X.to(device), y.to(device)</span>
+<span id="cb2-79"><a href="#cb2-79" aria-hidden="true" tabindex="-1"></a>            </span>
+<span id="cb2-80"><a href="#cb2-80" aria-hidden="true" tabindex="-1"></a>            <span class="co"># Forward pass</span></span>
+<span id="cb2-81"><a href="#cb2-81" aria-hidden="true" tabindex="-1"></a>            y_pred <span class="op">=</span> model(X)</span>
+<span id="cb2-82"><a href="#cb2-82" aria-hidden="true" tabindex="-1"></a>            </span>
+<span id="cb2-83"><a href="#cb2-83" aria-hidden="true" tabindex="-1"></a>            <span class="co"># Calculate loss</span></span>
+<span id="cb2-84"><a href="#cb2-84" aria-hidden="true" tabindex="-1"></a>            loss <span class="op">=</span> loss_fn(y_pred, y)</span>
+<span id="cb2-85"><a href="#cb2-85" aria-hidden="true" tabindex="-1"></a>            test_loss <span class="op">+=</span> loss.item()</span>
+<span id="cb2-86"><a href="#cb2-86" aria-hidden="true" tabindex="-1"></a>            </span>
+<span id="cb2-87"><a href="#cb2-87" aria-hidden="true" tabindex="-1"></a>            <span class="co"># Calculate accuracy</span></span>
+<span id="cb2-88"><a href="#cb2-88" aria-hidden="true" tabindex="-1"></a>            y_pred_labels <span class="op">=</span> y_pred.argmax(dim<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb2-89"><a href="#cb2-89" aria-hidden="true" tabindex="-1"></a>            test_acc.update(y_pred_labels, y)</span>
+<span id="cb2-90"><a href="#cb2-90" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb2-91"><a href="#cb2-91" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Averaging the loss and accuracy</span></span>
+<span id="cb2-92"><a href="#cb2-92" aria-hidden="true" tabindex="-1"></a>    test_loss <span class="op">=</span> test_loss <span class="op">/</span> <span class="bu">len</span>(dataloader)</span>
+<span id="cb2-93"><a href="#cb2-93" aria-hidden="true" tabindex="-1"></a>    test_acc <span class="op">=</span> test_acc.compute()</span>
+<span id="cb2-94"><a href="#cb2-94" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> test_loss, test_acc</span>
+<span id="cb2-95"><a href="#cb2-95" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-96"><a href="#cb2-96" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> model_train(epochs, model, train_dataloader, test_dataloader, optimizer, loss_fn, device, num_classes):</span>
+<span id="cb2-97"><a href="#cb2-97" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
+<span id="cb2-98"><a href="#cb2-98" aria-hidden="true" tabindex="-1"></a><span class="co">    Trains a pytorch model for a certain number of epochs going through the model training </span></span>
+<span id="cb2-99"><a href="#cb2-99" aria-hidden="true" tabindex="-1"></a><span class="co">    and testing stage, and accumulating the loss, accuracy, and training and testing time.</span></span>
+<span id="cb2-100"><a href="#cb2-100" aria-hidden="true" tabindex="-1"></a><span class="co">    </span></span>
+<span id="cb2-101"><a href="#cb2-101" aria-hidden="true" tabindex="-1"></a><span class="co">    Parameters:</span></span>
+<span id="cb2-102"><a href="#cb2-102" aria-hidden="true" tabindex="-1"></a><span class="co">        epochs: An integer to run the training and testing stage. </span></span>
+<span id="cb2-103"><a href="#cb2-103" aria-hidden="true" tabindex="-1"></a><span class="co">        model: A pytorch model for training and testing.</span></span>
+<span id="cb2-104"><a href="#cb2-104" aria-hidden="true" tabindex="-1"></a><span class="co">        train_dataloader: A pytorch dataloader for training.</span></span>
+<span id="cb2-105"><a href="#cb2-105" aria-hidden="true" tabindex="-1"></a><span class="co">        test_dataloader: A pytorch dataloader for testing.</span></span>
+<span id="cb2-106"><a href="#cb2-106" aria-hidden="true" tabindex="-1"></a><span class="co">        loss_fn: A pytorch loss to calculate the model's prediction loss.</span></span>
+<span id="cb2-107"><a href="#cb2-107" aria-hidden="true" tabindex="-1"></a><span class="co">        optimizer: A pytorch optimizer to minimize the loss function.</span></span>
+<span id="cb2-108"><a href="#cb2-108" aria-hidden="true" tabindex="-1"></a><span class="co">        device: A torch device to allocate tensors on 'cpu' or 'cuda'.</span></span>
+<span id="cb2-109"><a href="#cb2-109" aria-hidden="true" tabindex="-1"></a><span class="co">        num_classes: An integer that indicates the total number of classes in the dataset.</span></span>
+<span id="cb2-110"><a href="#cb2-110" aria-hidden="true" tabindex="-1"></a><span class="co">        </span></span>
+<span id="cb2-111"><a href="#cb2-111" aria-hidden="true" tabindex="-1"></a><span class="co">    Returns: A tuple of accumulated results in dict and total training time in float datatype.</span></span>
+<span id="cb2-112"><a href="#cb2-112" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb2-113"><a href="#cb2-113" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Create an empty result</span></span>
+<span id="cb2-114"><a href="#cb2-114" aria-hidden="true" tabindex="-1"></a>    results <span class="op">=</span> {<span class="st">'train_loss'</span>: [],</span>
+<span id="cb2-115"><a href="#cb2-115" aria-hidden="true" tabindex="-1"></a>               <span class="st">'train_acc'</span>: [],</span>
+<span id="cb2-116"><a href="#cb2-116" aria-hidden="true" tabindex="-1"></a>               <span class="st">'test_loss'</span>: [],</span>
+<span id="cb2-117"><a href="#cb2-117" aria-hidden="true" tabindex="-1"></a>               <span class="st">'test_acc'</span>: [],</span>
+<span id="cb2-118"><a href="#cb2-118" aria-hidden="true" tabindex="-1"></a>               <span class="st">'train_epoch_time(min)'</span>: [],</span>
+<span id="cb2-119"><a href="#cb2-119" aria-hidden="true" tabindex="-1"></a>               <span class="st">'test_epoch_time(min)'</span>: []}</span>
+<span id="cb2-120"><a href="#cb2-120" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb2-121"><a href="#cb2-121" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Loop through training and testing steps</span></span>
+<span id="cb2-122"><a href="#cb2-122" aria-hidden="true" tabindex="-1"></a>    model_train_start_time <span class="op">=</span> timer()</span>
+<span id="cb2-123"><a href="#cb2-123" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> epoch <span class="kw">in</span> tqdm(<span class="bu">range</span>(epochs), desc<span class="op">=</span><span class="ss">f'Training and Evaluation for </span><span class="sc">{</span>epochs<span class="sc">}</span><span class="ss"> Epochs'</span>, unit<span class="op">=</span><span class="st">'epochs'</span>):</span>
+<span id="cb2-124"><a href="#cb2-124" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Training the model and timing it.</span></span>
+<span id="cb2-125"><a href="#cb2-125" aria-hidden="true" tabindex="-1"></a>        train_epoch_start_time <span class="op">=</span> timer()</span>
+<span id="cb2-126"><a href="#cb2-126" aria-hidden="true" tabindex="-1"></a>        train_loss, train_acc <span class="op">=</span> train_step(model<span class="op">=</span>model, </span>
+<span id="cb2-127"><a href="#cb2-127" aria-hidden="true" tabindex="-1"></a>                                           dataloader<span class="op">=</span>train_dataloader, </span>
+<span id="cb2-128"><a href="#cb2-128" aria-hidden="true" tabindex="-1"></a>                                           loss_fn<span class="op">=</span>loss_fn, </span>
+<span id="cb2-129"><a href="#cb2-129" aria-hidden="true" tabindex="-1"></a>                                           optimizer<span class="op">=</span>optimizer, </span>
+<span id="cb2-130"><a href="#cb2-130" aria-hidden="true" tabindex="-1"></a>                                           device<span class="op">=</span>device, </span>
+<span id="cb2-131"><a href="#cb2-131" aria-hidden="true" tabindex="-1"></a>                                           num_classes<span class="op">=</span>num_classes)</span>
+<span id="cb2-132"><a href="#cb2-132" aria-hidden="true" tabindex="-1"></a>        train_epoch_stop_time <span class="op">=</span> timer()</span>
+<span id="cb2-133"><a href="#cb2-133" aria-hidden="true" tabindex="-1"></a>        train_epoch_time <span class="op">=</span> (train_epoch_stop_time <span class="op">-</span> train_epoch_start_time)<span class="op">/</span><span class="dv">60</span></span>
+<span id="cb2-134"><a href="#cb2-134" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb2-135"><a href="#cb2-135" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Testing the model and timing it</span></span>
+<span id="cb2-136"><a href="#cb2-136" aria-hidden="true" tabindex="-1"></a>        test_epoch_start_time <span class="op">=</span> timer()</span>
+<span id="cb2-137"><a href="#cb2-137" aria-hidden="true" tabindex="-1"></a>        test_loss, test_acc <span class="op">=</span> test_step(model<span class="op">=</span>model,</span>
+<span id="cb2-138"><a href="#cb2-138" aria-hidden="true" tabindex="-1"></a>                                        dataloader<span class="op">=</span>test_dataloader,</span>
+<span id="cb2-139"><a href="#cb2-139" aria-hidden="true" tabindex="-1"></a>                                        loss_fn<span class="op">=</span>loss_fn,</span>
+<span id="cb2-140"><a href="#cb2-140" aria-hidden="true" tabindex="-1"></a>                                        device<span class="op">=</span>device,</span>
+<span id="cb2-141"><a href="#cb2-141" aria-hidden="true" tabindex="-1"></a>                                        num_classes<span class="op">=</span>num_classes)</span>
+<span id="cb2-142"><a href="#cb2-142" aria-hidden="true" tabindex="-1"></a>        test_epoch_stop_time <span class="op">=</span> timer()</span>
+<span id="cb2-143"><a href="#cb2-143" aria-hidden="true" tabindex="-1"></a>        test_epoch_time <span class="op">=</span> (test_epoch_stop_time <span class="op">-</span> test_epoch_start_time)<span class="op">/</span><span class="dv">60</span></span>
+<span id="cb2-144"><a href="#cb2-144" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb2-145"><a href="#cb2-145" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Print the model result</span></span>
+<span id="cb2-146"><a href="#cb2-146" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f'Epoch: [</span><span class="sc">{</span>epoch<span class="op">+</span><span class="dv">1</span><span class="sc">}</span><span class="ss">/</span><span class="sc">{</span>epochs<span class="sc">}</span><span class="ss">] | train_loss: </span><span class="sc">{</span>train_loss<span class="sc">:.4f}</span><span class="ss"> | train_acc: </span><span class="sc">{</span>train_acc<span class="sc">:.4f}</span><span class="ss"> | train_time: </span><span class="sc">{</span>train_epoch_time<span class="sc">:.4f}</span><span class="ss"> min | '</span></span>
+<span id="cb2-147"><a href="#cb2-147" aria-hidden="true" tabindex="-1"></a>              <span class="ss">f'test loss: </span><span class="sc">{</span>test_loss<span class="sc">:.4f}</span><span class="ss"> | test_acc: </span><span class="sc">{</span>test_acc<span class="sc">:.4f}</span><span class="ss"> | test_time: </span><span class="sc">{</span>test_epoch_time<span class="sc">:.4f}</span><span class="ss"> min'</span>)</span>
+<span id="cb2-148"><a href="#cb2-148" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb2-149"><a href="#cb2-149" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Saving the results</span></span>
+<span id="cb2-150"><a href="#cb2-150" aria-hidden="true" tabindex="-1"></a>        results[<span class="st">'train_loss'</span>].append(train_loss)</span>
+<span id="cb2-151"><a href="#cb2-151" aria-hidden="true" tabindex="-1"></a>        results[<span class="st">'train_acc'</span>].append(train_acc.detach().cpu().item())</span>
+<span id="cb2-152"><a href="#cb2-152" aria-hidden="true" tabindex="-1"></a>        results[<span class="st">'test_loss'</span>].append(test_loss)</span>
+<span id="cb2-153"><a href="#cb2-153" aria-hidden="true" tabindex="-1"></a>        results[<span class="st">'test_acc'</span>].append(test_acc.detach().cpu().item())</span>
+<span id="cb2-154"><a href="#cb2-154" aria-hidden="true" tabindex="-1"></a>        results[<span class="st">'train_epoch_time(min)'</span>].append(train_epoch_time)</span>
+<span id="cb2-155"><a href="#cb2-155" aria-hidden="true" tabindex="-1"></a>        results[<span class="st">'test_epoch_time(min)'</span>].append(test_epoch_time)</span>
+<span id="cb2-156"><a href="#cb2-156" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb2-157"><a href="#cb2-157" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Calculating total model training time</span></span>
+<span id="cb2-158"><a href="#cb2-158" aria-hidden="true" tabindex="-1"></a>    model_train_end_time <span class="op">=</span> timer()</span>
+<span id="cb2-159"><a href="#cb2-159" aria-hidden="true" tabindex="-1"></a>    total_train_time <span class="op">=</span> (model_train_end_time <span class="op">-</span> model_train_start_time)<span class="op">/</span><span class="dv">60</span></span>
+<span id="cb2-160"><a href="#cb2-160" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f'</span><span class="ch">\n</span><span class="ss">Total Model Training Time: </span><span class="sc">{</span>total_train_time<span class="sc">:.4f}</span><span class="ss"> min'</span>)</span>
+<span id="cb2-161"><a href="#cb2-161" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> results, total_train_time</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<p><strong>Training the Model:</strong></p>
+<details>
+<summary>
+Code
+</summary>
+<div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>set_seed(<span class="dv">42</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Initializing the model and dataloaders</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>model, transforms <span class="op">=</span> create_model(num_classes<span class="op">=</span><span class="bu">len</span>(dataset.classes), device<span class="op">=</span>device)</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>model.to(device)</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>train_dataloader <span class="op">=</span> create_dataloaders(dataset<span class="op">=</span>train_dataset, batch<span class="op">=</span>BATCH_SIZE, shuffle<span class="op">=</span><span class="va">True</span>, workers<span class="op">=</span>WORKERS)</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>test_dataloader <span class="op">=</span> create_dataloaders(dataset<span class="op">=</span>test_dataset, batch<span class="op">=</span>BATCH_SIZE, shuffle<span class="op">=</span><span class="va">False</span>, workers<span class="op">=</span>WORKERS)</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Intializing loss and optimizer</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>loss_fn <span class="op">=</span> torch.nn.CrossEntropyLoss()</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>optimizer <span class="op">=</span> torch.optim.Adam(params<span class="op">=</span>model.parameters(), lr<span class="op">=</span><span class="fl">0.0001</span>)</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Setting up compiled model(Introduced in PyTorch 2.0.0)</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> torch.<span class="bu">compile</span>(model, mode<span class="op">=</span><span class="st">'default'</span>) <span class="co"># Only used it durning Exp 2.</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Training the model using the function</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>NUM_EPOCHS <span class="op">=</span> <span class="dv">3</span></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>exp2_results, exp2_total_train_time <span class="op">=</span> model_train(epochs<span class="op">=</span>NUM_EPOCHS,</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>                                                  model<span class="op">=</span>model,</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>                                                  train_dataloader<span class="op">=</span>train_dataloader,</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>                                                  test_dataloader<span class="op">=</span>test_dataloader,</span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>                                                  optimizer<span class="op">=</span>optimizer,</span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>                                                  loss_fn<span class="op">=</span>loss_fn,</span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>                                                  device<span class="op">=</span>device,</span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>                                                  num_classes<span class="op">=</span><span class="bu">len</span>(dataset.classes))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div data-notebook="notebooks/blog_figures.ipynb">
+<div class="cell" data-outputid="8447c764-4a71-4dbf-bafa-1c4b8c5a0765" data-execution_count="4">
+<div class="cell-output cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><a href="index_files/figure-html/fig-pytorch-exp-output-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="Benchmark Comparison between PyTorch Eager and Compile Mode for 3 Epochs."><img src="index_files/figure-html/fig-pytorch-exp-output-1.png" class="img-fluid figure-img"></a></p>
+<p></p><figcaption class="figure-caption">Benchmark Comparison between PyTorch Eager and Compile Mode for 3 Epochs.</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<p>As you can see the loss and accuracy are quite similar for both experiments. The result needs to be the same because we do not change the model and the epoch is also the same for both. This is good for the new features in that it does not make any changes to the model rather a container is created and the model is fitted within that container.</p>
+<p>The PyTorch team has mentioned that the major changes you will see are with speed, for this to happen all the processing is to be done in the initial epoch later there should be an increase in speed, but in my case, the eager is doing much better than the compile mode. This might be due to the hardware that I am using the A4000 GPU.</p>
+</section>
+<section id="phase-2---pytorch-lightning-implementation" class="level3">
+<h3 class="anchored" data-anchor-id="phase-2---pytorch-lightning-implementation">Phase 2 - PyTorch Lightning Implementation</h3>
+<p>The training pipeline is similar to before but the structure is defined as per the lightning methodology.</p>
+<p><strong>Defining Training Structure:</strong></p>
+<details>
+<summary>
+Code
+</summary>
+<div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> PyLightHMDB51(L.LightningModule):</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co">    A Lightning Module containing Model training and validation step.</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co">    Parameters: </span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="co">        model: A PyTorch Model.</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="co">        loss_fn: A PyTorch loss function.</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="co">        optimizer: A Pytorch Optimizer.</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="co">        num_classes: An integer for the total number of classes in the dataset.</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, model, loss_fn, optimizer, num_classes):</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>        <span class="bu">super</span>().<span class="fu">__init__</span>()</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.model <span class="op">=</span> model</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.loss_fn <span class="op">=</span> loss_fn</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.optimizer <span class="op">=</span> optimizer</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.num_classes <span class="op">=</span> num_classes</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.train_acc <span class="op">=</span> torchmetrics.Accuracy(task<span class="op">=</span><span class="st">'multiclass'</span>, </span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>                                               num_classes<span class="op">=</span><span class="va">self</span>.num_classes)</span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.test_acc <span class="op">=</span> torchmetrics.Accuracy(task<span class="op">=</span><span class="st">'multiclass'</span>, </span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>                                              num_classes<span class="op">=</span><span class="va">self</span>.num_classes)</span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> forward(<span class="va">self</span>, x):</span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">self</span>.model(x)</span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> training_step(<span class="va">self</span>, train_batch, batch_idx):</span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>        X, y <span class="op">=</span> train_batch</span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>        y_preds <span class="op">=</span> <span class="va">self</span>.forward(X)</span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>        loss <span class="op">=</span> <span class="va">self</span>.loss_fn(y_preds, y)</span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.log(<span class="st">'train_loss'</span>, loss, prog_bar<span class="op">=</span><span class="va">True</span>, on_step<span class="op">=</span><span class="va">False</span>, on_epoch<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a>        y_pred_labels <span class="op">=</span> torch.argmax(torch.softmax(y_preds, dim<span class="op">=</span><span class="dv">1</span>), dim<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.train_acc.update(y_pred_labels, y)</span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.log(<span class="st">'train_acc'</span>, <span class="va">self</span>.train_acc, prog_bar<span class="op">=</span><span class="va">True</span>, on_step<span class="op">=</span><span class="va">False</span>, on_epoch<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> loss</span>
+<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> validation_step(<span class="va">self</span>, val_batch, batch_idx):</span>
+<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a>        X, y <span class="op">=</span> val_batch</span>
+<span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a>        y_preds <span class="op">=</span> <span class="va">self</span>.forward(X)</span>
+<span id="cb4-37"><a href="#cb4-37" aria-hidden="true" tabindex="-1"></a>        loss <span class="op">=</span> <span class="va">self</span>.loss_fn(y_preds, y)</span>
+<span id="cb4-38"><a href="#cb4-38" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.log(<span class="st">'test_loss'</span>, loss, prog_bar<span class="op">=</span><span class="va">True</span>, on_step<span class="op">=</span><span class="va">False</span>, on_epoch<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb4-39"><a href="#cb4-39" aria-hidden="true" tabindex="-1"></a>        y_pred_labels <span class="op">=</span> torch.argmax(torch.softmax(y_preds, dim<span class="op">=</span><span class="dv">1</span>), dim<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb4-40"><a href="#cb4-40" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.test_acc.update(y_pred_labels, y)</span>
+<span id="cb4-41"><a href="#cb4-41" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.log(<span class="st">'test_acc'</span>, <span class="va">self</span>.test_acc, prog_bar<span class="op">=</span><span class="va">True</span>, on_step<span class="op">=</span><span class="va">False</span>, on_epoch<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb4-42"><a href="#cb4-42" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb4-43"><a href="#cb4-43" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> configure_optimizers(<span class="va">self</span>):</span>
+<span id="cb4-44"><a href="#cb4-44" aria-hidden="true" tabindex="-1"></a>        optimizers <span class="op">=</span> <span class="va">self</span>.optimizer</span>
+<span id="cb4-45"><a href="#cb4-45" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> optimizers</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<p><strong>Training the Model</strong>:</p>
+<details>
+<summary>
+Code
+</summary>
+<div class="sourceCode" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>set_seed(<span class="dv">42</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Creating the pytorch lightning trainer</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>NUM_EPOCHS <span class="op">=</span> <span class="dv">3</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>logger <span class="op">=</span> L.pytorch.loggers.CSVLogger(save_dir<span class="op">=</span>RESULTS_DIR, </span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>                                     name<span class="op">=</span><span class="st">"pytorch_lightning_compile_mode"</span>)</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>trainer <span class="op">=</span> L.Trainer(max_epochs<span class="op">=</span>NUM_EPOCHS, </span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>                    logger<span class="op">=</span>logger)</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Initializing the model and dataloaders</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>model, transforms <span class="op">=</span> create_model(num_classes<span class="op">=</span><span class="bu">len</span>(dataset.classes), device<span class="op">=</span>device)</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>train_dataloader <span class="op">=</span> create_dataloaders(dataset<span class="op">=</span>train_dataset, batch<span class="op">=</span>BATCH_SIZE, shuffle<span class="op">=</span><span class="va">True</span>, workers<span class="op">=</span>WORKERS)</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>test_dataloader <span class="op">=</span> create_dataloaders(dataset<span class="op">=</span>test_dataset, batch<span class="op">=</span>BATCH_SIZE, shuffle<span class="op">=</span><span class="va">False</span>, workers<span class="op">=</span>WORKERS)</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Intializing loss and optimizer</span></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>loss_fn <span class="op">=</span> torch.nn.CrossEntropyLoss()</span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>optimizer <span class="op">=</span> torch.optim.Adam(params<span class="op">=</span>model.parameters(), lr<span class="op">=</span><span class="fl">0.0001</span>)</span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Setting up compiled model(Introduced in PyTorch 2.0.0)</span></span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> torch.<span class="bu">compile</span>(model, mode<span class="op">=</span><span class="st">'default'</span>) <span class="co"># Only used it durning Exp 4.</span></span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a><span class="co"># Initializing the lightning module class</span></span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> PyLightHMDB51(model<span class="op">=</span>model, </span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>                      loss_fn<span class="op">=</span>loss_fn, </span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>                      optimizer<span class="op">=</span>optimizer, </span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>                      num_classes<span class="op">=</span><span class="bu">len</span>(dataset.classes))</span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a><span class="co"># Fiting the model to the trainer.</span></span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a>start_time <span class="op">=</span> timer()</span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a>trainer.fit(model<span class="op">=</span>model, </span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a>            train_dataloaders<span class="op">=</span>train_dataloader, </span>
+<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a>            val_dataloaders<span class="op">=</span>test_dataloader)</span>
+<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a>end_time <span class="op">=</span> timer()</span>
+<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a>exp4_total_train_time <span class="op">=</span> (end_time <span class="op">-</span> start_time)<span class="op">/</span><span class="dv">60</span></span>
+<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f'Total Time to train the model: </span><span class="sc">{</span>exp4_total_train_time<span class="sc">:.4f}</span><span class="ss"> min'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div data-notebook="notebooks/blog_figures.ipynb">
+<div class="cell" data-outputid="178b7758-7fdc-4265-fb40-69b9d98ab09f" data-execution_count="6">
+<div class="cell-output cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><a href="index_files/figure-html/fig-pytorch-light-exp-output-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4" title="Benchmark Comparison between PyTorch Lightning Eager and Compile Mode for 3 Epochs."><img src="index_files/figure-html/fig-pytorch-light-exp-output-1.png" class="img-fluid figure-img"></a></p>
+<p></p><figcaption class="figure-caption">Benchmark Comparison between PyTorch Lightning Eager and Compile Mode for 3 Epochs.</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<p>Here, while training the model the lightning only logs the loss and accuracy. So understanding the time for every epoch is difficult in this case. But similar to PyTorch the values of the loss and accuracy are not changed so the training was properly done.</p>
+</section>
+<section id="phase-3---lightning-fabric-implementation" class="level3">
+<h3 class="anchored" data-anchor-id="phase-3---lightning-fabric-implementation">Phase 3 - Lightning Fabric Implementation</h3>
+<p>Fabric is quite simple to implement, the code structure is similar to PyTorch that we used in the beginning but we have minor changes, some of the manual processes are automated by fabric, and with this the code has less chance of being broken.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>For all the modifications in the code, I have added a comment “New by Fabric”.</p>
+</div>
+</div>
+<p><strong>Defining Training Structure</strong>:</p>
+<details>
+<summary>
+Code
+</summary>
+<div class="sourceCode" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> train_step(model, dataloader, loss_fn, optimizer, fabric, num_classes):</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Trains a pytorch model by going into train mode and applying forward pass,</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co">    loss calculation and optimizer step.</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="co">    </span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="co">    Parameters:</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="co">        model: A pytorch model for training.</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="co">        dataloader: A pytorch dataloader for training.</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="co">        loss_fn: A pytorch loss to calculate the model's prediction loss.</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="co">        optimizer: A pytorch optimizer to minimize the loss function.</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="co">        fabric: A Fabric function to setup a device for the tensors and gradients.</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="co">        num_classes: An integer that indicates the total number of classes in the dataset.</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="co">        </span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a><span class="co">    Returns: A tuple of training loss and training accuracy.</span></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a><span class="co">        </span></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Model on training mode</span></span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>    model.train()</span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Setting train loss and accuracy </span></span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>    train_loss <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>    train_acc <span class="op">=</span> torchmetrics.Accuracy(task<span class="op">=</span><span class="st">'multiclass'</span>, num_classes<span class="op">=</span>num_classes).to(fabric.device) <span class="co"># New by Fabric</span></span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Looping the dataloaders</span></span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> batch, (X, y) <span class="kw">in</span> tqdm(<span class="bu">enumerate</span>(dataloader), desc<span class="op">=</span><span class="st">'Model Training'</span>, total<span class="op">=</span><span class="bu">len</span>(dataloader), unit<span class="op">=</span><span class="st">'batch'</span>):</span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a>        <span class="co"># X, y = X.to(device), y.to(device) # New by Fabric</span></span>
+<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a>        <span class="co"># 5 step to train a model</span></span>
+<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a>        y_pred <span class="op">=</span> model(X) <span class="co"># 1. Forward pass</span></span>
+<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a>        loss <span class="op">=</span> loss_fn(y_pred, y) <span class="co"># 2. Calculate loss</span></span>
+<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a>        train_loss <span class="op">+=</span> loss.item() </span>
+<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a>        optimizer.zero_grad() <span class="co"># 3. Initiate optimizer</span></span>
+<span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a>        <span class="co">#loss.backward() # 4. Backward pass</span></span>
+<span id="cb6-34"><a href="#cb6-34" aria-hidden="true" tabindex="-1"></a>        fabric.backward(loss) <span class="co"># New by Fabric</span></span>
+<span id="cb6-35"><a href="#cb6-35" aria-hidden="true" tabindex="-1"></a>        optimizer.step() <span class="co"># 5. Updating the model parameters</span></span>
+<span id="cb6-36"><a href="#cb6-36" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb6-37"><a href="#cb6-37" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Calculating the training accuracy</span></span>
+<span id="cb6-38"><a href="#cb6-38" aria-hidden="true" tabindex="-1"></a>        y_pred_labels <span class="op">=</span> torch.argmax(torch.softmax(y_pred, dim<span class="op">=</span><span class="dv">1</span>), dim<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb6-39"><a href="#cb6-39" aria-hidden="true" tabindex="-1"></a>        train_acc.update(y_pred_labels, y)</span>
+<span id="cb6-40"><a href="#cb6-40" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb6-41"><a href="#cb6-41" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Averaging the loss and accuracy</span></span>
+<span id="cb6-42"><a href="#cb6-42" aria-hidden="true" tabindex="-1"></a>    train_loss <span class="op">=</span> train_loss <span class="op">/</span> <span class="bu">len</span>(dataloader)</span>
+<span id="cb6-43"><a href="#cb6-43" aria-hidden="true" tabindex="-1"></a>    train_acc <span class="op">=</span> train_acc.compute()</span>
+<span id="cb6-44"><a href="#cb6-44" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> train_loss, train_acc</span>
+<span id="cb6-45"><a href="#cb6-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-46"><a href="#cb6-46" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> test_step(model, dataloader, loss_fn, fabric, num_classes):</span>
+<span id="cb6-47"><a href="#cb6-47" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
+<span id="cb6-48"><a href="#cb6-48" aria-hidden="true" tabindex="-1"></a><span class="co">    Test a pytorch model by going into eval mode and applying forward pass,</span></span>
+<span id="cb6-49"><a href="#cb6-49" aria-hidden="true" tabindex="-1"></a><span class="co">    and loss calculation.</span></span>
+<span id="cb6-50"><a href="#cb6-50" aria-hidden="true" tabindex="-1"></a><span class="co">    </span></span>
+<span id="cb6-51"><a href="#cb6-51" aria-hidden="true" tabindex="-1"></a><span class="co">    Parameters:</span></span>
+<span id="cb6-52"><a href="#cb6-52" aria-hidden="true" tabindex="-1"></a><span class="co">        model: A pytorch model for testing.</span></span>
+<span id="cb6-53"><a href="#cb6-53" aria-hidden="true" tabindex="-1"></a><span class="co">        dataloader: A pytorch dataloader for testing.</span></span>
+<span id="cb6-54"><a href="#cb6-54" aria-hidden="true" tabindex="-1"></a><span class="co">        loss_fn: A pytorch loss to calculate the model's prediction loss.</span></span>
+<span id="cb6-55"><a href="#cb6-55" aria-hidden="true" tabindex="-1"></a><span class="co">        fabric: A Fabric function to setup a device for the tensors and gradients.</span></span>
+<span id="cb6-56"><a href="#cb6-56" aria-hidden="true" tabindex="-1"></a><span class="co">        num_classes: An integer that indicates the total number of classes in the dataset.</span></span>
+<span id="cb6-57"><a href="#cb6-57" aria-hidden="true" tabindex="-1"></a><span class="co">        </span></span>
+<span id="cb6-58"><a href="#cb6-58" aria-hidden="true" tabindex="-1"></a><span class="co">    Returns: A tuple of testing loss and testing accuracy.</span></span>
+<span id="cb6-59"><a href="#cb6-59" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb6-60"><a href="#cb6-60" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Model on evaluation mode</span></span>
+<span id="cb6-61"><a href="#cb6-61" aria-hidden="true" tabindex="-1"></a>    model.<span class="bu">eval</span>()</span>
+<span id="cb6-62"><a href="#cb6-62" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb6-63"><a href="#cb6-63" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Setting train loss and accuracy </span></span>
+<span id="cb6-64"><a href="#cb6-64" aria-hidden="true" tabindex="-1"></a>    test_loss <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb6-65"><a href="#cb6-65" aria-hidden="true" tabindex="-1"></a>    test_acc <span class="op">=</span> torchmetrics.Accuracy(task<span class="op">=</span><span class="st">'multiclass'</span>, num_classes<span class="op">=</span>num_classes).to(fabric.device) <span class="co"># New by Fabric</span></span>
+<span id="cb6-66"><a href="#cb6-66" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb6-67"><a href="#cb6-67" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Using inference mode</span></span>
+<span id="cb6-68"><a href="#cb6-68" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> torch.no_grad():</span>
+<span id="cb6-69"><a href="#cb6-69" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Looping the dataloaders</span></span>
+<span id="cb6-70"><a href="#cb6-70" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> batch, (X, y) <span class="kw">in</span> tqdm(<span class="bu">enumerate</span>(dataloader), desc<span class="op">=</span><span class="st">'Model Evaluation'</span>, total<span class="op">=</span><span class="bu">len</span>(dataloader), unit<span class="op">=</span><span class="st">'batch'</span>):</span>
+<span id="cb6-71"><a href="#cb6-71" aria-hidden="true" tabindex="-1"></a>            <span class="co"># X, y = X.to(device), y.to(device) # New by Fabric</span></span>
+<span id="cb6-72"><a href="#cb6-72" aria-hidden="true" tabindex="-1"></a>            </span>
+<span id="cb6-73"><a href="#cb6-73" aria-hidden="true" tabindex="-1"></a>            <span class="co"># Forward pass</span></span>
+<span id="cb6-74"><a href="#cb6-74" aria-hidden="true" tabindex="-1"></a>            y_pred <span class="op">=</span> model(X)</span>
+<span id="cb6-75"><a href="#cb6-75" aria-hidden="true" tabindex="-1"></a>            </span>
+<span id="cb6-76"><a href="#cb6-76" aria-hidden="true" tabindex="-1"></a>            <span class="co"># Calculate loss</span></span>
+<span id="cb6-77"><a href="#cb6-77" aria-hidden="true" tabindex="-1"></a>            loss <span class="op">=</span> loss_fn(y_pred, y)</span>
+<span id="cb6-78"><a href="#cb6-78" aria-hidden="true" tabindex="-1"></a>            test_loss <span class="op">+=</span> loss.item()</span>
+<span id="cb6-79"><a href="#cb6-79" aria-hidden="true" tabindex="-1"></a>            </span>
+<span id="cb6-80"><a href="#cb6-80" aria-hidden="true" tabindex="-1"></a>            <span class="co"># Calculate accuracy</span></span>
+<span id="cb6-81"><a href="#cb6-81" aria-hidden="true" tabindex="-1"></a>            y_pred_labels <span class="op">=</span> y_pred.argmax(dim<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb6-82"><a href="#cb6-82" aria-hidden="true" tabindex="-1"></a>            test_acc.update(y_pred_labels, y)</span>
+<span id="cb6-83"><a href="#cb6-83" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb6-84"><a href="#cb6-84" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Averaging the loss and accuracy</span></span>
+<span id="cb6-85"><a href="#cb6-85" aria-hidden="true" tabindex="-1"></a>    test_loss <span class="op">=</span> test_loss <span class="op">/</span> <span class="bu">len</span>(dataloader)</span>
+<span id="cb6-86"><a href="#cb6-86" aria-hidden="true" tabindex="-1"></a>    test_acc <span class="op">=</span> test_acc.compute()</span>
+<span id="cb6-87"><a href="#cb6-87" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> test_loss, test_acc</span>
+<span id="cb6-88"><a href="#cb6-88" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-89"><a href="#cb6-89" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> model_train(epochs, model, train_dataloader, test_dataloader, optimizer, loss_fn, fabric, num_classes):</span>
+<span id="cb6-90"><a href="#cb6-90" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
+<span id="cb6-91"><a href="#cb6-91" aria-hidden="true" tabindex="-1"></a><span class="co">    Trains a pytorch model for a certain number of epochs going through the model training </span></span>
+<span id="cb6-92"><a href="#cb6-92" aria-hidden="true" tabindex="-1"></a><span class="co">    and testing stage, and accumulating the loss, accuracy, and training and testing time.</span></span>
+<span id="cb6-93"><a href="#cb6-93" aria-hidden="true" tabindex="-1"></a><span class="co">    </span></span>
+<span id="cb6-94"><a href="#cb6-94" aria-hidden="true" tabindex="-1"></a><span class="co">    Parameters:</span></span>
+<span id="cb6-95"><a href="#cb6-95" aria-hidden="true" tabindex="-1"></a><span class="co">        epochs: An integer to run the training and testing stage. </span></span>
+<span id="cb6-96"><a href="#cb6-96" aria-hidden="true" tabindex="-1"></a><span class="co">        model: A pytorch model for training and testing.</span></span>
+<span id="cb6-97"><a href="#cb6-97" aria-hidden="true" tabindex="-1"></a><span class="co">        train_dataloader: A pytorch dataloader for training.</span></span>
+<span id="cb6-98"><a href="#cb6-98" aria-hidden="true" tabindex="-1"></a><span class="co">        test_dataloader: A pytorch dataloader for testing.</span></span>
+<span id="cb6-99"><a href="#cb6-99" aria-hidden="true" tabindex="-1"></a><span class="co">        loss_fn: A pytorch loss to calculate the model's prediction loss.</span></span>
+<span id="cb6-100"><a href="#cb6-100" aria-hidden="true" tabindex="-1"></a><span class="co">        optimizer: A pytorch optimizer to minimize the loss function.</span></span>
+<span id="cb6-101"><a href="#cb6-101" aria-hidden="true" tabindex="-1"></a><span class="co">        fabric: A Fabric function to setup a device for the tensors and gradients.</span></span>
+<span id="cb6-102"><a href="#cb6-102" aria-hidden="true" tabindex="-1"></a><span class="co">        num_classes: An integer that indicates the total number of classes in the dataset.</span></span>
+<span id="cb6-103"><a href="#cb6-103" aria-hidden="true" tabindex="-1"></a><span class="co">        </span></span>
+<span id="cb6-104"><a href="#cb6-104" aria-hidden="true" tabindex="-1"></a><span class="co">    Returns: A tuple of accumulated results in dict and total training time in float datatype.</span></span>
+<span id="cb6-105"><a href="#cb6-105" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb6-106"><a href="#cb6-106" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Create an empty result</span></span>
+<span id="cb6-107"><a href="#cb6-107" aria-hidden="true" tabindex="-1"></a>    results <span class="op">=</span> {<span class="st">'train_loss'</span>: [],</span>
+<span id="cb6-108"><a href="#cb6-108" aria-hidden="true" tabindex="-1"></a>               <span class="st">'train_acc'</span>: [],</span>
+<span id="cb6-109"><a href="#cb6-109" aria-hidden="true" tabindex="-1"></a>               <span class="st">'test_loss'</span>: [],</span>
+<span id="cb6-110"><a href="#cb6-110" aria-hidden="true" tabindex="-1"></a>               <span class="st">'test_acc'</span>: [],</span>
+<span id="cb6-111"><a href="#cb6-111" aria-hidden="true" tabindex="-1"></a>               <span class="st">'train_epoch_time(min)'</span>: [],</span>
+<span id="cb6-112"><a href="#cb6-112" aria-hidden="true" tabindex="-1"></a>               <span class="st">'test_epoch_time(min)'</span>: []}</span>
+<span id="cb6-113"><a href="#cb6-113" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb6-114"><a href="#cb6-114" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Loop through training and testing steps</span></span>
+<span id="cb6-115"><a href="#cb6-115" aria-hidden="true" tabindex="-1"></a>    model_train_start_time <span class="op">=</span> timer()</span>
+<span id="cb6-116"><a href="#cb6-116" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> epoch <span class="kw">in</span> tqdm(<span class="bu">range</span>(epochs), desc<span class="op">=</span><span class="ss">f'Training and Evaluation for </span><span class="sc">{</span>epochs<span class="sc">}</span><span class="ss"> Epochs'</span>, unit<span class="op">=</span><span class="st">'epochs'</span>):</span>
+<span id="cb6-117"><a href="#cb6-117" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Training the model and timing it.</span></span>
+<span id="cb6-118"><a href="#cb6-118" aria-hidden="true" tabindex="-1"></a>        train_epoch_start_time <span class="op">=</span> timer()</span>
+<span id="cb6-119"><a href="#cb6-119" aria-hidden="true" tabindex="-1"></a>        train_loss, train_acc <span class="op">=</span> train_step(model<span class="op">=</span>model, </span>
+<span id="cb6-120"><a href="#cb6-120" aria-hidden="true" tabindex="-1"></a>                                           dataloader<span class="op">=</span>train_dataloader, </span>
+<span id="cb6-121"><a href="#cb6-121" aria-hidden="true" tabindex="-1"></a>                                           loss_fn<span class="op">=</span>loss_fn, </span>
+<span id="cb6-122"><a href="#cb6-122" aria-hidden="true" tabindex="-1"></a>                                           optimizer<span class="op">=</span>optimizer, </span>
+<span id="cb6-123"><a href="#cb6-123" aria-hidden="true" tabindex="-1"></a>                                           fabric<span class="op">=</span>fabric, <span class="co"># New by Fabric</span></span>
+<span id="cb6-124"><a href="#cb6-124" aria-hidden="true" tabindex="-1"></a>                                           num_classes<span class="op">=</span>num_classes)</span>
+<span id="cb6-125"><a href="#cb6-125" aria-hidden="true" tabindex="-1"></a>        train_epoch_stop_time <span class="op">=</span> timer()</span>
+<span id="cb6-126"><a href="#cb6-126" aria-hidden="true" tabindex="-1"></a>        train_epoch_time <span class="op">=</span> (train_epoch_stop_time <span class="op">-</span> train_epoch_start_time)<span class="op">/</span><span class="dv">60</span></span>
+<span id="cb6-127"><a href="#cb6-127" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb6-128"><a href="#cb6-128" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Testing the model and timing it</span></span>
+<span id="cb6-129"><a href="#cb6-129" aria-hidden="true" tabindex="-1"></a>        test_epoch_start_time <span class="op">=</span> timer()</span>
+<span id="cb6-130"><a href="#cb6-130" aria-hidden="true" tabindex="-1"></a>        test_loss, test_acc <span class="op">=</span> test_step(model<span class="op">=</span>model,</span>
+<span id="cb6-131"><a href="#cb6-131" aria-hidden="true" tabindex="-1"></a>                                        dataloader<span class="op">=</span>test_dataloader,</span>
+<span id="cb6-132"><a href="#cb6-132" aria-hidden="true" tabindex="-1"></a>                                        loss_fn<span class="op">=</span>loss_fn,</span>
+<span id="cb6-133"><a href="#cb6-133" aria-hidden="true" tabindex="-1"></a>                                        fabric<span class="op">=</span>fabric, <span class="co"># New by Fabric</span></span>
+<span id="cb6-134"><a href="#cb6-134" aria-hidden="true" tabindex="-1"></a>                                        num_classes<span class="op">=</span>num_classes)</span>
+<span id="cb6-135"><a href="#cb6-135" aria-hidden="true" tabindex="-1"></a>        test_epoch_stop_time <span class="op">=</span> timer()</span>
+<span id="cb6-136"><a href="#cb6-136" aria-hidden="true" tabindex="-1"></a>        test_epoch_time <span class="op">=</span> (test_epoch_stop_time <span class="op">-</span> test_epoch_start_time)<span class="op">/</span><span class="dv">60</span></span>
+<span id="cb6-137"><a href="#cb6-137" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb6-138"><a href="#cb6-138" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Print the model result</span></span>
+<span id="cb6-139"><a href="#cb6-139" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f'Epoch: [</span><span class="sc">{</span>epoch<span class="op">+</span><span class="dv">1</span><span class="sc">}</span><span class="ss">/</span><span class="sc">{</span>epochs<span class="sc">}</span><span class="ss">] | train_loss: </span><span class="sc">{</span>train_loss<span class="sc">:.4f}</span><span class="ss"> | train_acc: </span><span class="sc">{</span>train_acc<span class="sc">:.4f}</span><span class="ss"> | train_time: </span><span class="sc">{</span>train_epoch_time<span class="sc">:.4f}</span><span class="ss"> min | '</span></span>
+<span id="cb6-140"><a href="#cb6-140" aria-hidden="true" tabindex="-1"></a>              <span class="ss">f'test loss: </span><span class="sc">{</span>test_loss<span class="sc">:.4f}</span><span class="ss"> | test_acc: </span><span class="sc">{</span>test_acc<span class="sc">:.4f}</span><span class="ss"> | test_time: </span><span class="sc">{</span>test_epoch_time<span class="sc">:.4f}</span><span class="ss"> min'</span>)</span>
+<span id="cb6-141"><a href="#cb6-141" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb6-142"><a href="#cb6-142" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Saving the results</span></span>
+<span id="cb6-143"><a href="#cb6-143" aria-hidden="true" tabindex="-1"></a>        results[<span class="st">'train_loss'</span>].append(train_loss)</span>
+<span id="cb6-144"><a href="#cb6-144" aria-hidden="true" tabindex="-1"></a>        results[<span class="st">'train_acc'</span>].append(train_acc.detach().cpu().item())</span>
+<span id="cb6-145"><a href="#cb6-145" aria-hidden="true" tabindex="-1"></a>        results[<span class="st">'test_loss'</span>].append(test_loss)</span>
+<span id="cb6-146"><a href="#cb6-146" aria-hidden="true" tabindex="-1"></a>        results[<span class="st">'test_acc'</span>].append(test_acc.detach().cpu().item())</span>
+<span id="cb6-147"><a href="#cb6-147" aria-hidden="true" tabindex="-1"></a>        results[<span class="st">'train_epoch_time(min)'</span>].append(train_epoch_time)</span>
+<span id="cb6-148"><a href="#cb6-148" aria-hidden="true" tabindex="-1"></a>        results[<span class="st">'test_epoch_time(min)'</span>].append(test_epoch_time)</span>
+<span id="cb6-149"><a href="#cb6-149" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb6-150"><a href="#cb6-150" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Calculating total model training time</span></span>
+<span id="cb6-151"><a href="#cb6-151" aria-hidden="true" tabindex="-1"></a>    model_train_end_time <span class="op">=</span> timer()</span>
+<span id="cb6-152"><a href="#cb6-152" aria-hidden="true" tabindex="-1"></a>    total_train_time <span class="op">=</span> (model_train_end_time <span class="op">-</span> model_train_start_time)<span class="op">/</span><span class="dv">60</span></span>
+<span id="cb6-153"><a href="#cb6-153" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f'</span><span class="ch">\n</span><span class="ss">Total Model Training Time: </span><span class="sc">{</span>total_train_time<span class="sc">:.4f}</span><span class="ss"> min'</span>)</span>
+<span id="cb6-154"><a href="#cb6-154" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> results, total_train_time</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<p><strong>Training the Model</strong>:</p>
+<details>
+<summary>
+Code
+</summary>
+<div class="sourceCode" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>set_seed(<span class="dv">42</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Initializing Fabric # New by Fabric</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>fabric <span class="op">=</span> Fabric()</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Initializing the model and dataloaders</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>model, transforms <span class="op">=</span> create_model(num_classes<span class="op">=</span><span class="bu">len</span>(dataset.classes), device<span class="op">=</span>fabric.device) <span class="co"># New by Fabric</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="co"># model.to(device)</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>train_dataloader <span class="op">=</span> create_dataloaders(dataset<span class="op">=</span>train_dataset, batch<span class="op">=</span>BATCH_SIZE, shuffle<span class="op">=</span><span class="va">True</span>, workers<span class="op">=</span>WORKERS)</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>test_dataloader <span class="op">=</span> create_dataloaders(dataset<span class="op">=</span>test_dataset, batch<span class="op">=</span>BATCH_SIZE, shuffle<span class="op">=</span><span class="va">False</span>, workers<span class="op">=</span>WORKERS)</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Intializing loss and optimizer</span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>loss_fn <span class="op">=</span> torch.nn.CrossEntropyLoss()</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>optimizer <span class="op">=</span> torch.optim.Adam(params<span class="op">=</span>model.parameters(), lr<span class="op">=</span><span class="fl">0.0001</span>)</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Fabric setup # New by Fabric</span></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>model, optimizer <span class="op">=</span> fabric.setup(model, optimizer)</span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>train_dataloader, test_dataloader <span class="op">=</span> fabric.setup_dataloaders(train_dataloader, test_dataloader)</span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Setting up compiled model(Introduced in PyTorch 2.0.0)</span></span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> torch.<span class="bu">compile</span>(model, mode<span class="op">=</span><span class="st">'default'</span>) <span class="co"># Only used it for Exp 6</span></span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Training the model using the function</span></span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>NUM_EPOCHS <span class="op">=</span> <span class="dv">3</span></span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>exp6_results, exp6_total_train_time <span class="op">=</span> model_train(epochs<span class="op">=</span>NUM_EPOCHS,</span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a>                                                  model<span class="op">=</span>model, </span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a>                                                  train_dataloader<span class="op">=</span>train_dataloader, </span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a>                                                  test_dataloader<span class="op">=</span>test_dataloader, </span>
+<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a>                                                  optimizer<span class="op">=</span>optimizer, </span>
+<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a>                                                  loss_fn<span class="op">=</span>loss_fn, </span>
+<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a>                                                  fabric<span class="op">=</span>fabric, </span>
+<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a>                                                  num_classes<span class="op">=</span><span class="bu">len</span>(dataset.classes))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div data-notebook="notebooks/blog_figures.ipynb">
+<div class="cell" data-outputid="23349e30-1e78-489b-e5a8-ea7322e9e136" data-execution_count="7">
+<div class="cell-output cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><a href="index_files/figure-html/fig-fabric-exp-output-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-5" title="Benchmark Comparison between Lightning Fabric Eager and Compile Mode for 3 Epochs."><img src="index_files/figure-html/fig-fabric-exp-output-1.png" class="img-fluid figure-img"></a></p>
+<p></p><figcaption class="figure-caption">Benchmark Comparison between Lightning Fabric Eager and Compile Mode for 3 Epochs.</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<p>Similar to the result of PyTorch but if you see the time plot, here the compile mode reaches the level of eager mode at the 3rd epoch which means that for every epoch there was a decrease in the training time.</p>
+<section id="implementation-with-mixed-precision" class="level4">
+<h4 class="anchored" data-anchor-id="implementation-with-mixed-precision">Implementation with Mixed Precision</h4>
+<p>Fabric contains multiple different functionalities to automate manual functions, one of them being mixed precision. So I gave it a try and used mixed precision of Floating Point 16.</p>
+<details>
+<summary>
+Code
+</summary>
+<div class="sourceCode" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>set_seed(<span class="dv">42</span>)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Initializing Fabric with precision # New by Fabric</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>fabric <span class="op">=</span> Fabric(precision<span class="op">=</span><span class="st">'16-mixed'</span>)</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Initializing the model and dataloaders</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>model, transforms <span class="op">=</span> create_model(num_classes<span class="op">=</span><span class="bu">len</span>(dataset.classes), device<span class="op">=</span>fabric.device) <span class="co"># New by Fabric</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="co"># model.to(device)</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>train_dataloader <span class="op">=</span> create_dataloaders(dataset<span class="op">=</span>train_dataset, batch<span class="op">=</span>BATCH_SIZE, shuffle<span class="op">=</span><span class="va">True</span>, workers<span class="op">=</span>WORKERS)</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>test_dataloader <span class="op">=</span> create_dataloaders(dataset<span class="op">=</span>test_dataset, batch<span class="op">=</span>BATCH_SIZE, shuffle<span class="op">=</span><span class="va">False</span>, workers<span class="op">=</span>WORKERS)</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Intializing loss and optimizer</span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>loss_fn <span class="op">=</span> torch.nn.CrossEntropyLoss()</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>optimizer <span class="op">=</span> torch.optim.Adam(params<span class="op">=</span>model.parameters(), lr<span class="op">=</span><span class="fl">0.0001</span>)</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Fabric setup # New by Fabric</span></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>model, optimizer <span class="op">=</span> fabric.setup(model, optimizer)</span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>train_dataloader, test_dataloader <span class="op">=</span> fabric.setup_dataloaders(train_dataloader, test_dataloader)</span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Setting up compiled model(Introduced in PyTorch 2.0.0)</span></span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> torch.<span class="bu">compile</span>(model, mode<span class="op">=</span><span class="st">'default'</span>) <span class="co"># Only used it for Exp 8</span></span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Training the model using the function</span></span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>NUM_EPOCHS <span class="op">=</span> <span class="dv">3</span></span>
+<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a>exp8_results, exp8_total_train_time <span class="op">=</span> model_train(epochs<span class="op">=</span>NUM_EPOCHS,</span>
+<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a>                                                  model<span class="op">=</span>model, </span>
+<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a>                                                  train_dataloader<span class="op">=</span>train_dataloader, </span>
+<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a>                                                  test_dataloader<span class="op">=</span>test_dataloader, </span>
+<span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a>                                                  optimizer<span class="op">=</span>optimizer, </span>
+<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a>                                                  loss_fn<span class="op">=</span>loss_fn, </span>
+<span id="cb8-31"><a href="#cb8-31" aria-hidden="true" tabindex="-1"></a>                                                  fabric<span class="op">=</span>fabric, </span>
+<span id="cb8-32"><a href="#cb8-32" aria-hidden="true" tabindex="-1"></a>                                                  num_classes<span class="op">=</span><span class="bu">len</span>(dataset.classes))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div data-notebook="notebooks/blog_figures.ipynb">
+<div class="cell" data-outputid="72cdd12e-b006-49b1-e211-bb65d94302dc" data-execution_count="8">
+<div class="cell-output cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><a href="index_files/figure-html/fig-fabric16-exp-output-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-6" title="Benchmark Comparison between Lightning Fabric (TF16 Mixed Precision) Eager and Compile Mode for 3 Epochs."><img src="index_files/figure-html/fig-fabric16-exp-output-1.png" class="img-fluid figure-img"></a></p>
+<p></p><figcaption class="figure-caption">Benchmark Comparison between Lightning Fabric (TF16 Mixed Precision) Eager and Compile Mode for 3 Epochs.</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<p>There are no major changes, just a slight decrease in training time and the loss and accuracy are the same due to no changes in the model.</p>
+</section>
+</section>
+</section>
+<section id="results" class="level1">
+<h1>Results</h1>
+<p>So now that all the experiments are completed, it’s time to check the overall comparison of all the experiments and which one has performed the best.</p>
+<div class="quarto-layout-panel">
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div class="quarto-figure quarto-figure-center" style="flex-basis: 50.0%;justify-content: center;">
+<figure class="figure">
+<p><a href="images/model_train_time_a4000.png" class="lightbox" data-gallery="quarto-lightbox-gallery-7" title="Nvidia RTX A4000"><img src="images/model_train_time_a4000.png" class="img-fluid figure-img"></a></p>
+<p></p><figcaption class="figure-caption">Nvidia RTX A4000</figcaption><p></p>
+</figure>
+</div>
+<div class="quarto-figure quarto-figure-center" style="flex-basis: 50.0%;justify-content: center;">
+<figure class="figure">
+<p><a href="images/model_train_time_teslat4.png" class="lightbox" data-gallery="quarto-lightbox-gallery-8" title="Nvidia Tesla T4"><img src="images/model_train_time_teslat4.png" class="img-fluid figure-img"></a></p>
+<p></p><figcaption class="figure-caption">Nvidia Tesla T4</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>These are some shocking results I have got, If you see the plots, the PyTorch Eager mode, the first experiment that I did gave the best inference time for both the A4000 and for Tesla T4. I did not see that coming, I was hoping for the compile mode to have the best time at least for the A4000 knowing that it’s an Ampere chip with a compute capability of 8.6. This might have not been the case if we had trained the model using the A100 or A10 GPUs.</p>
+<p>The PyTorch Lightning in compile mode took the longest time to train a model, one reason might be that lightning already has more computation in the background for automating multiple different tasks and we have added the compile mode which takes a longer time in the initial epoch.</p>
+<p>While Pytorch shows the best speed and lightning has a hard time, fabric comes in the middle of both of them. It shows better results than Lightning and also provides some of the cool features that Lightning provides on the PyTorch code. On the other hand, adding mixed precision didn’t yield any major difference, this part needs more experimentation like modifying the hyper-parameters - batch size, etc.</p>
+</section>
+<section id="conclusion" class="level1">
+<h1>Conclusion</h1>
+<p>In this article, we have explored the new features that PyTorch and PyTorch Lightning have released. These features are in the stable release of version 2.0, they are still in the early stage of development and many more changes and support for different hardware will be available in the future release. Many more experiments and optimizations need to be done, however, those are for some other days.</p>
+<p>I hope that you enjoyed this article, if you want to try the codes yourself you can check them out over <a href="https://github.com/JohnPPinto/HMDB51_human_motion_recognition_pytorch" target="_blank">here</a>, do try the code on different GPUs and share the results with me, I am more than happy to improve this article.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<div>
+    <hr>
+    <h3>Stay in touch</h3>
+    <p>If you enjoyed my blog and don't want to miss out on any future articles you can subscribe to my newsletters.</p>
+    <iframe src="https://embeds.beehiiv.com/e7421b93-7002-413c-b016-9c72444d77b6?slim=true" data-test-id="beehiiv-embed" height="52" frameborder="0" scrolling="no" style="margin: 0; border-radius: 0px !important; background-color: transparent;">
+    </iframe>
+    <h3>Click to share</h3>
+    <div style="display: inline-flex; align-items: center;">
+        <div style="display: flex; margin-top: 10%; margin-right: 10%;">
+            <a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-size="large" data-via="john77272002" data-show-count="false">Tweet
+            </a>
+            <script async="" src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+        </div>
+        <div style="display: flex;">
+            <script src="https://platform.linkedin.com/in.js" type="text/javascript">lang: en_US</script>
+            <script type="IN/Share" data-url="https://www.linkedin.com"></script>
+        </div>
+    </div>
+    <hr>
+</div>
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const disableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'prefetch';
+    }
+  }
+  const enableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'stylesheet';
+    }
+  }
+  const manageTransitions = (selector, allowTransitions) => {
+    const els = window.document.querySelectorAll(selector);
+    for (let i=0; i < els.length; i++) {
+      const el = els[i];
+      if (allowTransitions) {
+        el.classList.remove('notransition');
+      } else {
+        el.classList.add('notransition');
+      }
+    }
+  }
+  const toggleColorMode = (alternate) => {
+    // Switch the stylesheets
+    const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+    manageTransitions('#quarto-margin-sidebar .nav-link', false);
+    if (alternate) {
+      enableStylesheet(alternateStylesheets);
+      for (const sheetNode of alternateStylesheets) {
+        if (sheetNode.id === "quarto-bootstrap") {
+          toggleBodyColorMode(sheetNode);
+        }
+      }
+    } else {
+      disableStylesheet(alternateStylesheets);
+      toggleBodyColorPrimary();
+    }
+    manageTransitions('#quarto-margin-sidebar .nav-link', true);
+    // Switch the toggles
+    const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+    for (let i=0; i < toggles.length; i++) {
+      const toggle = toggles[i];
+      if (toggle) {
+        if (alternate) {
+          toggle.classList.add("alternate");     
+        } else {
+          toggle.classList.remove("alternate");
+        }
+      }
+    }
+    // Hack to workaround the fact that safari doesn't
+    // properly recolor the scrollbar when toggling (#1455)
+    if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+      manageTransitions("body", false);
+      window.scrollTo(0, 1);
+      setTimeout(() => {
+        window.scrollTo(0, 0);
+        manageTransitions("body", true);
+      }, 40);  
+    }
+  }
+  const isFileUrl = () => { 
+    return window.location.protocol === 'file:';
+  }
+  const hasAlternateSentinel = () => {  
+    let styleSentinel = getColorSchemeSentinel();
+    if (styleSentinel !== null) {
+      return styleSentinel === "alternate";
+    } else {
+      return false;
+    }
+  }
+  const setStyleSentinel = (alternate) => {
+    const value = alternate ? "alternate" : "default";
+    if (!isFileUrl()) {
+      window.localStorage.setItem("quarto-color-scheme", value);
+    } else {
+      localAlternateSentinel = value;
+    }
+  }
+  const getColorSchemeSentinel = () => {
+    if (!isFileUrl()) {
+      const storageValue = window.localStorage.getItem("quarto-color-scheme");
+      return storageValue != null ? storageValue : localAlternateSentinel;
+    } else {
+      return localAlternateSentinel;
+    }
+  }
+  let localAlternateSentinel = 'default';
+  // Dark / light mode switch
+  window.quartoToggleColorScheme = () => {
+    // Read the current dark / light value 
+    let toAlternate = !hasAlternateSentinel();
+    toggleColorMode(toAlternate);
+    setStyleSentinel(toAlternate);
+  };
+  // Ensure there is a toggle, if there isn't float one in the top right
+  if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+    const a = window.document.createElement('a');
+    a.classList.add('top-right');
+    a.classList.add('quarto-color-scheme-toggle');
+    a.href = "";
+    a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+    const i = window.document.createElement("i");
+    i.classList.add('bi');
+    a.appendChild(i);
+    window.document.body.appendChild(a);
+  }
+  // Switch to dark mode if need be
+  if (hasAlternateSentinel()) {
+    toggleColorMode(true);
+  } else {
+    toggleColorMode(false);
+  }
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<script src="https://giscus.app/client.js" data-repo="JohnPPinto/blog" data-repo-id="R_kgDOJTakLg" data-category="General" data-category-id="DIC_kwDOJTakLs4CVlze" data-mapping="title" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="light" data-lang="en" crossorigin="anonymous" async="">
+</script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">John Pinto <i class="fa-copyright fa-regular" aria-label="regular"></i> 2023 made with HTML5 <i class="fab fa-html5"></i>, CSS3 <i class="fa-brands fa-css3"></i> and <a href="https://quarto.org">Quarto</a>.</div>   
+    <div class="nav-footer-center"><div class="cookie-consent-footer"><a href="#" id="open_preferences_center">Cookie Preferences</a></div></div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+<script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","loop":true,"selector":".lightbox","descPosition":"bottom","openEffect":"zoom"});</script>
+
+
+
+</body></html>

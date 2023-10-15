@@ -2,7 +2,7 @@
 title: "Riding the Waves - PyTorch and Lightning 2.0"
 description: "In this post, I will be talking about the new release by PyTorch and PyTorch Lightning. Also testing the potential of the new updates." 
 author: "John Pinto"
-date: "2023-04-01"
+date: "2023-05-15"
 categories: ["PyTorch", "Lightning", "Fabric", "AI", "Video Classification", "Computer Vision"]
 image: "featured.png"
 toc: true
@@ -29,7 +29,7 @@ PyTorch and PyTorch Lightning (2.0) were released on 15 March 2023.
 
 **PyTorch**: The main focus is the improvement in the speed, even the release article title says it
 
-> "PyTorch 2.0: Our next generation release that is faster, more Pythonic and Dynamic as ever"
+> "PyTorch 2.0: Our next-generation release that is faster, more Pythonic and Dynamic as ever"
 
 you can read the article over [here](https://pytorch.org/blog/pytorch-2.0-release/).
 
@@ -41,7 +41,7 @@ torch.compile()
 
 They have even mentioned the details while testing the new functionality and how the `torch.compile()` can improve the speed of the models from different sources \[[HuggingFace](https://github.com/huggingface/transformers), [TIMM](https://github.com/rwightman/pytorch-image-models) and [TorchBench](https://github.com/pytorch/benchmark/)\].
 
-To run this amazing compiled model, PyTorch introduces new technologies - **TorchDynamo, AOTAutograd, PrimTorch and TorchInductor**. All of these new technologies are working in a flow and they are broken down into three phases - **Graph Acquisition, Graph Lowering and Graph Compilation**. You can check all of this over [here](https://pytorch.org/get-started/pytorch-2.0/), they have explained the complex system in easy to understand way.
+To run this amazing compiled model, PyTorch introduces new technologies - **TorchDynamo, AOTAutograd, PrimTorch and TorchInductor**. All of these new technologies are working in a flow and they are broken down into three phases - **Graph Acquisition, Graph Lowering and Graph Compilation**. You can check all of this over [here](https://pytorch.org/get-started/pytorch-2.0/), they have explained the complex system in an easy-to-understand way.
 
 ::: callout-tip
 Read the above-linked article, especially the section on [technology overview](https://pytorch.org/get-started/pytorch-2.0/#technology-overview), this will help you understand the hyper-parameters workings within the torch.compile().
@@ -57,14 +57,14 @@ PyTorch Lightning has a history of converting the vanilla style of PyTorch code 
 
 PyTorch and PyTorch Lightning 2.0 are stable releases but there is some information that needs attention.
 
-1.  **Hardware**: This speed-up performance that the PyTorch team speaks of is based on specific hardware, broadly they have mentioned that NVIDIA Volta and Ampere server-class GPUs are capable to produce decent results. So desktop GPUs will need to wait for later releases.
+1.  **Hardware**: This speed-up performance that the PyTorch team speaks of is based on specific hardware, broadly they have mentioned that NVIDIA Volta and Ampere server-class GPUs are capable of producing decent results. So desktop GPUs will need to wait for later releases.
 2.  **Model Saving/Exporting**: Right now the compiled model can only be saved using the `model.state_dict()` method. You won't be able to save the object of the model, which returns an error if you try to. You can read the [serialization](https://pytorch.org/get-started/pytorch-2.0/#serialization) part of the article that I have mentioned above. Along with the save part, the team will also introduce `torch.export()` mode in the later release.
 
 # Enough Theory, Time to Experiment...
 
-Before I start showing my code and results, let me brief you about it. Many websites were already showing the methodology and results of PyTorch 2.0 on different models, you can check the blog article of [Weights and Biases](https://api.wandb.ai/links/gladiator/d0o6cxp0) that show how they implemented and test the new features.
+Before I start showing my code and results, let me brief you about it. Many websites were already showing the methodology and results of PyTorch 2.0 on different models, you can check the blog article of [Weights and Biases](https://api.wandb.ai/links/gladiator/d0o6cxp0) that shows how they implemented and test the new features.
 
-I wanted to try something different so I choose to implement and test it on a video classification problem rather than an Image Classification or NLP problem. For my Video Classification problem, I went with the [HMDB51 dataset](https://serre-lab.clps.brown.edu/resource/hmdb-a-large-human-motion-database). Now, the next step was selecting the hardware, majority of the website has shown that they were using Nvidia A100 GPU, and even PyTorch themselves have shown the results based on this hardware and have recommended GPU similar to this type. For me the only available Ampere GPU was Nvidia **A4000 (CUDA: 8.6)** and as a reference, I even used a **Tesla T4 (CUDA: 7.5)**.
+I wanted to try something different so I chose to implement and test it on a video classification problem rather than an Image Classification or NLP problem. For my Video Classification problem, I went with the [HMDB51 dataset](https://serre-lab.clps.brown.edu/resource/hmdb-a-large-human-motion-database). Now, the next step was selecting the hardware, the majority of the websites had shown that they were using Nvidia A100 GPU, and even PyTorch themselves have shown the results based on this hardware and have recommended GPU similar to this type. For me the only available Ampere GPU was Nvidia **A4000 (CUDA: 8.6)** and as a reference, I even used a **Tesla T4 (CUDA: 7.5)**.
 
 ::: callout-note
 There's a reason why PyTorch compile mode needs Volta and Ampere GPUs because the minimum CUDA compute capability needs to be more than 8.0. You can check your hardware computing capability on the [Nvidia website](https://developer.nvidia.com/cuda-gpus).
@@ -82,7 +82,7 @@ There are three Phases of testing that I have conducted:
 
 ### Dataset, Dataloaders and Model Details
 
--   Dataset contains 51 Classes, I have used only **20 classes** for all the experiments.
+-   The dataset contains 51 Classes, I have used only **20 classes** for all the experiments.
 
 -   The dataset contained a fixed sequence length of **16 frames**.
 
@@ -120,7 +120,7 @@ def train_step(model, dataloader, loss_fn, optimizer, device, num_classes):
         loss_fn: A pytorch loss to calculate the model's prediction loss.
         optimizer: A pytorch optimizer to minimize the loss function.
         device: A torch device to allocate tensors on 'cpu' or 'cuda'.
-        num_classes: A integer that indicates total number of classes in the dataset.
+        num_classes: An integer that indicates the total number of classes in the dataset.
         
     Returns: A tuple of training loss and training accuracy.
         
@@ -207,21 +207,21 @@ def test_step(model, dataloader, loss_fn, device, num_classes):
 def model_train(epochs, model, train_dataloader, test_dataloader, optimizer, loss_fn, device, num_classes):
     """
     Trains a pytorch model for a certain number of epochs going through the model training 
-    and testing stage, and accumalating the loss, accuracy, and training and testing time.
+    and testing stage, and accumulating the loss, accuracy, and training and testing time.
     
     Parameters:
-        epochs: A integer to run the training and testing stage. 
+        epochs: An integer to run the training and testing stage. 
         model: A pytorch model for training and testing.
         train_dataloader: A pytorch dataloader for training.
         test_dataloader: A pytorch dataloader for testing.
         loss_fn: A pytorch loss to calculate the model's prediction loss.
         optimizer: A pytorch optimizer to minimize the loss function.
         device: A torch device to allocate tensors on 'cpu' or 'cuda'.
-        num_classes: A integer that indicates total number of classes in the dataset.
+        num_classes: An integer that indicates the total number of classes in the dataset.
         
-    Returns: A tuple of accumaleted results in dict and total training time in float datatype.
+    Returns: A tuple of accumulated results in dict and total training time in float datatype.
     """
-    # Create empty result
+    # Create an empty result
     results = {'train_loss': [],
                'train_acc': [],
                'test_loss': [],
@@ -312,7 +312,7 @@ exp2_results, exp2_total_train_time = model_train(epochs=NUM_EPOCHS,
 
 {{< embed notebooks/blog_figures.ipynb#fig-pytorch-exp >}}
 
-As you can see the loss and accuracy are quite similar for both experiments. The result needs to be the same because we do not change the model and the epoch is also the same for both. This is good for the new features that it does not make any changes to the model rather a container is created and the model is fitted within that container.
+As you can see the loss and accuracy are quite similar for both experiments. The result needs to be the same because we do not change the model and the epoch is also the same for both. This is good for the new features in that it does not make any changes to the model rather a container is created and the model is fitted within that container.
 
 The PyTorch team has mentioned that the major changes you will see are with speed, for this to happen all the processing is to be done in the initial epoch later there should be an increase in speed, but in my case, the eager is doing much better than the compile mode. This might be due to the hardware that I am using the A4000 GPU.
 
@@ -334,7 +334,7 @@ class PyLightHMDB51(L.LightningModule):
         model: A PyTorch Model.
         loss_fn: A PyTorch loss function.
         optimizer: A Pytorch Optimizer.
-        num_classes: A integer for total number of classes in the dataset.
+        num_classes: An integer for the total number of classes in the dataset.
     """
     def __init__(self, model, loss_fn, optimizer, num_classes):
         super().__init__()
@@ -410,7 +410,7 @@ model = PyLightHMDB51(model=model,
                       optimizer=optimizer, 
                       num_classes=len(dataset.classes))
 
-# Fiting the model to trainer.
+# Fiting the model to the trainer.
 start_time = timer()
 trainer.fit(model=model, 
             train_dataloaders=train_dataloader, 
@@ -428,10 +428,10 @@ Here, while training the model the lightning only logs the loss and accuracy. So
 
 ### Phase 3 - Lightning Fabric Implementation
 
-Fabric is quite simple for implementing, the code structure is similar to PyTorch that we used in the beginning but we have minor changes, some of the manual processes are automated by fabric, and with this the code has less chance of being broken.
+Fabric is quite simple to implement, the code structure is similar to PyTorch that we used in the beginning but we have minor changes, some of the manual processes are automated by fabric, and with this the code has less chance of being broken.
 
 ::: callout-note
-I have added a comment "New by Fabric" for all lines that are modified.
+For all the modifications in the code, I have added a comment "New by Fabric".
 :::
 
 **Defining Training Structure**:
@@ -451,8 +451,8 @@ def train_step(model, dataloader, loss_fn, optimizer, fabric, num_classes):
         dataloader: A pytorch dataloader for training.
         loss_fn: A pytorch loss to calculate the model's prediction loss.
         optimizer: A pytorch optimizer to minimize the loss function.
-        fabric: A Fabric function to setup device for the tensors and gradients.
-        num_classes: A integer that indicates total number of classes in the dataset.
+        fabric: A Fabric function to setup a device for the tensors and gradients.
+        num_classes: An integer that indicates the total number of classes in the dataset.
         
     Returns: A tuple of training loss and training accuracy.
         
@@ -495,8 +495,8 @@ def test_step(model, dataloader, loss_fn, fabric, num_classes):
         model: A pytorch model for testing.
         dataloader: A pytorch dataloader for testing.
         loss_fn: A pytorch loss to calculate the model's prediction loss.
-        fabric: A Fabric function to setup device for the tensors and gradients.
-        num_classes: A integer that indicates total number of classes in the dataset.
+        fabric: A Fabric function to setup a device for the tensors and gradients.
+        num_classes: An integer that indicates the total number of classes in the dataset.
         
     Returns: A tuple of testing loss and testing accuracy.
     """
@@ -532,21 +532,21 @@ def test_step(model, dataloader, loss_fn, fabric, num_classes):
 def model_train(epochs, model, train_dataloader, test_dataloader, optimizer, loss_fn, fabric, num_classes):
     """
     Trains a pytorch model for a certain number of epochs going through the model training 
-    and testing stage, and accumalating the loss, accuracy, and training and testing time.
+    and testing stage, and accumulating the loss, accuracy, and training and testing time.
     
     Parameters:
-        epochs: A integer to run the training and testing stage. 
+        epochs: An integer to run the training and testing stage. 
         model: A pytorch model for training and testing.
         train_dataloader: A pytorch dataloader for training.
         test_dataloader: A pytorch dataloader for testing.
         loss_fn: A pytorch loss to calculate the model's prediction loss.
         optimizer: A pytorch optimizer to minimize the loss function.
-        fabric: A Fabric function to setup device for the tensors and gradients.
-        num_classes: A integer that indicates total number of classes in the dataset.
+        fabric: A Fabric function to setup a device for the tensors and gradients.
+        num_classes: An integer that indicates the total number of classes in the dataset.
         
-    Returns: A tuple of accumaleted results in dict and total training time in float datatype.
+    Returns: A tuple of accumulated results in dict and total training time in float datatype.
     """
-    # Create empty result
+    # Create an empty result
     results = {'train_loss': [],
                'train_acc': [],
                'test_loss': [],
@@ -705,14 +705,14 @@ So now that all the experiments are completed, it's time to check the overall co
 ![Nvidia Tesla T4](images/model_train_time_teslat4.png){fig-align="center"}
 :::
 
-These are some shocking results I have got, If you see the plots, the PyTorch Eager mode, the first experiment that I did gave the best inference time for both the A4000 and for Tesla T4. I did not see that coming, I was hoping for the compile mode to have the best time at least for the A4000 knowing that it's an Ampere chip with a compute capability of 8.6. This might had not been the case if we had trained the model using the A100 or A10 GPUs.
+These are some shocking results I have got, If you see the plots, the PyTorch Eager mode, the first experiment that I did gave the best inference time for both the A4000 and for Tesla T4. I did not see that coming, I was hoping for the compile mode to have the best time at least for the A4000 knowing that it's an Ampere chip with a compute capability of 8.6. This might have not been the case if we had trained the model using the A100 or A10 GPUs.
 
 The PyTorch Lightning in compile mode took the longest time to train a model, one reason might be that lightning already has more computation in the background for automating multiple different tasks and we have added the compile mode which takes a longer time in the initial epoch.
 
-While Pytorch shows the best speed and lightning has a hard time, fabric comes in the middle of both of them. Showing better results than Lightning and also providing some of the cool features that Lightning provides on the PyTorch code. On the other hand, adding mixed precision didn't yield any major difference, this part needs more experimentation like modifying the hyper-parameters - batch size, etc.
+While Pytorch shows the best speed and lightning has a hard time, fabric comes in the middle of both of them. It shows better results than Lightning and also provides some of the cool features that Lightning provides on the PyTorch code. On the other hand, adding mixed precision didn't yield any major difference, this part needs more experimentation like modifying the hyper-parameters - batch size, etc.
 
 # Conclusion
 
-In this article, we have explored the new features that PyTorch and PyTorch Lightning has released. These features are in the stable release of version 2.0, they are still in the early stage of development and many more changes and support for different hardware will be available in the future release. There are many more experiments and optimization that need to be done, however, those are for some other days.
+In this article, we have explored the new features that PyTorch and PyTorch Lightning have released. These features are in the stable release of version 2.0, they are still in the early stage of development and many more changes and support for different hardware will be available in the future release. Many more experiments and optimizations need to be done, however, those are for some other days.
 
 I hope that you enjoyed this article, if you want to try the codes yourself you can check them out over [here](https://github.com/JohnPPinto/HMDB51_human_motion_recognition_pytorch){target="_blank"}, do try the code on different GPUs and share the results with me, I am more than happy to improve this article.

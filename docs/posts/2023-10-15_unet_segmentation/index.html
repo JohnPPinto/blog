@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="John Pinto">
-<meta name="dcterms.date" content="2023-09-30">
+<meta name="dcterms.date" content="2023-10-15">
 <meta name="description" content="Building blocks for a strong foundation in image segmentation journey.">
 
 <title>John Pinto - Construct your First Multiclass U-Net in PyTorch</title>
@@ -137,11 +137,11 @@ cookieconsent.run({
 <link rel="stylesheet" href="../../styles.css">
 <meta property="og:title" content="John Pinto - Construct your First Multiclass U-Net in PyTorch">
 <meta property="og:description" content="Building blocks for a strong foundation in image segmentation journey.">
-<meta property="og:image" content="https://johnppinto.github.io/blog/posts/2023-09-30_unet_segmentation/featured.jpg">
+<meta property="og:image" content="https://johnppinto.github.io/blog/posts/2023-10-15_unet_segmentation/featured.jpg">
 <meta property="og:site-name" content="John Pinto">
 <meta name="twitter:title" content="John Pinto - Construct your First Multiclass U-Net in PyTorch">
 <meta name="twitter:description" content="Building blocks for a strong foundation in image segmentation journey.">
-<meta name="twitter:image" content="https://johnppinto.github.io/blog/posts/2023-09-30_unet_segmentation/featured.jpg">
+<meta name="twitter:image" content="https://johnppinto.github.io/blog/posts/2023-10-15_unet_segmentation/featured.jpg">
 <meta name="twitter:card" content="summary_large_image">
 </head>
 
@@ -182,12 +182,12 @@ cookieconsent.run({
  <span class="menu-text"></span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="https://www.linkedin.com/in/john-p-pinto/" rel="" target="_blank"><i class="bi bi-linkedin" role="img">
+    <a class="nav-link" href="https://www.linkedin.com/in/johnppinto/" rel="" target="_blank"><i class="bi bi-linkedin" role="img">
 </i> 
  <span class="menu-text"></span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="https://twitter.com/john77272002" rel="" target="_blank"><i class="bi bi-twitter" role="img">
+    <a class="nav-link" href="https://twitter.com/ThisIsJohnPinto/" rel="" target="_blank"><i class="bi bi-twitter" role="img">
 </i> 
  <span class="menu-text"></span></a>
   </li>  
@@ -236,7 +236,7 @@ cookieconsent.run({
       <div>
       <div class="quarto-title-meta-heading">Published</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">September 30, 2023</p>
+        <p class="date">October 15, 2023</p>
       </div>
     </div>
     
@@ -295,9 +295,8 @@ cookieconsent.run({
 <p>Semantic segmentation has a simple objective, to learn and understand each and every pixel that the camera has captured. If you have already been reading and learning about machine learning, then you might know numbers are everything in this field. So, what makes semantic segmentation special is the way it represents the pixel. All the information of the pixel is labeled with a class, whether it’s a binary(0 or 1) or a multiclass(more than 2) problem.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><a href="images/semantic_seg.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Example of label encoded mask. Image Source: https://www.jeremyjordan.me/semantic-segmentation/"><img src="images/semantic_seg.png" class="img-fluid figure-img"></a></p>
-<p></p><figcaption class="figure-caption">Example of label encoded mask.<br>
-Image Source: <a href="https://www.jeremyjordan.me/semantic-segmentation/" target="_blank" rel="noopener">https://www.jeremyjordan.me/semantic-segmentation/</a></figcaption><p></p>
+<p><a href="images/semantic_seg.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Example of label encoded mask. Image Source"><img src="images/semantic_seg.png" class="img-fluid figure-img"></a></p>
+<p></p><figcaption class="figure-caption">Example of label encoded mask. <a href="https://www.jeremyjordan.me/semantic-segmentation/" target="_blank" rel="noopener">Image Source</a></figcaption><p></p>
 </figure>
 </div>
 <p>Learning about semantic segmentation and applying this method to solve problems was one of the difficult tasks traditionally until deep learning methods showed up, one of the starting methods to boost this field was called U-Net. U-Net is a deep learning architecture, that was introduced for a task in <a href="https://arxiv.org/pdf/1505.04597.pdf" target="_blank" rel="noopener">Biomedical Image Segmentation</a>, the model has given amazing results and even to date it can handle most of the segmentation problem.</p>
@@ -494,7 +493,7 @@ Note
 <section id="implementation" class="level2">
 <h2 class="anchored" data-anchor-id="implementation">Implementation</h2>
 <p>We have successfully constructed the U-Net Model, and with this, our model is ready for semantic segmentation tasks.</p>
-<p>To test our model and to know whether it’s capable of performing and producing multiclass masks for any image we will need to train the model on a dataset, to implement this I have already done model training in a notebook, you can check the notebook over <a href="https://nbviewer.org/github/JohnPPinto/Deep-Learning-Projects/blob/main/06_unet_segmentation_on_a_drone_dataset.ipynb" target="_blank" rel="noopener">here</a>.</p>
+<p>To test our model and to know whether it’s capable of performing and producing multiclass masks for any image we will need to train the model on a dataset, to implement this I have already done model training in a notebook, you can check the notebook over <a href="https://nbviewer.org/github/JohnPPinto/Deep-Learning-Projects-Notebooks/blob/main/UNet_Segmentation_on_a_Drone_Dataset.ipynb" target="_blank" rel="noopener">here</a>.</p>
 <p>Implementation is similar to the other task of computer vision, with some minor changes. While building the PyTorch dataset, the mask tensor needs to be labeled encoded. This means that the pixel of the image will have an RGB value representation, this needs to be converted into label representation.</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1"></a><span class="kw">def</span> rgbmask_to_label(rgb_mask: numpy.ndarray,</span>
 <span id="cb5-2"><a href="#cb5-2"></a>                     colormap: <span class="bu">list</span>):</span>
@@ -535,7 +534,7 @@ Note
 <span id="cb6-10"><a href="#cb6-10"></a><span class="co"># Categorical cross-entropy loss (Only logits/raw data)</span></span>
 <span id="cb6-11"><a href="#cb6-11"></a>criterion <span class="op">=</span> torch.nn.CrossEntropyLoss()</span>
 <span id="cb6-12"><a href="#cb6-12"></a>output <span class="op">=</span> criterion(prediction, ground_truth)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p><em>You can learn more about Loss function from this <a href="https://machinelearningmastery.com/loss-functions-in-pytorch-models/">article</a>.</em></p>
+<p><em>You can learn more about Loss function from this <a href="https://machinelearningmastery.com/loss-functions-in-pytorch-models/" target="_blank" rel="noopener">article</a>.</em></p>
 </section>
 <section id="accuracy" class="level3">
 <h3 class="anchored" data-anchor-id="accuracy">Accuracy</h3>
@@ -557,7 +556,7 @@ Note
 <span id="cb7-14"><a href="#cb7-14"></a>    pred <span class="op">=</span> nn.Softmax2d()(pred).argmax(<span class="dv">1</span>).<span class="bu">int</span>()</span>
 <span id="cb7-15"><a href="#cb7-15"></a>    target <span class="op">=</span> target.<span class="bu">int</span>()</span>
 <span id="cb7-16"><a href="#cb7-16"></a>    <span class="cf">return</span> ((pred <span class="op">==</span> target).<span class="bu">sum</span>() <span class="op">/</span> torch.numel(target)).item()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p><em>You can read more about accuracy from this <a href="https://deepchecks.com/how-to-check-the-accuracy-of-your-machine-learning-model/">article</a>.</em></p>
+<p><em>You can read more about accuracy from this <a href="https://deepchecks.com/how-to-check-the-accuracy-of-your-machine-learning-model/" target="_blank" rel="noopener">article</a>.</em></p>
 </section>
 <section id="iou-and-dice" class="level3">
 <h3 class="anchored" data-anchor-id="iou-and-dice">IoU and Dice</h3>
@@ -627,15 +626,15 @@ Note
 <span id="cb8-58"><a href="#cb8-58"></a></span>
 <span id="cb8-59"><a href="#cb8-59"></a>    <span class="cf">return</span> (np.array(iou_array), iou_mean,</span>
 <span id="cb8-60"><a href="#cb8-60"></a>            np.array(dice_array), dice_mean)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p><em>You can further read about IoU and Dice from this <a href="https://medium.datadriveninvestor.com/deep-learning-in-medical-imaging-3c1008431aaf">article</a></em></p>
-<p>Now, that we have constructed the model and learned something about the metrics, it’s time to see whether the model runs successfully and provides prediction as needed, below are the predicted results after running the model for 3 epochs.</p>
+<p><em>You can further read about IoU and Dice from this <a href="https://medium.datadriveninvestor.com/deep-learning-in-medical-imaging-3c1008431aaf" target="_blank" rel="noopener">article</a>.</em></p>
+<p>Now, that we have constructed the model and learned something about the metrics, it’s time to see whether the model runs successfully and provides prediction as needed, below are the predicted results after running the model for 6 epochs.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><a href="images/prediction.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4"><img src="images/prediction.png" class="img-fluid figure-img"></a></p>
 </figure>
 </div>
-<p>As you can see the model is been able to identify a large pixel area mask like the paved area(purple) and grass(green) only after training the model for 3 epochs, but still, the smaller pixel area classes will need much longer training time. Due to limited training, the model is currently underfitting which can be improved by training the model for much longer.</p>
-<p>You can try my <a href="https://nbviewer.org/github/JohnPPinto/Deep-Learning-Projects/blob/main/06_unet_segmentation_on_a_drone_dataset.ipynb">notebook</a> and train the model for much longer, and if you use the dataset you will need to create a credentials.py file to store the password provided by the owner of the dataset. You can get the password by visiting the dataset site and following the instructions - website: <a href="https://www.tugraz.at/index.php?id=22387">https://www.tugraz.at/index.php?id=22387</a>.</p>
+<p>As you can see the model is been able to identify a large pixel area mask like the paved area(purple) and grass(green) only after training the model for 6 epochs, but still, the smaller pixel area classes will need much longer training time. Due to limited training, the model is currently underfitting which can be improved by training the model for much longer.</p>
+<p>You can try my <a href="https://nbviewer.org/github/JohnPPinto/Deep-Learning-Projects-Notebooks/blob/main/UNet_Segmentation_on_a_Drone_Dataset.ipynb" target="_blank" rel="noopener">notebook</a> and train the model for much longer, and if you use the dataset you will need to create a credentials.py file to store the password provided by the owner of the dataset. You can get the password by visiting the dataset site and following the instructions - website: <a href="https://www.tugraz.at/index.php?id=22387" target="_blank" rel="noopener">https://www.tugraz.at/index.php?id=22387</a>.</p>
 <p>Thank you for reading my article and I hope that you have enjoyed it. If I have left out something do mention it in the GitHub repo issues or the comments of this article, I am more than happy to improve this article.</p>
 
 
@@ -1024,7 +1023,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     </div>
   </div>
 </footer>
-<script>var lightboxQuarto = GLightbox({"openEffect":"zoom","loop":true,"descPosition":"bottom","closeEffect":"zoom","selector":".lightbox"});</script>
+<script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","loop":true,"openEffect":"zoom","selector":".lightbox","descPosition":"bottom"});</script>
 
 
 

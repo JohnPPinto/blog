@@ -2,7 +2,7 @@
 title: "Construct your First Multiclass U-Net in PyTorch"
 description: "Building blocks for a strong foundation in image segmentation journey." 
 author: "John Pinto"
-date: "2023-09-30"
+date: "2023-10-15"
 categories: ["PyTorch", "AI", "Computer Vision", "Image Segmentation"]
 image: "featured.jpg"
 toc: true
@@ -12,7 +12,6 @@ notebook-links: false
 filters:
    - lightbox
 lightbox: auto
-draft: true
 ---
 
 ```{=html}
@@ -30,7 +29,9 @@ The field of Computer Vision is quite vast and the general idea is to make the m
 
 Semantic segmentation has a simple objective, to learn and understand each and every pixel that the camera has captured. If you have already been reading and learning about machine learning, then you might know numbers are everything in this field. So, what makes semantic segmentation special is the way it represents the pixel. All the information of the pixel is labeled with a class, whether it's a binary(0 or 1) or a multiclass(more than 2) problem.
 
-Learning about semantic segmentation and applying this method to solve problems was one of the difficult tasks traditionally until deep learning methods showed up, one of the starting methods to boost this field was called U-Net. U-Net is a deep learning architecture, that was introduced for a task in [Biomedical Image Segmentation](https://arxiv.org/pdf/1505.04597.pdf), the model has given amazing results and even to date it can handle most of the segmentation problem.
+![Example of label encoded mask. [Image Source](https://www.jeremyjordan.me/semantic-segmentation/){target="_blank" rel="noopener"}](images/semantic_seg.png){fig-align="center"}
+
+Learning about semantic segmentation and applying this method to solve problems was one of the difficult tasks traditionally until deep learning methods showed up, one of the starting methods to boost this field was called U-Net. U-Net is a deep learning architecture, that was introduced for a task in [Biomedical Image Segmentation](https://arxiv.org/pdf/1505.04597.pdf){target="_blank" rel="noopener"}, the model has given amazing results and even to date it can handle most of the segmentation problem.
 
 In this article, we will learn more about U-Net and construct our own PyTorch implementation of the U-Net architecture. 
 
@@ -228,7 +229,7 @@ class UnetModel(nn.Module):
 
 We have successfully constructed the U-Net Model, and with this, our model is ready for semantic segmentation tasks.
 
-To test our model and to know whether it's capable of performing and producing multiclass masks for any image we will need to train the model on a dataset, to implement this I have already done model training in a notebook, you can check the notebook over [here](https://nbviewer.org/github/JohnPPinto/Deep-Learning-Projects/blob/main/06_unet_segmentation_on_a_drone_dataset.ipynb).
+To test our model and to know whether it's capable of performing and producing multiclass masks for any image we will need to train the model on a dataset, to implement this I have already done model training in a notebook, you can check the notebook over [here](https://nbviewer.org/github/JohnPPinto/Deep-Learning-Projects-Notebooks/blob/main/UNet_Segmentation_on_a_Drone_Dataset.ipynb){target="_blank" rel="noopener"}.
 
 Implementation is similar to the other task of computer vision, with some minor changes. While building the PyTorch dataset, the mask tensor needs to be labeled encoded. This means that the pixel of the image will have an RGB value representation, this needs to be converted into label representation.
 
@@ -261,8 +262,24 @@ def rgbmask_to_label(rgb_mask: numpy.ndarray,
 While performing the model training, you will require proper metrics that can represent the performance of the model. This indicator will help us understand, how well the model is learning and improving, I have used the following in the notebook:
 
 ### Loss
-While performing the model training the most important factor is to calculate the loss. Usually, the rule of thumb is to use Binary Cross-Entropy Loss for binary classification and  Cross-entropy Loss for multiclass classification. In PyTorch, while using the Binary Cross-Entropy Loss there is an option to use raw data(logits) directly or with an activation function like Sigmoid. When working with multiclass you can use PyTorch Cross-Entropy Loss, here only raw data is allowed to be provided to the function, the function itself makes a Softmax calculation. 
-*You can learn more about Loss function from this [article](https://machinelearningmastery.com/loss-functions-in-pytorch-models/).*
+While performing the model training the most important factor is to calculate the loss. Usually, the rule of thumb is to use Binary Cross-Entropy Loss for binary classification and categorical cross-entropy Loss for multiclass classification. In PyTorch, while using the Binary Cross-Entropy Loss there is an option to use raw data(logits) directly or with an activation function like Sigmoid. When working with multiclass you can use PyTorch Cross-Entropy Loss, here only raw data is allowed to be provided to the function, the function itself makes a Softmax calculation.
+
+```{.python code-line-numbers="true"}
+# Binary cross-entropy loss (with logits/raw data)
+criterion = torch.nn.BCEWithLogitsLoss()
+output = criterion(prediction, ground_truth)
+
+# Binary cross-entropy loss (with sigmoid)
+prediction = torch.nn.Sigmoid(prediction)
+criterion = torch.nn.BCELoss()
+output = criterion(prediction, ground_truth)
+
+# Categorical cross-entropy loss (Only logits/raw data)
+criterion = torch.nn.CrossEntropyLoss()
+output = criterion(prediction, ground_truth)
+```
+
+*You can learn more about Loss function from this [article](https://machinelearningmastery.com/loss-functions-in-pytorch-models/){target="_blank" rel="noopener"}.*
 
 ### Accuracy
 Accuracy is the simplest way to learn about the model performance, but the real truth can be hidden when you see the values given by the accuracy metrics. The reason why accuracy can't be trusted is because if the problem has an imbalanced dataset then it is very easy to get a higher accuracy score by having all the scores from the majority class. So using accuracy as your only metric is not good enough but want an overall look at the prediction it is better to use accuracy. 
@@ -270,7 +287,26 @@ Accuracy is the simplest way to learn about the model performance, but the real 
 The Formula of accuracy is:
 $$Accuracy = \dfrac {TP + TN}{TP + TN + FP + FN}$$
 
-*You can read more about accuracy from this [article](https://deepchecks.com/how-to-check-the-accuracy-of-your-machine-learning-model/).*
+```{.python code-line-numbers="true"}
+def calculate_accuracy(pred: torch.Tensor,
+                       target: torch.Tensor):
+    """
+    Calculate multi-class accuracy for the provided tensor while training the
+    model
+    Parameters:
+        pred (torch.Tensor): Raw logits produced by the model, the shape of
+                             the tensor needs to be (B,C,H,W).
+        target (torch.Tensor): A ground truth tensor, that is label encoded of
+                               shape (B,H,W).
+    Returns: Accuracy score
+    """
+    assert len(pred.shape) == 4 and len(target.shape) == 3
+    pred = nn.Softmax2d()(pred).argmax(1).int()
+    target = target.int()
+    return ((pred == target).sum() / torch.numel(target)).item()
+```
+
+*You can read more about accuracy from this [article](https://deepchecks.com/how-to-check-the-accuracy-of-your-machine-learning-model/){target="_blank" rel="noopener"}.*
 
 ### IoU and Dice
 Intersection over Union(IoU), also known as the Jaccard Index, is one of the most preferred metrics when working on an object detection problem. Another metric that is also preferred for classification problems is called Dice, also known as F1-Score. These metrics make a clear definition by considering only the true positive for the class it is been calculated while representing mathematically both of the metrics are quite related by they both show different representations for the same class. This is because in general IoU metric tends to penalize the bad class more than the Dice metric, even though they both agree on the same instance. So it is preferred to use one of the metrics from these two.
@@ -285,14 +321,77 @@ and $$Dice = \dfrac {TP + TP}{TP + TP + FP + TN} = \dfrac {2a}{a + b}$$
 
 Hence, $$Dice = \dfrac {\dfrac {2a}{b}}{\dfrac {a+b}{b}} = \dfrac {2 \cdot \dfrac {a}{b}}{\dfrac {a}{b} + 1} = \dfrac {2 \cdot IoU}{ IoU + 1}$$
 
-*You can further read about IoU and Dice from this [article](https://medium.datadriveninvestor.com/deep-learning-in-medical-imaging-3c1008431aaf)*
+```{.python code-line-numbers="true"}
+def calculate_iou_dice(pred: torch.Tensor,
+                       target: torch.Tensor,
+                       n_classes: int):
+    """
+    Calculate multi-class DICE and IoU scores for the provided tensor while
+    training the model
+    Parameters:
+        pred (torch.Tensor): Raw logits produced by the model, the shape of
+                             the tensor needs to be (B,C,H,W).
+        target (torch.Tensor): A ground truth tensor, that is label encoded of
+                               shape (B,H,W).
+        n_classes (int): Total number of classes
+    Returns:
+        iou_array (numpy.ndarray): An array with iou score for all the classes.
+        iou_mean (float): An average iou score.
+        dice_array (numpy.ndarray): An array with a dice score for all the classes.
+        dice_mean (float): An average dice score.
+    """
+    assert len(pred.shape) == 4 and len(target.shape) == 3
+    assert pred.shape[1] == n_classes
+    dice_array = []
+    iou_array = []
 
-Now, that we have constructed the model and learned something about the metrics, it's time to see whether the model runs successfully, below are the predicted results after running the model for 3 epochs.
+    # Getting the predicted labels for every pixel
+    # Flattening both the predicted and ground truth tensor
+    pred = nn.Softmax2d()(pred).argmax(dim=1).view(-1)
+    target = target.view(-1)
+
+    # Looping through the data for each class and
+    # Calculating the DICE and Iou score
+    for class_idx in range(n_classes):
+
+        # Creating a tensor for matching classes
+        pred_inds = pred == class_idx
+        target_inds = target == class_idx
+
+        # Calculating the IoU score
+        intersection = (pred_inds[target_inds]).long().sum().item()
+        union = pred_inds.long().sum().item() \
+                + target_inds.long().sum().item() - intersection
+
+        # Stopping the zero error for division
+        if union == 0:
+            iou = 0
+            iou_array.append(iou)
+            dice_array.append(iou)
+        else:
+            iou = intersection / union
+            iou_array.append(iou)
+
+            # Calculating the dice score
+            dice = (2 * iou) / (iou + 1)
+            dice_array.append(dice)
+
+    # Getting the average of both the scores
+    iou_mean = np.mean(iou_array)
+    dice_mean = np.mean(dice_array)
+
+    return (np.array(iou_array), iou_mean,
+            np.array(dice_array), dice_mean)
+```
+
+*You can further read about IoU and Dice from this [article](https://medium.datadriveninvestor.com/deep-learning-in-medical-imaging-3c1008431aaf){target="_blank" rel="noopener"}.*
+
+Now, that we have constructed the model and learned something about the metrics, it's time to see whether the model runs successfully and provides prediction as needed, below are the predicted results after running the model for 6 epochs.
 
 ![](images/prediction.png){fig-align="center"}
 
-As you can see the model is been able to identify a large pixel area mask like the paved area(purple) and grass(green) only after training the model for 3 epochs, but still, the smaller pixel area classes will need much longer training time. Due to limited training, the model is currently underfitting which can be improved by training the model for much longer.
+As you can see the model is been able to identify a large pixel area mask like the paved area(purple) and grass(green) only after training the model for 6 epochs, but still, the smaller pixel area classes will need much longer training time. Due to limited training, the model is currently underfitting which can be improved by training the model for much longer.
 
-You can try my [notebook](https://nbviewer.org/github/JohnPPinto/Deep-Learning-Projects/blob/main/06_unet_segmentation_on_a_drone_dataset.ipynb) and train the model for much longer, and if you use the dataset you will need to create a credentials.py file to store the password provided by the owner of the dataset. You can get the password by visiting the dataset site and following the instructions - website: [https://www.tugraz.at/index.php?id=22387](https://www.tugraz.at/index.php?id=22387). 
+You can try my [notebook](https://nbviewer.org/github/JohnPPinto/Deep-Learning-Projects-Notebooks/blob/main/UNet_Segmentation_on_a_Drone_Dataset.ipynb){target="_blank" rel="noopener"} and train the model for much longer, and if you use the dataset you will need to create a credentials.py file to store the password provided by the owner of the dataset. You can get the password by visiting the dataset site and following the instructions - website: [https://www.tugraz.at/index.php?id=22387](https://www.tugraz.at/index.php?id=22387){target="_blank" rel="noopener"}. 
 
 Thank you for reading my article and I hope that you have enjoyed it. If I have left out something do mention it in the GitHub repo issues or the comments of this article, I am more than happy to improve this article.
