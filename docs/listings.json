@@ -2,6 +2,7 @@
   {
     "listing": "/blog.html",
     "items": [
+      "/posts/2023-11-01_deployment_part1/index.html",
       "/posts/2023-10-15_unet_segmentation/index.html",
       "/posts/2023-05-15_pytorch_and_lightning_2.0/index.html",
       "/posts/2023-04-10_tf_modelling/index.html"

@@ -6,11 +6,11 @@
   </url>
   <url>
     <loc>https://johnppinto.github.io/blog/index.html</loc>
-    <lastmod>2023-10-15T19:06:42.281Z</lastmod>
+    <lastmod>2023-11-02T02:56:23.495Z</lastmod>
   </url>
   <url>
     <loc>https://johnppinto.github.io/blog/blog.html</loc>
-    <lastmod>2023-10-15T19:07:18.909Z</lastmod>
+    <lastmod>2023-11-02T02:57:33.902Z</lastmod>
   </url>
   <url>
     <loc>https://johnppinto.github.io/blog/about.html</loc>
@@ -67,5 +67,9 @@
   <url>
     <loc>https://johnppinto.github.io/blog/posts/2023-10-15_unet_segmentation/index.html</loc>
     <lastmod>2023-10-15T19:07:00.321Z</lastmod>
+  </url>
+  <url>
+    <loc>https://johnppinto.github.io/blog/posts/2023-11-01_deployment_part1/index.html</loc>
+    <lastmod>2023-11-02T02:56:33.783Z</lastmod>
   </url>
 </urlset>

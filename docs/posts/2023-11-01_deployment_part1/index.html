@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.302">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="John Pinto">
+<meta name="dcterms.date" content="2023-11-01">
+<meta name="description" content="In this series, I will be talking about the Deployment stage which is part of the ML pipeline. This is Part 1 of this series, the beginning of any project’s deployment.">
+
+<title>John Pinto - Orchestrate MLOps - Deployment Pipeline Part 1</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../assets/images/favicon.png" rel="icon" type="image/png">
+<script src="../../site_libs/cookie-consent/cookie-consent.js"></script>
+<link href="../../site_libs/cookie-consent/cookie-consent.css" rel="stylesheet">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<script src="../../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="../../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="../../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
+<link href="../../site_libs/quarto-contrib/fontawesome6-0.1.0/all.css" rel="stylesheet">
+<link href="../../site_libs/quarto-contrib/fontawesome6-0.1.0/latex-fontsize.css" rel="stylesheet">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-6DE2RCBFFM"></script>
+
+<script type="text/plain" cookie-consent="tracking">
+
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-6DE2RCBFFM', { 'anonymize_ip': true});
+</script>
+
+<script type="text/javascript" charset="UTF-8">
+document.addEventListener('DOMContentLoaded', function () {
+cookieconsent.run({
+  "notice_banner_type":"simple",
+  "consent_type":"implied",
+  "palette":"light",
+  "language":"en",
+  "page_load_consent_levels":["strictly-necessary","functionality","tracking","targeting"],
+  "notice_banner_reject_button_hide":false,
+  "preferences_center_close_button_hide":false,
+  "website_name":""
+  });
+});
+</script> 
+  
+
+
+<link rel="stylesheet" href="../../styles.css">
+<meta property="og:title" content="John Pinto - Orchestrate MLOps - Deployment Pipeline Part 1">
+<meta property="og:description" content="In this series, I will be talking about the Deployment stage which is part of the ML pipeline. This is Part 1 of this series, the beginning of any project’s deployment.">
+<meta property="og:image" content="https://johnppinto.github.io/blog/posts/2023-11-01_deployment_part1/featured.png">
+<meta property="og:site-name" content="John Pinto">
+<meta property="og:image:height" content="485">
+<meta property="og:image:width" content="445">
+<meta name="twitter:title" content="John Pinto - Orchestrate MLOps - Deployment Pipeline Part 1">
+<meta name="twitter:description" content="In this series, I will be talking about the Deployment stage which is part of the ML pipeline. This is Part 1 of this series, the beginning of any project’s deployment.">
+<meta name="twitter:image" content="https://johnppinto.github.io/blog/posts/2023-11-01_deployment_part1/featured.png">
+<meta name="twitter:image-height" content="485">
+<meta name="twitter:image-width" content="445">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+
+<body class="floating nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">John Pinto</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../blog.html" rel="" target="">
+ <span class="menu-text">Blog</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html" rel="" target="">
+ <span class="menu-text">About</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="https://johnpinto.pythonanywhere.com/" rel="" target="_blank">
+ <span class="menu-text">Portfolio</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/JohnPPinto" rel="" target="_blank"><i class="bi bi-github" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://www.linkedin.com/in/johnppinto/" rel="" target="_blank"><i class="bi bi-linkedin" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/ThisIsJohnPinto/" rel="" target="_blank"><i class="bi bi-twitter" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="../../blog.xml" rel="" target="_blank"><i class="bi bi-rss" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+            <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default toc-left page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-page-right">
+      <h1 class="title">Orchestrate MLOps - Deployment Pipeline Part 1</h1>
+                  <div>
+        <div class="description">
+          In this series, I will be talking about the Deployment stage which is part of the ML pipeline. This is Part 1 of this series, the beginning of any project’s deployment.
+        </div>
+      </div>
+                          <div class="quarto-categories">
+                <div class="quarto-category">PyTorch</div>
+                <div class="quarto-category">AI</div>
+                <div class="quarto-category">Image-to-Text</div>
+                <div class="quarto-category">NLP</div>
+                <div class="quarto-category">MLOps</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>John Pinto </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">November 1, 2023</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
+    <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#project-setup" id="toc-project-setup" class="nav-link active" data-scroll-target="#project-setup">Project Setup</a>
+  <ul class="collapse">
+  <li><a href="#fastapi-backend" id="toc-fastapi-backend" class="nav-link" data-scroll-target="#fastapi-backend">FastAPI Backend</a></li>
+  <li><a href="#streamlit-frontend" id="toc-streamlit-frontend" class="nav-link" data-scroll-target="#streamlit-frontend">Streamlit Frontend</a></li>
+  </ul></li>
+  </ul>
+</nav>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block column-page-right" id="quarto-document-content">
+
+
+
+
+<style>
+.quarto-figure-center > figure {
+  text-align: center;
+}
+</style>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><a href="featured.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1"><img src="featured.png" class="img-fluid figure-img" width="367"></a></p>
+</figure>
+</div>
+<p>One of the hot topics right now is Machine Learning, especially the field of Deep Learning, after the emergence of ChatGPT and various other Artificial Intelligence products. Many have taken an interest in this field and day by day the field is growing tremendously large, with the growing community many online tutorials and information for anyone to start learning have been improving and getting easy.</p>
+<p>Many beginners that start learning machine learning go through the initial stages of the ML pipeline, i.e.&nbsp;Data Stage and Model Stage. This is a good way to learn and understand the basic concepts when starting. But as your knowledge grows you will need to learn how to produce a project that fits the Machine Learning Life Cycle, even called Machine Learning Operations (MLOps).</p>
+<p>Once you have worked on the Data Stage and the Model Stage, next comes the Deployment of the Model, here you need to make the model available to anyone. Make an interactive application that communicates with the model and produces the prediction as a result for the user. The important point in the deployment stage is the communication of the model, the backend with the frontend of the application. In Python, this can be achieved using the famous REST API, for a long time, Flask, was the go-to framework for implementing REST API, but the new framework FastAPI has gained popularity because it is much faster compared to the other frameworks including Flask.</p>
+<p>With that, we’re going to build a FastAPI app for our backend that will produce and serve our prediction whenever requested, and for taking inputs and displaying results we will create a frontend user interface using the Streamlit application framework. Streamlit is one of the best ways for rapid prototyping and it is very easy to implement different UI components.</p>
+<section id="project-setup" class="level1">
+<h1>Project Setup</h1>
+<p>For this article, I will be using a pre-trained model to demonstrate the deployment stage, the pre-trained called BLIP - Bootstrapping Language-Image Pre-training, this model framework works in achieving tasks using vision and language. All the project code is present in my GitHub repository, you can check it over <a href="https://github.com/JohnPPinto/Blog-Project-Orchestrate-MLOps-Deployment-Pipeline.git">here</a>.</p>
+<p>Starting with the project, create two directories within your project directory.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> mkdir frontend</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> mkdir backend</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Add <em>__init__.py</em> files to each directory.</p>
+<section id="fastapi-backend" class="level2">
+<h2 class="anchored" data-anchor-id="fastapi-backend">FastAPI Backend</h2>
+<p>In the backend directory add everything that the backend will need like the models and the scripts to load the data and the model. For this project, I have added the models and scripts that process the input data and run the model which in return provides the required prediction. You can click <a href="https://github.com/JohnPPinto/Blog-Project-Orchestrate-MLOps-Deployment-Pipeline/tree/main/backend">here</a> to check the backend of my project.</p>
+<p>To build your FastAPI app, you can add a new file called ‘main.py’ in the backend directory.</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>backend/main.py</strong></pre>
+</div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a><span class="im">import</span> uvicorn</span>
+<span id="cb2-2"><a href="#cb2-2"></a><span class="im">from</span> io <span class="im">import</span> BytesIO</span>
+<span id="cb2-3"><a href="#cb2-3"></a><span class="im">from</span> PIL <span class="im">import</span> Image</span>
+<span id="cb2-4"><a href="#cb2-4"></a><span class="im">from</span> fastapi <span class="im">import</span> FastAPI</span>
+<span id="cb2-5"><a href="#cb2-5"></a><span class="im">from</span> fastapi <span class="im">import</span> File</span>
+<span id="cb2-6"><a href="#cb2-6"></a><span class="im">from</span> fastapi <span class="im">import</span> UploadFile</span>
+<span id="cb2-7"><a href="#cb2-7"></a><span class="im">from</span> predict <span class="im">import</span> predict</span>
+<span id="cb2-8"><a href="#cb2-8"></a></span>
+<span id="cb2-9"><a href="#cb2-9"></a><span class="co"># Initiating FastAPI</span></span>
+<span id="cb2-10"><a href="#cb2-10"></a>app <span class="op">=</span> FastAPI()</span>
+<span id="cb2-11"><a href="#cb2-11"></a></span>
+<span id="cb2-12"><a href="#cb2-12"></a><span class="co"># A demo get method</span></span>
+<span id="cb2-13"><a href="#cb2-13"></a><span class="at">@app.get</span>(<span class="st">"/"</span>)</span>
+<span id="cb2-14"><a href="#cb2-14"></a><span class="cf">async</span> <span class="kw">def</span> read_root():</span>
+<span id="cb2-15"><a href="#cb2-15"></a>    <span class="cf">return</span> {<span class="st">'message'</span>: <span class="st">"Welcome, You can type docs in the URL to check the API documentation."</span>}</span>
+<span id="cb2-16"><a href="#cb2-16"></a></span>
+<span id="cb2-17"><a href="#cb2-17"></a><span class="co"># A post method to return the prediction</span></span>
+<span id="cb2-18"><a href="#cb2-18"></a><span class="at">@app.post</span>(<span class="st">'/predict'</span>)</span>
+<span id="cb2-19"><a href="#cb2-19"></a><span class="cf">async</span> <span class="kw">def</span> predict_image(<span class="bu">file</span>: UploadFile <span class="op">=</span> File(...),</span>
+<span id="cb2-20"><a href="#cb2-20"></a>                        <span class="bu">type</span>: <span class="bu">str</span> <span class="op">=</span> <span class="st">'caption'</span>,</span>
+<span id="cb2-21"><a href="#cb2-21"></a>                        decode_method: <span class="bu">str</span> <span class="op">=</span> <span class="st">'beam'</span>,</span>
+<span id="cb2-22"><a href="#cb2-22"></a>                        question <span class="op">=</span> <span class="va">None</span>):</span>
+<span id="cb2-23"><a href="#cb2-23"></a>    <span class="co"># Reading the image file</span></span>
+<span id="cb2-24"><a href="#cb2-24"></a>    content <span class="op">=</span> <span class="cf">await</span> <span class="bu">file</span>.read()</span>
+<span id="cb2-25"><a href="#cb2-25"></a>    image <span class="op">=</span> Image.<span class="bu">open</span>(BytesIO(content))</span>
+<span id="cb2-26"><a href="#cb2-26"></a></span>
+<span id="cb2-27"><a href="#cb2-27"></a>    <span class="co"># Getting the prediction</span></span>
+<span id="cb2-28"><a href="#cb2-28"></a>    result <span class="op">=</span> predict(image<span class="op">=</span>image,</span>
+<span id="cb2-29"><a href="#cb2-29"></a>                     <span class="bu">type</span><span class="op">=</span><span class="bu">type</span>,</span>
+<span id="cb2-30"><a href="#cb2-30"></a>                     decode_method<span class="op">=</span>decode_method,</span>
+<span id="cb2-31"><a href="#cb2-31"></a>                     question<span class="op">=</span>question)</span>
+<span id="cb2-32"><a href="#cb2-32"></a>    </span>
+<span id="cb2-33"><a href="#cb2-33"></a>    <span class="cf">return</span> result</span>
+<span id="cb2-34"><a href="#cb2-34"></a></span>
+<span id="cb2-35"><a href="#cb2-35"></a><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">'__main__'</span>:</span>
+<span id="cb2-36"><a href="#cb2-36"></a>    uvicorn.run(<span class="st">'main:app'</span>, host<span class="op">=</span><span class="st">'0.0.0.0'</span>, port<span class="op">=</span><span class="dv">8080</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Going through the whole code at once and reading it line by line is the best way to understand what is happening exactly, now that you have seen the code it’s time to explain the workings.</p>
+<ol type="1">
+<li>We import all the necessary libraries for running the script, Fastapi and Uvicorn are the core packages for the FastAPI app. Package io and PIL are for processing and loading the data and <a href="https://github.com/JohnPPinto/Blog-Project-Orchestrate-MLOps-Deployment-Pipeline/blob/main/backend/predict.py">predict</a> is the local module that loads and runs the model for producing prediction.</li>
+<li>After importing the packages, I initialize the FastAPI app, creating an instance for the app this instance communicates with the server and the processing of the model and data. You can keep it empty or add your application <a href="https://fastapi.tiangolo.com/tutorial/metadata/">title and description</a> as an argument.</li>
+<li>The first thing I create is a Get method, you use a Get method only when you want to provide any form of data. The Get method is only used for retrieving data whenever requested, within the Get method I haven’t provided any name, which means that a direct URL request will provide the information. The information needs to be a function and returned in JSON format.</li>
+<li>Now that the demo “get” is shown, the main working of the app is in the Post method, you use the Post method when you want to retrieve data whenever requested but need input data before sending the requested data. This is exactly what we need, an image will be taken and the predicted text will be provided in return. Similar to the Get method, we name the Post method and create a function, the function takes the following arguments, a file declared as a FastAPI upload file type, rest of the arguments are for the predict function.</li>
+<li>Within the post method, the predict image function initially reads the file data, reading the file data which is in bytes format needs to be stored for further processing and for that BytesIO does the best work to store in the memory, using the stored data <code>PIL.Image</code> can open it efficiently. Using the PIL data, the predict function provides us with the result. The result data is in JSON format.</li>
+<li>At the end, we use Uvicorn to run the server on the main.py file at the localhost i.e.&nbsp;0.0.0.0 and default port 8080.</li>
+</ol>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Once your data is been stored in BytesIO and opened by PIL you can even convert your data into numpy for array-like data.<br> <code>np.asarray()</code> can take a PIL format file and convert it into a numpy array.</p>
+</div>
+</div>
+<p>Once you run the main.py file, the FastAPI and Uvicorn will run the app on the URL http://localhost:8080/docs, the docs are the documentation that the FastAPI auto-generates. You can now use the GUI to try out the working of the application.</p>
+</section>
+<section id="streamlit-frontend" class="level2">
+<h2 class="anchored" data-anchor-id="streamlit-frontend">Streamlit Frontend</h2>
+<p>In our frontend, we will be using Streamlit. Streamlit is easy to understand and using it is not at all difficult. Most of the components are a single line of code and the rest of the features are dynamically handled by Streamlit in the back. Streamlit even offers a modern-looking GUI by default so even the designing part is not needed. So No HTML and CSS are needed for using Streamlit.</p>
+<p>I won’t be going into explaining Streamlit and its components, all of the code is self-explanatory, and you can use the documents for understanding each component. You can check the streamlit document over <a href="https://docs.streamlit.io/library/api-reference">here</a>.</p>
+<p>To build the Streamlit app, you can add a main.py file in the frontend directory.</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>frontend/main.py</strong></pre>
+</div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a><span class="im">import</span> requests</span>
+<span id="cb3-2"><a href="#cb3-2"></a><span class="im">import</span> streamlit <span class="im">as</span> st</span>
+<span id="cb3-3"><a href="#cb3-3"></a></span>
+<span id="cb3-4"><a href="#cb3-4"></a><span class="co"># Setting page layout</span></span>
+<span id="cb3-5"><a href="#cb3-5"></a>st.set_page_config(page_title<span class="op">=</span><span class="st">'Demo App'</span>,</span>
+<span id="cb3-6"><a href="#cb3-6"></a>                   page_icon<span class="op">=</span><span class="st">'📷'</span>,</span>
+<span id="cb3-7"><a href="#cb3-7"></a>                   layout<span class="op">=</span><span class="st">'wide'</span>,</span>
+<span id="cb3-8"><a href="#cb3-8"></a>                   initial_sidebar_state<span class="op">=</span><span class="st">'expanded'</span>)</span>
+<span id="cb3-9"><a href="#cb3-9"></a></span>
+<span id="cb3-10"><a href="#cb3-10"></a><span class="co"># Setting default values</span></span>
+<span id="cb3-11"><a href="#cb3-11"></a><span class="bu">type</span> <span class="op">=</span> <span class="st">'caption'</span></span>
+<span id="cb3-12"><a href="#cb3-12"></a>decode_method <span class="op">=</span> <span class="st">'beam'</span></span>
+<span id="cb3-13"><a href="#cb3-13"></a>question <span class="op">=</span> <span class="va">None</span></span>
+<span id="cb3-14"><a href="#cb3-14"></a></span>
+<span id="cb3-15"><a href="#cb3-15"></a><span class="co"># Navbar</span></span>
+<span id="cb3-16"><a href="#cb3-16"></a><span class="cf">with</span> st.sidebar:</span>
+<span id="cb3-17"><a href="#cb3-17"></a>    st.header(<span class="st">'Configuration:'</span>)</span>
+<span id="cb3-18"><a href="#cb3-18"></a></span>
+<span id="cb3-19"><a href="#cb3-19"></a>    <span class="co"># Upload a image</span></span>
+<span id="cb3-20"><a href="#cb3-20"></a>    image <span class="op">=</span> st.file_uploader(label<span class="op">=</span><span class="st">'Upload a Image...'</span>, <span class="bu">type</span><span class="op">=</span>(<span class="st">'jpg'</span>, <span class="st">'png'</span>))</span>
+<span id="cb3-21"><a href="#cb3-21"></a></span>
+<span id="cb3-22"><a href="#cb3-22"></a>    <span class="co"># Display radio for type of prediction</span></span>
+<span id="cb3-23"><a href="#cb3-23"></a>    <span class="bu">type</span> <span class="op">=</span> st.radio(label<span class="op">=</span><span class="st">'Choose a type for prediction'</span>,</span>
+<span id="cb3-24"><a href="#cb3-24"></a>                    options<span class="op">=</span>(<span class="st">'caption'</span>, <span class="st">'vqa'</span>),</span>
+<span id="cb3-25"><a href="#cb3-25"></a>                    horizontal<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb3-26"><a href="#cb3-26"></a>    </span>
+<span id="cb3-27"><a href="#cb3-27"></a>    <span class="cf">if</span> <span class="bu">type</span> <span class="op">==</span> <span class="st">'caption'</span>:</span>
+<span id="cb3-28"><a href="#cb3-28"></a>        decode_method <span class="op">=</span> st.radio(label<span class="op">=</span><span class="st">'Choose a decode method for caption'</span>,</span>
+<span id="cb3-29"><a href="#cb3-29"></a>                                 options<span class="op">=</span>(<span class="st">'beam'</span>, <span class="st">'nucleus'</span>),</span>
+<span id="cb3-30"><a href="#cb3-30"></a>                                 horizontal<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb3-31"><a href="#cb3-31"></a>        </span>
+<span id="cb3-32"><a href="#cb3-32"></a>    <span class="cf">elif</span> <span class="bu">type</span> <span class="op">==</span> <span class="st">'vqa'</span>:</span>
+<span id="cb3-33"><a href="#cb3-33"></a>        question <span class="op">=</span> st.text_input(label<span class="op">=</span><span class="st">'Enter your question for the image.'</span>,</span>
+<span id="cb3-34"><a href="#cb3-34"></a>                                 placeholder<span class="op">=</span><span class="st">'Eg. What is there in this image?'</span>)</span>
+<span id="cb3-35"><a href="#cb3-35"></a></span>
+<span id="cb3-36"><a href="#cb3-36"></a>    <span class="co"># Display button for submitting the image</span></span>
+<span id="cb3-37"><a href="#cb3-37"></a>    submit_button <span class="op">=</span> st.button(<span class="st">'Submit'</span>, use_container_width<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb3-38"><a href="#cb3-38"></a></span>
+<span id="cb3-39"><a href="#cb3-39"></a><span class="co"># Column for main part</span></span>
+<span id="cb3-40"><a href="#cb3-40"></a>col1, col2 <span class="op">=</span> st.columns(<span class="dv">2</span>)</span>
+<span id="cb3-41"><a href="#cb3-41"></a></span>
+<span id="cb3-42"><a href="#cb3-42"></a><span class="co"># Displaying image</span></span>
+<span id="cb3-43"><a href="#cb3-43"></a><span class="cf">with</span> col1:</span>
+<span id="cb3-44"><a href="#cb3-44"></a>    st.header(<span class="st">'Image'</span>)</span>
+<span id="cb3-45"><a href="#cb3-45"></a>    <span class="cf">if</span> image <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span>:  </span>
+<span id="cb3-46"><a href="#cb3-46"></a>        contents <span class="op">=</span> image.getvalue()</span>
+<span id="cb3-47"><a href="#cb3-47"></a>        st.image(contents)</span>
+<span id="cb3-48"><a href="#cb3-48"></a></span>
+<span id="cb3-49"><a href="#cb3-49"></a><span class="co"># Displaying result</span></span>
+<span id="cb3-50"><a href="#cb3-50"></a><span class="cf">with</span> col2:</span>
+<span id="cb3-51"><a href="#cb3-51"></a>    st.header(<span class="st">'Result'</span>)</span>
+<span id="cb3-52"><a href="#cb3-52"></a>    </span>
+<span id="cb3-53"><a href="#cb3-53"></a>    <span class="cf">if</span> submit_button <span class="kw">and</span> image <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span>:</span>
+<span id="cb3-54"><a href="#cb3-54"></a>        files <span class="op">=</span> {<span class="st">'file'</span>: image.getvalue()}</span>
+<span id="cb3-55"><a href="#cb3-55"></a>    </span>
+<span id="cb3-56"><a href="#cb3-56"></a>        <span class="cf">with</span> st.spinner(<span class="st">'Loading, this will be quick...'</span>):</span>
+<span id="cb3-57"><a href="#cb3-57"></a>            params <span class="op">=</span> {<span class="st">'type'</span>: <span class="bu">type</span>,</span>
+<span id="cb3-58"><a href="#cb3-58"></a>                      <span class="st">'decode_method'</span>: decode_method,</span>
+<span id="cb3-59"><a href="#cb3-59"></a>                      <span class="st">'question'</span>: question}</span>
+<span id="cb3-60"><a href="#cb3-60"></a>            </span>
+<span id="cb3-61"><a href="#cb3-61"></a>            <span class="co"># Requesting for the prediction</span></span>
+<span id="cb3-62"><a href="#cb3-62"></a>            res <span class="op">=</span> requests.post(<span class="ss">f'http://localhost:8080/predict'</span>, </span>
+<span id="cb3-63"><a href="#cb3-63"></a>                                files<span class="op">=</span>files, </span>
+<span id="cb3-64"><a href="#cb3-64"></a>                                params<span class="op">=</span>params)</span>
+<span id="cb3-65"><a href="#cb3-65"></a>            result <span class="op">=</span> res.json()</span>
+<span id="cb3-66"><a href="#cb3-66"></a>            </span>
+<span id="cb3-67"><a href="#cb3-67"></a>            <span class="co"># Displaying the prediction</span></span>
+<span id="cb3-68"><a href="#cb3-68"></a>            st.write(result[<span class="st">'prediction'</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Now, that you have seen the code, I will explain how the frontend communicates with the backend, if you check the <em>Displaying result</em> <code>with col2</code> section on lines number 61 - 65, I use the requests library to call the post function where I provide the URL of the backend and also provide the file’s data that has the bytes data of the image file. Along with the image data, I also provide the remaining arguments that the prediction function will need for making the prediction.</p>
+<p>To run the streamlit file you just need to call the script file using the following command: <code>streamlit run main.py</code>. This will run the frontend code on the default URL i.e.&nbsp;http://localhost:8501.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Remember that running the frontend Streamlit web app only won’t provide the prediction, you will also need to run the backend <a href="https://github.com/JohnPPinto/Blog-Project-Orchestrate-MLOps-Deployment-Pipeline/blob/main/backend/main.py">main.py</a> FastAPI file also. When both are actively running will make a complete cycle of communication.</p>
+</div>
+</div>
+<p>Now, that you have read the whole article, you might be wondering if there must be a way to make a single environment that holds both frontend and backend, where with a single click the app should run and activate the complete development process.</p>
+<p>If you are wondering then you are right it’s possible and I will be explaining that in part 2 of this series.</p>
+<p>Thank you for reading my article and I hope that you have enjoyed it. If you want to check the project’s code, you can find it over <a href="https://github.com/JohnPPinto/Blog-Project-Orchestrate-MLOps-Deployment-Pipeline.git">here</a>. If I have left out something do mention it in the GitHub repo issues or the comments of this article, I am more than happy to improve this article.</p>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<div>
+    <hr>
+    <h3>Stay in touch</h3>
+    <p>If you enjoyed my blog and don't want to miss out on any future articles you can subscribe to my newsletters.</p>
+    <iframe src="https://embeds.beehiiv.com/e7421b93-7002-413c-b016-9c72444d77b6?slim=true" data-test-id="beehiiv-embed" height="52" frameborder="0" scrolling="no" style="margin: 0; border-radius: 0px !important; background-color: transparent;">
+    </iframe>
+    <h3>Click to share</h3>
+    <div style="display: inline-flex; align-items: center;">
+        <div style="display: flex; margin-top: 10%; margin-right: 10%;">
+            <a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-size="large" data-via="john77272002" data-show-count="false">Tweet
+            </a>
+            <script async="" src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+        </div>
+        <div style="display: flex;">
+            <script src="https://platform.linkedin.com/in.js" type="text/javascript">lang: en_US</script>
+            <script type="IN/Share" data-url="https://www.linkedin.com"></script>
+        </div>
+    </div>
+    <hr>
+</div>
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const disableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'prefetch';
+    }
+  }
+  const enableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'stylesheet';
+    }
+  }
+  const manageTransitions = (selector, allowTransitions) => {
+    const els = window.document.querySelectorAll(selector);
+    for (let i=0; i < els.length; i++) {
+      const el = els[i];
+      if (allowTransitions) {
+        el.classList.remove('notransition');
+      } else {
+        el.classList.add('notransition');
+      }
+    }
+  }
+  const toggleColorMode = (alternate) => {
+    // Switch the stylesheets
+    const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+    manageTransitions('#quarto-margin-sidebar .nav-link', false);
+    if (alternate) {
+      enableStylesheet(alternateStylesheets);
+      for (const sheetNode of alternateStylesheets) {
+        if (sheetNode.id === "quarto-bootstrap") {
+          toggleBodyColorMode(sheetNode);
+        }
+      }
+    } else {
+      disableStylesheet(alternateStylesheets);
+      toggleBodyColorPrimary();
+    }
+    manageTransitions('#quarto-margin-sidebar .nav-link', true);
+    // Switch the toggles
+    const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+    for (let i=0; i < toggles.length; i++) {
+      const toggle = toggles[i];
+      if (toggle) {
+        if (alternate) {
+          toggle.classList.add("alternate");     
+        } else {
+          toggle.classList.remove("alternate");
+        }
+      }
+    }
+    // Hack to workaround the fact that safari doesn't
+    // properly recolor the scrollbar when toggling (#1455)
+    if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+      manageTransitions("body", false);
+      window.scrollTo(0, 1);
+      setTimeout(() => {
+        window.scrollTo(0, 0);
+        manageTransitions("body", true);
+      }, 40);  
+    }
+  }
+  const isFileUrl = () => { 
+    return window.location.protocol === 'file:';
+  }
+  const hasAlternateSentinel = () => {  
+    let styleSentinel = getColorSchemeSentinel();
+    if (styleSentinel !== null) {
+      return styleSentinel === "alternate";
+    } else {
+      return false;
+    }
+  }
+  const setStyleSentinel = (alternate) => {
+    const value = alternate ? "alternate" : "default";
+    if (!isFileUrl()) {
+      window.localStorage.setItem("quarto-color-scheme", value);
+    } else {
+      localAlternateSentinel = value;
+    }
+  }
+  const getColorSchemeSentinel = () => {
+    if (!isFileUrl()) {
+      const storageValue = window.localStorage.getItem("quarto-color-scheme");
+      return storageValue != null ? storageValue : localAlternateSentinel;
+    } else {
+      return localAlternateSentinel;
+    }
+  }
+  let localAlternateSentinel = 'default';
+  // Dark / light mode switch
+  window.quartoToggleColorScheme = () => {
+    // Read the current dark / light value 
+    let toAlternate = !hasAlternateSentinel();
+    toggleColorMode(toAlternate);
+    setStyleSentinel(toAlternate);
+  };
+  // Ensure there is a toggle, if there isn't float one in the top right
+  if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+    const a = window.document.createElement('a');
+    a.classList.add('top-right');
+    a.classList.add('quarto-color-scheme-toggle');
+    a.href = "";
+    a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+    const i = window.document.createElement("i");
+    i.classList.add('bi');
+    a.appendChild(i);
+    window.document.body.appendChild(a);
+  }
+  // Switch to dark mode if need be
+  if (hasAlternateSentinel()) {
+    toggleColorMode(true);
+  } else {
+    toggleColorMode(false);
+  }
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<script src="https://giscus.app/client.js" data-repo="JohnPPinto/blog" data-repo-id="R_kgDOJTakLg" data-category="General" data-category-id="DIC_kwDOJTakLs4CVlze" data-mapping="title" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="light" data-lang="en" crossorigin="anonymous" async="">
+</script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">John Pinto <i class="fa-copyright fa-regular" aria-label="regular"></i> 2023 made with HTML5 <i class="fab fa-html5"></i>, CSS3 <i class="fa-brands fa-css3"></i> and <a href="https://quarto.org">Quarto</a>.</div>   
+    <div class="nav-footer-center"><div class="cookie-consent-footer"><a href="#" id="open_preferences_center">Cookie Preferences</a></div></div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+<script>var lightboxQuarto = GLightbox({"selector":".lightbox","closeEffect":"zoom","loop":true,"descPosition":"bottom","openEffect":"zoom"});</script>
+
+
+
+</body></html>
