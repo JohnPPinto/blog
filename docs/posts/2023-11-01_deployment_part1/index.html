@@ -380,67 +380,65 @@ Tip
 <span id="cb3-7"><a href="#cb3-7"></a>                   layout<span class="op">=</span><span class="st">'wide'</span>,</span>
 <span id="cb3-8"><a href="#cb3-8"></a>                   initial_sidebar_state<span class="op">=</span><span class="st">'expanded'</span>)</span>
 <span id="cb3-9"><a href="#cb3-9"></a></span>
-<span id="cb3-10"><a href="#cb3-10"></a><span class="co"># Setting default values</span></span>
-<span id="cb3-11"><a href="#cb3-11"></a><span class="bu">type</span> <span class="op">=</span> <span class="st">'caption'</span></span>
-<span id="cb3-12"><a href="#cb3-12"></a>decode_method <span class="op">=</span> <span class="st">'beam'</span></span>
-<span id="cb3-13"><a href="#cb3-13"></a>question <span class="op">=</span> <span class="va">None</span></span>
-<span id="cb3-14"><a href="#cb3-14"></a></span>
-<span id="cb3-15"><a href="#cb3-15"></a><span class="co"># Navbar</span></span>
-<span id="cb3-16"><a href="#cb3-16"></a><span class="cf">with</span> st.sidebar:</span>
-<span id="cb3-17"><a href="#cb3-17"></a>    st.header(<span class="st">'Configuration:'</span>)</span>
-<span id="cb3-18"><a href="#cb3-18"></a></span>
-<span id="cb3-19"><a href="#cb3-19"></a>    <span class="co"># Upload a image</span></span>
-<span id="cb3-20"><a href="#cb3-20"></a>    image <span class="op">=</span> st.file_uploader(label<span class="op">=</span><span class="st">'Upload a Image...'</span>, <span class="bu">type</span><span class="op">=</span>(<span class="st">'jpg'</span>, <span class="st">'png'</span>))</span>
-<span id="cb3-21"><a href="#cb3-21"></a></span>
-<span id="cb3-22"><a href="#cb3-22"></a>    <span class="co"># Display radio for type of prediction</span></span>
-<span id="cb3-23"><a href="#cb3-23"></a>    <span class="bu">type</span> <span class="op">=</span> st.radio(label<span class="op">=</span><span class="st">'Choose a type for prediction'</span>,</span>
-<span id="cb3-24"><a href="#cb3-24"></a>                    options<span class="op">=</span>(<span class="st">'caption'</span>, <span class="st">'vqa'</span>),</span>
-<span id="cb3-25"><a href="#cb3-25"></a>                    horizontal<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb3-26"><a href="#cb3-26"></a>    </span>
-<span id="cb3-27"><a href="#cb3-27"></a>    <span class="cf">if</span> <span class="bu">type</span> <span class="op">==</span> <span class="st">'caption'</span>:</span>
-<span id="cb3-28"><a href="#cb3-28"></a>        decode_method <span class="op">=</span> st.radio(label<span class="op">=</span><span class="st">'Choose a decode method for caption'</span>,</span>
-<span id="cb3-29"><a href="#cb3-29"></a>                                 options<span class="op">=</span>(<span class="st">'beam'</span>, <span class="st">'nucleus'</span>),</span>
-<span id="cb3-30"><a href="#cb3-30"></a>                                 horizontal<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb3-31"><a href="#cb3-31"></a>        </span>
-<span id="cb3-32"><a href="#cb3-32"></a>    <span class="cf">elif</span> <span class="bu">type</span> <span class="op">==</span> <span class="st">'vqa'</span>:</span>
-<span id="cb3-33"><a href="#cb3-33"></a>        question <span class="op">=</span> st.text_input(label<span class="op">=</span><span class="st">'Enter your question for the image.'</span>,</span>
-<span id="cb3-34"><a href="#cb3-34"></a>                                 placeholder<span class="op">=</span><span class="st">'Eg. What is there in this image?'</span>)</span>
-<span id="cb3-35"><a href="#cb3-35"></a></span>
-<span id="cb3-36"><a href="#cb3-36"></a>    <span class="co"># Display button for submitting the image</span></span>
-<span id="cb3-37"><a href="#cb3-37"></a>    submit_button <span class="op">=</span> st.button(<span class="st">'Submit'</span>, use_container_width<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb3-38"><a href="#cb3-38"></a></span>
-<span id="cb3-39"><a href="#cb3-39"></a><span class="co"># Column for main part</span></span>
-<span id="cb3-40"><a href="#cb3-40"></a>col1, col2 <span class="op">=</span> st.columns(<span class="dv">2</span>)</span>
-<span id="cb3-41"><a href="#cb3-41"></a></span>
-<span id="cb3-42"><a href="#cb3-42"></a><span class="co"># Displaying image</span></span>
-<span id="cb3-43"><a href="#cb3-43"></a><span class="cf">with</span> col1:</span>
-<span id="cb3-44"><a href="#cb3-44"></a>    st.header(<span class="st">'Image'</span>)</span>
-<span id="cb3-45"><a href="#cb3-45"></a>    <span class="cf">if</span> image <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span>:  </span>
-<span id="cb3-46"><a href="#cb3-46"></a>        contents <span class="op">=</span> image.getvalue()</span>
-<span id="cb3-47"><a href="#cb3-47"></a>        st.image(contents)</span>
-<span id="cb3-48"><a href="#cb3-48"></a></span>
-<span id="cb3-49"><a href="#cb3-49"></a><span class="co"># Displaying result</span></span>
-<span id="cb3-50"><a href="#cb3-50"></a><span class="cf">with</span> col2:</span>
-<span id="cb3-51"><a href="#cb3-51"></a>    st.header(<span class="st">'Result'</span>)</span>
-<span id="cb3-52"><a href="#cb3-52"></a>    </span>
-<span id="cb3-53"><a href="#cb3-53"></a>    <span class="cf">if</span> submit_button <span class="kw">and</span> image <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span>:</span>
-<span id="cb3-54"><a href="#cb3-54"></a>        files <span class="op">=</span> {<span class="st">'file'</span>: image.getvalue()}</span>
-<span id="cb3-55"><a href="#cb3-55"></a>    </span>
-<span id="cb3-56"><a href="#cb3-56"></a>        <span class="cf">with</span> st.spinner(<span class="st">'Loading, this will be quick...'</span>):</span>
-<span id="cb3-57"><a href="#cb3-57"></a>            params <span class="op">=</span> {<span class="st">'type'</span>: <span class="bu">type</span>,</span>
-<span id="cb3-58"><a href="#cb3-58"></a>                      <span class="st">'decode_method'</span>: decode_method,</span>
-<span id="cb3-59"><a href="#cb3-59"></a>                      <span class="st">'question'</span>: question}</span>
-<span id="cb3-60"><a href="#cb3-60"></a>            </span>
-<span id="cb3-61"><a href="#cb3-61"></a>            <span class="co"># Requesting for the prediction</span></span>
+<span id="cb3-10"><a href="#cb3-10"></a><span class="bu">type</span> <span class="op">=</span> <span class="st">'caption'</span></span>
+<span id="cb3-11"><a href="#cb3-11"></a>decode_method <span class="op">=</span> <span class="st">'beam'</span></span>
+<span id="cb3-12"><a href="#cb3-12"></a>question <span class="op">=</span> <span class="va">None</span></span>
+<span id="cb3-13"><a href="#cb3-13"></a></span>
+<span id="cb3-14"><a href="#cb3-14"></a><span class="cf">with</span> st.sidebar:</span>
+<span id="cb3-15"><a href="#cb3-15"></a>    st.header(<span class="st">'Configuration:'</span>)</span>
+<span id="cb3-16"><a href="#cb3-16"></a></span>
+<span id="cb3-17"><a href="#cb3-17"></a>    <span class="co"># Upload a image</span></span>
+<span id="cb3-18"><a href="#cb3-18"></a>    image <span class="op">=</span> st.file_uploader(label<span class="op">=</span><span class="st">'Upload a Image...'</span>, <span class="bu">type</span><span class="op">=</span>(<span class="st">'jpg'</span>, <span class="st">'png'</span>))</span>
+<span id="cb3-19"><a href="#cb3-19"></a></span>
+<span id="cb3-20"><a href="#cb3-20"></a>    <span class="co"># Display radio for type of prediction</span></span>
+<span id="cb3-21"><a href="#cb3-21"></a>    <span class="bu">type</span> <span class="op">=</span> st.radio(label<span class="op">=</span><span class="st">'Choose a type for prediction'</span>,</span>
+<span id="cb3-22"><a href="#cb3-22"></a>                    options<span class="op">=</span>(<span class="st">'caption'</span>, <span class="st">'vqa'</span>),</span>
+<span id="cb3-23"><a href="#cb3-23"></a>                    horizontal<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb3-24"><a href="#cb3-24"></a>    </span>
+<span id="cb3-25"><a href="#cb3-25"></a>    <span class="cf">if</span> <span class="bu">type</span> <span class="op">==</span> <span class="st">'caption'</span>:</span>
+<span id="cb3-26"><a href="#cb3-26"></a>        decode_method <span class="op">=</span> st.radio(label<span class="op">=</span><span class="st">'Choose a decode method for caption'</span>,</span>
+<span id="cb3-27"><a href="#cb3-27"></a>                                 options<span class="op">=</span>(<span class="st">'beam'</span>, <span class="st">'nucleus'</span>),</span>
+<span id="cb3-28"><a href="#cb3-28"></a>                                 horizontal<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb3-29"><a href="#cb3-29"></a>        </span>
+<span id="cb3-30"><a href="#cb3-30"></a>    <span class="cf">elif</span> <span class="bu">type</span> <span class="op">==</span> <span class="st">'vqa'</span>:</span>
+<span id="cb3-31"><a href="#cb3-31"></a>        question <span class="op">=</span> st.text_input(label<span class="op">=</span><span class="st">'Enter your question for the image.'</span>,</span>
+<span id="cb3-32"><a href="#cb3-32"></a>                                 placeholder<span class="op">=</span><span class="st">'Eg. What is there in this image?'</span>)</span>
+<span id="cb3-33"><a href="#cb3-33"></a></span>
+<span id="cb3-34"><a href="#cb3-34"></a>    <span class="co"># Display button for submitting the image</span></span>
+<span id="cb3-35"><a href="#cb3-35"></a>    submit_button <span class="op">=</span> st.button(<span class="st">'Submit'</span>, use_container_width<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb3-36"><a href="#cb3-36"></a></span>
+<span id="cb3-37"><a href="#cb3-37"></a><span class="co"># Column for main part</span></span>
+<span id="cb3-38"><a href="#cb3-38"></a>col1, col2 <span class="op">=</span> st.columns(<span class="dv">2</span>)</span>
+<span id="cb3-39"><a href="#cb3-39"></a></span>
+<span id="cb3-40"><a href="#cb3-40"></a><span class="co"># Displaying Image</span></span>
+<span id="cb3-41"><a href="#cb3-41"></a><span class="cf">with</span> col1:</span>
+<span id="cb3-42"><a href="#cb3-42"></a>    st.header(<span class="st">'Image'</span>)</span>
+<span id="cb3-43"><a href="#cb3-43"></a>    <span class="cf">if</span> image <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span>:  </span>
+<span id="cb3-44"><a href="#cb3-44"></a>        contents <span class="op">=</span> image.getvalue()</span>
+<span id="cb3-45"><a href="#cb3-45"></a>        st.image(contents)</span>
+<span id="cb3-46"><a href="#cb3-46"></a></span>
+<span id="cb3-47"><a href="#cb3-47"></a><span class="co"># Displaying result</span></span>
+<span id="cb3-48"><a href="#cb3-48"></a><span class="cf">with</span> col2:</span>
+<span id="cb3-49"><a href="#cb3-49"></a>    st.header(<span class="st">'Result'</span>)</span>
+<span id="cb3-50"><a href="#cb3-50"></a></span>
+<span id="cb3-51"><a href="#cb3-51"></a>    <span class="cf">if</span> question:</span>
+<span id="cb3-52"><a href="#cb3-52"></a>        st.write(<span class="ss">f'Question: </span><span class="sc">{</span>question<span class="sc">}</span><span class="ss">'</span>)</span>
+<span id="cb3-53"><a href="#cb3-53"></a>    </span>
+<span id="cb3-54"><a href="#cb3-54"></a>    <span class="cf">if</span> submit_button <span class="kw">and</span> image <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span>:</span>
+<span id="cb3-55"><a href="#cb3-55"></a>        files <span class="op">=</span> {<span class="st">'file'</span>: image.getvalue()}</span>
+<span id="cb3-56"><a href="#cb3-56"></a>    </span>
+<span id="cb3-57"><a href="#cb3-57"></a>        <span class="cf">with</span> st.spinner(<span class="st">'Loading, this will be quick...'</span>):</span>
+<span id="cb3-58"><a href="#cb3-58"></a>            params <span class="op">=</span> {<span class="st">'type'</span>: <span class="bu">type</span>,</span>
+<span id="cb3-59"><a href="#cb3-59"></a>                      <span class="st">'decode_method'</span>: decode_method,</span>
+<span id="cb3-60"><a href="#cb3-60"></a>                      <span class="st">'question'</span>: question}</span>
+<span id="cb3-61"><a href="#cb3-61"></a>        </span>
 <span id="cb3-62"><a href="#cb3-62"></a>            res <span class="op">=</span> requests.post(<span class="ss">f'http://localhost:8080/predict'</span>, </span>
 <span id="cb3-63"><a href="#cb3-63"></a>                                files<span class="op">=</span>files, </span>
 <span id="cb3-64"><a href="#cb3-64"></a>                                params<span class="op">=</span>params)</span>
 <span id="cb3-65"><a href="#cb3-65"></a>            result <span class="op">=</span> res.json()</span>
-<span id="cb3-66"><a href="#cb3-66"></a>            </span>
-<span id="cb3-67"><a href="#cb3-67"></a>            <span class="co"># Displaying the prediction</span></span>
-<span id="cb3-68"><a href="#cb3-68"></a>            st.write(result[<span class="st">'prediction'</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-66"><a href="#cb3-66"></a>            st.write(<span class="ss">f'Prediction: </span><span class="sc">{</span>result[<span class="st">"prediction"</span>]<span class="sc">}</span><span class="ss">'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Now, that you have seen the code, I will explain how the frontend communicates with the backend, if you check the <em>Displaying result</em> <code>with col2</code> section on lines number 61 - 65, I use the requests library to call the post function where I provide the URL of the backend and also provide the file’s data that has the bytes data of the image file. Along with the image data, I also provide the remaining arguments that the prediction function will need for making the prediction.</p>
+<p>Now, that you have seen the code, I will explain how the frontend communicates with the backend, if you check the <em>Displaying result</em> <code>with col2</code> section on lines number 62 - 65, I use the requests library to call the post function where I provide the URL of the backend and also provide the file’s data that has the bytes data of the image file. Along with the image data, I also provide the remaining arguments that the prediction function will need for making the prediction.</p>
 <p>To run the streamlit file you just need to call the script file using the following command: <code>streamlit run main.py</code>. This will run the frontend code on the default URL i.e.&nbsp;http://localhost:8501.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -844,7 +842,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     </div>
   </div>
 </footer>
-<script>var lightboxQuarto = GLightbox({"selector":".lightbox","closeEffect":"zoom","loop":true,"descPosition":"bottom","openEffect":"zoom"});</script>
+<script>var lightboxQuarto = GLightbox({"loop":true,"descPosition":"bottom","openEffect":"zoom","selector":".lightbox","closeEffect":"zoom"});</script>
 
 
 

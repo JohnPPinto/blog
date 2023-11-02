@@ -123,12 +123,10 @@ st.set_page_config(page_title='Demo App',
                    layout='wide',
                    initial_sidebar_state='expanded')
 
-# Setting default values
 type = 'caption'
 decode_method = 'beam'
 question = None
 
-# Navbar
 with st.sidebar:
     st.header('Configuration:')
 
@@ -155,7 +153,7 @@ with st.sidebar:
 # Column for main part
 col1, col2 = st.columns(2)
 
-# Displaying image
+# Displaying Image
 with col1:
     st.header('Image')
     if image is not None:  
@@ -165,6 +163,9 @@ with col1:
 # Displaying result
 with col2:
     st.header('Result')
+
+    if question:
+        st.write(f'Question: {question}')
     
     if submit_button and image is not None:
         files = {'file': image.getvalue()}
@@ -173,18 +174,15 @@ with col2:
             params = {'type': type,
                       'decode_method': decode_method,
                       'question': question}
-            
-            # Requesting for the prediction
+        
             res = requests.post(f'http://localhost:8080/predict', 
                                 files=files, 
                                 params=params)
             result = res.json()
-            
-            # Displaying the prediction
-            st.write(result['prediction'])
+            st.write(f'Prediction: {result["prediction"]}')
 ```
 
-Now, that you have seen the code, I will explain how the frontend communicates with the backend, if you check the *Displaying result* `with col2` section on lines number 61 - 65, I use the requests library to call the post function where I provide the URL of the backend and also provide the file's data that has the bytes data of the image file. Along with the image data, I also provide the remaining arguments that the prediction function will need for making the prediction.
+Now, that you have seen the code, I will explain how the frontend communicates with the backend, if you check the *Displaying result* `with col2` section on lines number 62 - 65, I use the requests library to call the post function where I provide the URL of the backend and also provide the file's data that has the bytes data of the image file. Along with the image data, I also provide the remaining arguments that the prediction function will need for making the prediction.
 
 To run the streamlit file you just need to call the script file using the following command: `streamlit run main.py`. This will run the frontend code on the default URL i.e. http://localhost:8501.
 
